@@ -2,7 +2,7 @@
 import React from "react";
 import { SlMagnifier } from "react-icons/sl";
 import { FiMenu } from "react-icons/fi";
-import Logo from "public/logo/Navbar-Logo.svg";
+import Logo from "public/Logo/Navbar-Logo.svg";
 
 const Navbar = () => {
   return (
