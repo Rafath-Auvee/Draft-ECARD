@@ -18,7 +18,6 @@ const Navbar = () => {
             <li>
               <a>Sign Up</a>
             </li>
-
             <li>
               <a>Sign In</a>
             </li>
@@ -46,7 +45,6 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end ">
-          
           <div className="flex justify-end md:hidden">
             <div className="drawer drawer-end">
               <input
