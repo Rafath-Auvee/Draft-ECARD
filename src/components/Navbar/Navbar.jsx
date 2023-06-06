@@ -6,7 +6,7 @@ import Logo from "public/Logo/Navbar-Logo.svg";
 
 const Navbar = () => {
   return (
-    <div className="mx-2  md:mx-14 text-[15px]">
+    <div className="mx-2 md:mx-14 text-[15px]">
       <div className="navbar bg-transparent border-b border-[#BBBCBD] hidden md:flex">
         <div className="navbar-start">{/* <Logo />   */}</div>
         <div className="navbar-center hidden"></div>
