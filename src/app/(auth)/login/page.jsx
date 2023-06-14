@@ -8,9 +8,9 @@ import IconRight from "/public/icons/Icon-right.svg";
 const Login = () => {
   return (
     <div>
-      <div className="min-h-screen bg-base-100">
-        <div className="flex flex-row">
-          <div className="basis-1/2">
+      <div className="min-h-screen bg-base-100  ">
+        <div className="flex flex-row justify-center">
+          <div className="basis-1/2 hidden lg:block">
             <Image
               src={HeroImage}
               width={0}
