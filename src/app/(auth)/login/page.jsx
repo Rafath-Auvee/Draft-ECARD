@@ -4,11 +4,14 @@ import HeroImage from "/public/images/hero_login.png";
 import Facebook from "/public/icons/facebook.svg";
 import Google from "/public/icons/google.svg";
 import IconRight from "/public/icons/Icon-right.svg";
-
+import Logo from "/public/icons/logo.svg";
 const Login = () => {
   return (
     <div>
-      <div className="min-h-screen bg-base-100 text-primary">
+      <div className="min-h-screen bg-base-100 text-primary relative">
+        <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
+          <Logo />
+        </div>
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
             <Image
