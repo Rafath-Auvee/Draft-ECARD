@@ -8,7 +8,7 @@ import IconRight from "/public/icons/Icon-right.svg";
 const Register = () => {
   return (
     <div>
-      <div className="min-h-screen bg-base-100">
+      <div className="min-h-screen bg-base-100 text-primary">
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
             <Image
@@ -24,33 +24,34 @@ const Register = () => {
             <div className="grid place-items-center h-screen">
               <div className="join join-vertical">
                 <div className="join-item">
-                  <h1 className="text-primary text-4xl text-center mb-12">
+                  <h1 className="text-primary text-2xl text-center mb-10 font-semibold">
                     Welcome to Save the Date
                   </h1>
                   <div className="flex flex-col ">
-                    <div className="btn btn-outline text-[1.2rem] w-[30rem] h-[3.5rem] mb-4">
+                    <div className="btn btn-outline text-[16px] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1 mb-3">
                       <Google />
                       <button className="font-medium">
                         Sign Up with Google
                       </button>
                     </div>
-                    <div className="btn btn-outline text-[1.2rem] w-[30rem] h-[3.5rem] mb-7">
+                    <div className="btn btn-outline text-[1rem] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1  mb-3">
                       <Facebook />
                       <button className="font-medium">
                         Sign Up with Facebook
                       </button>
                     </div>
                   </div>
-                  <div className="divider divide-[#E5E7EB] mb-10"></div>
+                  <div className="divider divide-[#E5E7EB] mb-3"></div>
+
                   <div className="form-control  join-item text-base">
-                    <div className="mb-7">
+                    <div className="mb-2">
                       <label className="label">
-                        <span className="text-xl">Username or Email *</span>
+                        <span className="text-base">Username or Email *</span>
                       </label>
                       <input
                         type="text"
-                        placeholder="Type here"
-                        className="input input-bordered w-full "
+                        placeholder="example@email.com"
+                        className="input input-bordered w-full h-11 placeholder:italic placeholder:font-normal"
                       />
                       {/* <label className="label">
                         <span className="label-text-alt text-error text-base">
@@ -60,12 +61,12 @@ const Register = () => {
                     </div>
                     <div>
                       <label className="label">
-                        <span className="text-xl">Password *</span>
+                        <span className="text-base">Password *</span>
                       </label>
                       <input
                         type="password"
-                        placeholder="Type here"
-                        className="input input-bordered w-full "
+                        placeholder="Password at least 6 Characters long"
+                        className="input input-bordered w-full h-11 placeholder:italic placeholder:font-normal"
                       />
                       {/* <label className="label">
                         <span className="text-base text-error">
@@ -81,19 +82,29 @@ const Register = () => {
                             // checked={false}
                             className="checkbox"
                           />
-                          <span className="text-xl ml-5">Remember me</span>
+                          <span className="text-base ml-5">Remember me</span>
                         </label>
                       </div>
-                    </div>
-                    <button className="btn btn-primary mb-8 text-white text-[20px] capitalize font-medium py-4 pb-[36px]">
-                      Sign Up
-                    </button>
-                    <div className="flex flex-row items-center justify-between">
-                      <h3 className="text-xl"> Don’t have an account?</h3>
-                      <button className="border-2 border-[#DADDE7] text-[#23272A] pl-16 pr-16 py-3 rounded-2xl flex flex-row items-center justify-center text-2xl">
-                        <span className="mr-3">Sign Up</span>
-                        <IconRight />
+                      <button className="btn btn-primary mt-4 mb-6 text-white text-base capitalize font-medium">
+                        Sign Up
                       </button>
+                      <div className="flex flex-row items-center justify-between">
+                        <h3 className="text-base"> Already Have an Account?</h3>
+                        <button className="border-2 border-[#DADDE7] text-[#23272A] px-5 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
+                          <span className="mr-1 lg:mr-3">Sign Up</span>
+                          <IconRight />
+                        </button>
+                      </div>
+
+                      <div className="mt-10 max-w-sm ">
+                        <p className="text-xs">
+                          By signing up, you agree to the{" "}
+                          <span className="underline">
+                            Terms and Conditions
+                          </span>{" "}
+                          and <span className="underline">Privacy Policy</span>.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

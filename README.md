@@ -1,34 +1,107 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div>
+      <div className="min-h-screen bg-base-100  ">
+        <div className="flex flex-row justify-center">
+          <div className="basis-1/2 hidden lg:block">
+            <Image
+              src={HeroImage}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "auto", height: "100%" }}
+              alt="Login Image"
+            />
+          </div>
+          <div className="basis-1/2 ">
+            <div className="grid place-items-center h-screen">
+              <div className="join join-vertical">
+                <div className="join-item">
+                  <h1 className="text-primary text-2xl text-center mb-10 font-semibold">
+                    Welcome to Save the Date
+                  </h1>
+                  <div className="flex flex-col ">
+                    <div className="btn btn-outline text-[16px] w-[25rem] border-[#D1D5DB] border-1 mb-3">
+                      <Google />
+                      <button className="font-medium">
+                        Sign Up with Google
+                      </button>
+                    </div>
+                    <div className="btn btn-outline text-[1rem] w-[25rem] border-[#D1D5DB] border-1  mb-3">
+                      <Facebook />
+                      <button className="font-medium">
+                        Sign Up with Facebook
+                      </button>
+                    </div>
+                  </div>
+                  <div className="divider divide-[#E5E7EB] mb-3"></div>
 
-## Getting Started
+                  <div className="form-control  join-item text-base">
+                    <div className="mb-2">
+                      <label className="label">
+                        <span className="text-base">Username or Email *</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="example@email.com"
+                        className="input input-bordered w-full h-11 placeholder:italic placeholder:font-normal"
+                      />
+                      {/* <label className="label">
+                        <span className="label-text-alt text-error text-base">
+                          Email Error Message
+                        </span>
+                      </label> */}
+                    </div>
+                    <div>
+                      <label className="label">
+                        <span className="text-base">Password *</span>
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="Password at least 6 Characters long"
+                        className="input input-bordered w-full h-11 placeholder:italic placeholder:font-normal"
+                      />
+                      {/* <label className="label">
+                        <span className="text-base text-error">
+                          Password Error Message
+                        </span>
+                      </label> */}
+                    </div>
+                    <div className="form-control mb-5 mt-4 ">
+                      <div>
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            // checked={false}
+                            className="checkbox"
+                          />
+                          <span className="text-base ml-5">Remember me</span>
+                        </label>
+                      </div>
+                      <button className="btn btn-primary mt-4 mb-6 text-white text-base capitalize font-medium">
+                        Sign Up
+                      </button>
+                      <div className="flex flex-row items-center justify-between">
+                        <h3 className="text-base"> Don’t have an account?</h3>
+                        <button className="border-2 border-[#DADDE7] text-[#23272A] px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-1xl">
+                          <span className="mr-3">Sign Up</span>
+                          <IconRight />
+                        </button>
+                      </div>
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+                      <div className="mt-10 max-w-sm ">
+                        <p className="text-xs">
+                          By signing up, you agree to the{" "}
+                          <span className="underline">
+                            Terms and Conditions
+                          </span>{" "}
+                          and <span className="underline">Privacy Policy</span>.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
