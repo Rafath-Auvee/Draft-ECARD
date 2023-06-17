@@ -4,14 +4,19 @@ import HeroImage from "/public/images/hero_login.png";
 import Facebook from "/public/icons/facebook.svg";
 import Google from "/public/icons/google.svg";
 import IconRight from "/public/icons/Icon-right.svg";
-import Logo from "/public/icons/logo.svg";
+import Logo from "/public/icons/logo_second.svg";
 const Login = () => {
   return (
     <div>
       <div className="min-h-screen bg-base-100 text-primary relative">
-        <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
+        {/* <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
           <Logo />
-        </div>
+        </div> */}
+        {/* <div className="navbar bg-transparent bg-opacity-0">
+          <div className="navbar-start">
+            <Logo />
+          </div>
+        </div> */}
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
             <Image
@@ -27,6 +32,9 @@ const Login = () => {
             <div className="grid place-items-center h-screen">
               <div className="join join-vertical">
                 <div className="join-item">
+                  <div className="grid place-items-center mb-5">
+                    <Logo />
+                  </div>
                   <h1 className="text-primary text-2xl text-center mb-10 font-semibold">
                     Welcome Back!
                   </h1>

@@ -4,15 +4,15 @@ import HeroImage from "/public/images/hero_login.png";
 import Facebook from "/public/icons/facebook.svg";
 import Google from "/public/icons/google.svg";
 import IconRight from "/public/icons/Icon-right.svg";
-import Logo from "/public/icons/logo.svg";
+import Logo from "/public/icons/logo_second.svg";
 
 const Register = () => {
   return (
     <div>
       <div className="min-h-screen bg-base-100 text-primary relative">
-        <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
+        {/* <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
           <Logo />
-        </div>
+        </div> */}
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
             <Image
@@ -28,17 +28,20 @@ const Register = () => {
             <div className="grid place-items-center h-screen">
               <div className="join join-vertical">
                 <div className="join-item">
-                  <h1 className="text-primary text-2xl text-center mb-10 font-semibold">
+                  <div className="grid place-items-center mb-5 ">
+                    <Logo />
+                  </div>
+                  <h1 className="text-primary text-2xl text-center mb-5 font-semibold">
                     Welcome to Save the Date
                   </h1>
                   <div className="flex flex-col ">
-                    <div className="btn btn-outline text-[16px] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1 mb-3">
+                    <div className="btn btn-outline text-[16px] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1 mb-2">
                       <Google />
                       <button className="font-medium">
                         Sign Up with Google
                       </button>
                     </div>
-                    <div className="btn btn-outline text-[1rem] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1  mb-3">
+                    <div className="btn btn-outline text-[1rem] w-[20rem] md:w-[23rem] lg:w-[25rem] border-[#D1D5DB] border-1  mb-2">
                       <Facebook />
                       <button className="font-medium">
                         Sign Up with Facebook
@@ -48,7 +51,7 @@ const Register = () => {
                   <div className="divider divide-[#E5E7EB] mb-3"></div>
 
                   <div className="form-control  join-item text-base">
-                    <div className="mb-2">
+                    <div className="mb-1">
                       <label className="label">
                         <span className="text-base">Username or Email *</span>
                       </label>
@@ -78,7 +81,7 @@ const Register = () => {
                         </span>
                       </label> */}
                     </div>
-                    <div className="form-control mb-5 mt-4 ">
+                    <div className="form-control mb-3 mt-4 ">
                       <div>
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -89,7 +92,7 @@ const Register = () => {
                           <span className="text-base ml-5">Remember me</span>
                         </label>
                       </div>
-                      <button className="btn btn-primary mt-4 mb-6 text-white text-base capitalize font-medium">
+                      <button className="btn btn-primary mt-4 mb-4 text-white text-base capitalize font-medium">
                         Sign Up
                       </button>
                       <div className="flex flex-row items-center justify-between">
@@ -100,7 +103,7 @@ const Register = () => {
                         </button>
                       </div>
 
-                      <div className="mt-10 max-w-sm ">
+                      <div className="mt-4 max-w-sm ">
                         <p className="text-xs">
                           By signing up, you agree to the{" "}
                           <span className="underline">
