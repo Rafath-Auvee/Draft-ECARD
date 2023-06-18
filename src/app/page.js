@@ -7,8 +7,16 @@ import Hero from "/public/Home/hero.png";
 import Iphone from "/public/Home/iPhone.png";
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from "react";
+import Footer from "../../components/Footer/Footer.jsx";
+
 
 export const data = [
+  {
+    imageUrl: "/Home/card_preview.png",
+    title: "Marble Textured Welcome Board",
+    price: "৳2,500",
+    buttonText: "View Design",
+  },
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
@@ -119,7 +127,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* <div className="grid grid-rows-6 md:grid-rows-4 lg:grid-rows-2 grid-flow-col gap-4 md:mx-10 gap-y-10"> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-20  gap-4 md:mx-10 lg:mx-24 ">
           {data.map((item, index) => (
             <div className="mx-5  lg:mx-10 " key={index}>
@@ -139,11 +146,14 @@ export default function Home() {
                   {item.price}
                 </p>
               </div>
-              
             </div>
           ))}
         </div>
       </div>
+      <div>
+      
+      <Footer/>
+    </div>
     </div>
   );
 }
