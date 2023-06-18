@@ -3,6 +3,8 @@ import Card from "../../components/Home/Card";
 import Card_Preview from "/public/Home/card_preview.png";
 import Hero from "/public/Home/hero.png";
 import Iphone from "/public/Home/iPhone.png";
+import { BsArrowRight } from "react-icons/bs";
+
 export default function Home() {
   return (
     <div>
@@ -11,14 +13,17 @@ export default function Home() {
         style={{ backgroundImage: `url('/Home/hero.png')` }}
       >
         <div className="flex flex-col items-center justify-center h-screen">
-          <div className="flex flex-col items-center justify-center h-full">
+          <div className="flex flex-col items-center justify-center h-full mt-[6rem]">
             <p className="text-[24px] text-primary uppercase">Looking for</p>
             <h1 className="font-bold text-[56px] text-primary capitalize">
               the Perfect E-card?
             </h1>
-            <button className="bg-primary text-white py-2.5 px-6 rounded flex items-center justify-center">
-              Check out The Designs Here
-            </button>
+            <div className="flex flex-row items-center justify-center">
+              <button className="bg-primary text-white py-[1rem] px-[1.5rem] mt-[24px] rounded flex items-center justify-center">
+                Check out The Designs Here
+                <BsArrowRight className="text-[20px] ml-[10px] mt-[2px]" />
+              </button>
+            </div>
           </div>
           <div className="flex items-center justify-center flex-grow">
             <Image
