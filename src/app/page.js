@@ -1,13 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Card from "../../components/Home/Card";
-import Card_Preview from "/public/Home/card_preview.png";
-import Hero from "/public/Home/hero.png";
 import Iphone from "/public/Home/iPhone.png";
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from "react";
-import Footer from "../../components/Footer/Footer.jsx";
+import Footer from "@/components/Footer/Footer";
+
 
 
 export const data = [

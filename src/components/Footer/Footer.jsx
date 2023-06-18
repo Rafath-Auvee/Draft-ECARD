@@ -10,13 +10,6 @@ const Footer = () => {
   return (
     <div>
       <footer className="footer footer-center p-10 bg-primary mt-20 text-white rounded">
-        {/* <Image
-          src={Logo}
-          width={50}
-          height={50}
-          alt="Save The Date Footer Logo"
-
-          /> */}
           <Logo/>
         <div className="grid grid-flow-col gap-4 text-[16px]">
           <a className="link link-hover">Home</a>

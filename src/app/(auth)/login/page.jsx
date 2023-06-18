@@ -5,6 +5,7 @@ import Facebook from "/public/icons/facebook.svg";
 import Google from "/public/icons/google.svg";
 import IconRight from "/public/icons/Icon-right.svg";
 import Logo from "/public/icons/logo_second.svg";
+
 const Login = () => {
   return (
     <div>
