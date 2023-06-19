@@ -1,12 +1,9 @@
-"use client";
-
+import React from "react";
+import Navbar from "@/components/Navbar/Navbar";
+import { BsArrowRight } from "react-icons/bs";
 import Image from "next/image";
 import Iphone from "/public/Home/iPhone.png";
-import { BsArrowRight } from "react-icons/bs";
-import Footer from "@/components/Footer/Footer";
-import Navbar from "@/components/Navbar/Navbar";
-
-export default function Home() {
+const HeroSection = () => {
   return (
     <div>
       <div
@@ -38,8 +35,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
-}
+};
+
+export default HeroSection;
