@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { BsArrowRight } from "react-icons/bs";
 import Image from "next/image";
 import Iphone from "/public/Home/iPhone.png";
+import Link from "next/link";
 const HeroSection = () => {
   return (
     <div>
@@ -18,10 +19,14 @@ const HeroSection = () => {
               the Perfect E-card?
             </h1>
             <div className="flex flex-row items-center justify-center">
-              <button className="bg-primary text-white py-[1rem] text-[18px] px-[1.5rem] mt-[24px] rounded flex items-center justify-center">
-                Check out The Designs Here
-                <BsArrowRight className="text-[20px] ml-[10px] mt-[2px]" />
-              </button>
+              <Link href="/portfolio">
+                <>
+                  <button className="bg-primary text-white py-[1rem] text-[18px] px-[1.5rem] mt-[24px] rounded flex items-center justify-center">
+                    Check out The Designs Here
+                    <BsArrowRight className="text-[20px] ml-[10px] mt-[2px]" />
+                  </button>
+                </>
+              </Link>
             </div>
           </div>
           <div className="flex items-center justify-center flex-grow mb-[64px] md:mb-[137px] lg:mb-[]">

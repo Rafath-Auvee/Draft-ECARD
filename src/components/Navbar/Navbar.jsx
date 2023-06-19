@@ -3,6 +3,7 @@ import React from "react";
 import { SlMagnifier } from "react-icons/sl";
 import { FiMenu } from "react-icons/fi";
 import Logo from "public/Logo/Navbar-Logo.svg";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -13,13 +14,13 @@ const Navbar = () => {
         <div className="navbar-end hidden md:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>How It Works</a>
+              <Link href="#" >How It Works</Link>
             </li>
             <li>
-              <a>Sign Up</a>
+              <Link href="/register">Sign Up</Link>
             </li>
             <li>
-              <a>Sign In</a>
+              <Link href="/login">Sign In</Link>
             </li>
           </ul>
         </div>
@@ -33,14 +34,14 @@ const Navbar = () => {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 ">
             <li>
-              <a>Home</a>
+              <Link href="/">Home</Link>
             </li>
             <li>
-              <a>Portfolio</a>
+              <Link href="/portfolio">Portfolio</Link>
             </li>
 
             <li>
-              <a>Physical Wedding Cards</a>
+              <Link href="/">Physical Wedding Cards</Link>
             </li>
           </ul>
         </div>
@@ -61,24 +62,24 @@ const Navbar = () => {
                 <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
                   <li>
-                    <a>Home</a>
+                    <Link href="/">Home</Link>
                   </li>
                   <li>
-                    <a>Portfolio</a>
-                  </li>
-
-                  <li>
-                    <a>Physical Wedding Cards</a>
-                  </li>
-                  <li>
-                    <a>How It Works</a>
-                  </li>
-                  <li>
-                    <a>Sign Up</a>
+                    <Link href="/portfolio">Portfolio</Link>
                   </li>
 
                   <li>
-                    <a>Sign In</a>
+                    <Link href="/">Physical Wedding Cards</Link>
+                  </li>
+                  <li>
+                    <Link href="#">How It Works</Link>
+                  </li>
+                  <li>
+                    <Link href="/register">Sign Up</Link>
+                  </li>
+
+                  <li>
+                    <Link href="/login">Sign In</Link>
                   </li>
                 </ul>
               </div>

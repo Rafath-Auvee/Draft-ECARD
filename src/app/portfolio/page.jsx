@@ -46,7 +46,7 @@ const page = () => {
             <PortfolioSidebar />
           </div>
           <div className="basis-9/12">
-            <div  className="md:flex hidden">
+            <div className="md:flex hidden">
               <PortfolioTop />
             </div>
             <PortfolioCards />
