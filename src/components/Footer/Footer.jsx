@@ -9,7 +9,7 @@ import {FiInstagram} from 'react-icons/fi';
 const Footer = () => {
   return (
     <div>
-      <footer className="footer footer-center p-10 bg-primary mt-20 text-white rounded">
+      <footer className="footer footer-center p-10 bg-primary mt-20 text-white rounded ">
           <Logo/>
         <div className="grid grid-flow-col gap-4 text-[16px]">
           <a className="link link-hover">Home</a>
