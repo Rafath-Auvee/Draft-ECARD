@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import MultiRangeSlider from "multi-range-slider-react";
 
 const PortfolioSidebar = () => {
-  const [minValue, set_minValue] = useState(0);
-  const [maxValue, set_maxValue] = useState(100);
+  const [minValue, set_minValue] = useState(500);
+  const [maxValue, set_maxValue] = useState(4000);
   const handleInput = (e) => {
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
@@ -63,12 +63,13 @@ const PortfolioSidebar = () => {
             />
           </label>
         </div>
+
         <p className="font-bold text-[18px] mt-[20px]">Pricing</p>
         <div className="divider"></div>
         <MultiRangeSlider
           style={{ border: "none", boxShadow: "none", padding: "15px 10px" }}
           min={0}
-          max={1000}
+          max={10000}
           step={1}
           minValue={minValue}
           maxValue={maxValue}
@@ -87,14 +88,16 @@ const PortfolioSidebar = () => {
           <input
             type="text"
             placeholder="Type here"
-            className="input input-bordered input-md basis-3/5 mr-[40px] bg-white"
+            className="input input-bordered input-md disabled:text-black cursor-none basis-3/5 mr-[40px] disabled:bg-white"
             disabled={true}
-            value={`${minValue} - ${maxValue}`}
+            value={`$${minValue} - $${maxValue}`}
           />
-          <button className="btn btn-primary btn-md text-white font-sans leading-relaxed"
+          <button
+            className="btn btn-primary btn-md text-white font-sans leading-relaxed "
             onClick={() => {
-              console.log(`Min: ${minValue}, Max: ${maxValue}`)
-            }}>
+              console.log(`Min: ${minValue}, Max: ${maxValue}`);
+            }}
+          >
             Apply
           </button>
         </div>
