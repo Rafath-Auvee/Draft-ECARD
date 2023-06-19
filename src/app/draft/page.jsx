@@ -13,7 +13,7 @@ export default function Home() {
         className="w-full h-screen bg-cover bg-no-repeat bg-scroll"
         style={{ backgroundImage: `url('/Home/hero.png')` }}
       >
-      <Navbar />
+        <Navbar />
         <div className="flex flex-col items-center justify-center h-screen">
           <div className="flex flex-col items-center justify-center h-full">
             <p className="text-[24px] text-primary uppercase">Looking for</p>
@@ -27,7 +27,7 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-center flex-grow mb-[132px]">
+          <div className="flex items-center justify-center flex-grow mb-[64px] md:mb-[137px]">
             <Image
               src={Iphone}
               width={0}
