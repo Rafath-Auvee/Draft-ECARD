@@ -19,7 +19,7 @@ const Cards = ({ items }) => {
               {items.title}
             </h2>
             <p className="font-bold text-2xl lg:text-xl basis-1/3 text-right md:text-left lg:text-right">
-              {items.price}
+            ৳{items.price}
             </p>
           </div>
         </div>

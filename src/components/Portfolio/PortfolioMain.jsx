@@ -1,17 +1,26 @@
+"use client"
+
 import React, { useState } from "react";
 import PortfolioCards from "@/components/Portfolio/PortfolioCards";
 import PortfolioSidebar from "@/components/Portfolio/PortfolioSidebar";
 import PortfolioTop from "@/components/Portfolio/PortfolioTop";
 
 const PortfolioMain = () => {
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(10000);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedFilter, setSelectedFilter] = useState("Default");
 
   const handleFilterChange = (selectedFilter) => {
+    setSelectedFilter(selectedFilter);
     console.log(`Selected Filter: ${selectedFilter}`);
   };
-  const handleFilters = (minValue, maxValue, selectedCategory) => {
-    console.log(
-      `Min: ${minValue}, Max: ${maxValue}, Category: ${selectedCategory}`
-    );
+
+  const handleFilters = (minValue, maxValue, selectedCategory, selectedFilter) => {
+    setMinValue(minValue);
+    setMaxValue(maxValue);
+    setSelectedCategory(selectedCategory);
+    console.log(`Min: ${minValue}, Max: ${maxValue}, Category: ${selectedCategory}`);
   };
 
   return (
@@ -23,7 +32,12 @@ const PortfolioMain = () => {
             <PortfolioSidebar onApplyFilters={handleFilters} />
           </div>
           <div className="lg:basis-9/12">
-            <PortfolioCards />
+            <PortfolioCards
+              minValue={minValue}
+              maxValue={maxValue}
+              selectedCategory={selectedCategory}
+              selectedFilter={selectedFilter}
+            />
           </div>
         </div>
       </div>

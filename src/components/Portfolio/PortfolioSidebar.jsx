@@ -45,7 +45,7 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
             />
           </label>
         </div>
-        <div className="form-control">
+        {/* <div className="form-control">
           <label className="label cursor-pointer">
             <span className="label-text">Single Page Animated Card</span>
             <input
@@ -56,7 +56,7 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
               onChange={() => setSelectedCategory("singlePageAnimatedCard")}
             />
           </label>
-        </div>
+        </div> */}
         <div className="form-control">
           <label className="label cursor-pointer">
             <span className="label-text">Multi Page Card</span>
@@ -88,6 +88,7 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
           thumbRightColor="#23272A"
           onInput={(e) => {
             handleInput(e);
+            
           }}
         />
         <div className="flex flew-row items-center mt-5">
