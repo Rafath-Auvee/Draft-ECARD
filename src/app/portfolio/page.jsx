@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import { data } from "../../Data/Card_Data";
 
 const page = () => {
-  const [selectedSortBy, setSelectedSortBy] = useState("");
 
   let count = 0;
   data.forEach(() => {

@@ -15,6 +15,7 @@ const PortfolioTop = () => {
         <div className="flex flex-col md:flex-row items-center md:items-start justify-between">
           <div className="w-full max-w-xs mx-auto md:mx-0 md:text-left">
             <select className="select select-bordered w-full">
+ 
               <option disabled defaultValue>Default</option>
               <option>Highest Price</option>
               <option>Lowest Price</option>
