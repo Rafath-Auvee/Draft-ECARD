@@ -16,15 +16,15 @@ const PortfolioCards = () => {
   };
 
   return (
-    <div className="ml-14">
+    <div className="ml-[1rem] md:ml-14">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 min-h-[120vh]">
         {currentCards.map((items, index) => (
           <Cards key={index} items={items} />
         ))}
       </div>
       <div className="mt-10">
-        <div className="flex flex-row justify-between  items-center mx-[40px] ">
-          <p className="capitalize basis-3/12">
+        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center mx-[40px]">
+          <p className="capitalize basis-3/12 mb-10 md:mb-0">
             Showed 1 - 6 of {data.length} products
           </p>
 

@@ -16,28 +16,25 @@ const Register = () => {
         </div> */}
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
-            
-                <Image
-                  src={HeroImage}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  style={{ width: "auto", height: "100%" }}
-                  alt="Login Image"
-                />
-             
+            <Image
+              src={HeroImage}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "auto", height: "100%" }}
+              alt="Login Image"
+            />
           </div>
           <div className="basis-1/2 ">
             <div className="grid place-items-center h-screen">
               <div className="join join-vertical">
                 <div className="join-item">
                   <div className="grid place-items-center mb-5 ">
-                  <Link href="/">
-              <>
-                    <Logo />
-                
-                    </>
-            </Link>
+                    <Link href="/">
+                      <>
+                        <Logo />
+                      </>
+                    </Link>
                   </div>
                   <h1 className="text-primary text-2xl text-center mb-5 font-semibold">
                     Welcome to Save the Date

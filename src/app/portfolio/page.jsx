@@ -23,32 +23,13 @@ const page = () => {
   return (
     <div>
       <Navbar />
-      <div className="mx-16 mt-20">
-        <div className="flex flex-row ">
-          <div className="basis-3/12"></div>
-          <div className="basis-9/12 flex flex-row justify-between ml-[185px] mr-[55px] items-center">
-            <div>
-              <select className="select select-bordered w-full max-w-xs">
-                <option disabled selected>
-                  Sort By
-                </option>
-                <option>Default</option>
-                <option>Highest Price</option>
-                <option>Lowest Price</option>
-                <option>Popular</option>
-              </select>
-            </div>
-            <p className="capitalize">Showed 1 - 6 of {count} products</p>
-          </div>
-        </div>
+      <div className="lg:mx-16 mt-20">
+        <PortfolioTop />
         <div className="flex flex-row mt-10">
-          <div className="basis-3/12 md:flex hidden">
+          <div className="lg:basis-3/12 lg:flex hidden">
             <PortfolioSidebar />
           </div>
-          <div className="basis-9/12">
-            <div className="md:flex hidden">
-              <PortfolioTop />
-            </div>
+          <div className="lg:basis-9/12">
             <PortfolioCards />
           </div>
         </div>
