@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import MultiRangeSlider from "multi-range-slider-react";
 
-const PortfolioSidebar = () => {
+const PortfolioSidebar = ({ onApplyFilters }) => {
+  const [selectedCategory, setSelectedCategory] = useState("singlePageCard");
   const [minValue, set_minValue] = useState(500);
   const [maxValue, set_maxValue] = useState(4000);
+
   const handleInput = (e) => {
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
+    onApplyFilters(e.minValue, e.maxValue, selectedCategory);
   };
   return (
     <div>
@@ -35,20 +38,22 @@ const PortfolioSidebar = () => {
             <span className="label-text">Single Page Card</span>
             <input
               type="radio"
-              name="radio-10"
+              name="category"
               className="radio checked:bg-black"
-              checked
+              checked={selectedCategory === "singlePageCard"}
+              onChange={() => setSelectedCategory("singlePageCard")}
             />
           </label>
         </div>
         <div className="form-control">
           <label className="label cursor-pointer">
-            <span className="label-text">Single Page Animated Card </span>
+            <span className="label-text">Single Page Animated Card</span>
             <input
               type="radio"
-              name="radio-10"
+              name="category"
               className="radio checked:bg-black"
-              checked
+              checked={selectedCategory === "singlePageAnimatedCard"}
+              onChange={() => setSelectedCategory("singlePageAnimatedCard")}
             />
           </label>
         </div>
@@ -57,9 +62,10 @@ const PortfolioSidebar = () => {
             <span className="label-text">Multi Page Card</span>
             <input
               type="radio"
-              name="radio-10"
+              name="category"
               className="radio checked:bg-black"
-              checked
+              checked={selectedCategory === "multiPageCard"}
+              onChange={() => setSelectedCategory("multiPageCard")}
             />
           </label>
         </div>
