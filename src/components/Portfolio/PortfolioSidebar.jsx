@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import MultiRangeSlider from "multi-range-slider-react";
 
@@ -13,24 +11,10 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
     set_maxValue(e.maxValue);
     onApplyFilters(e.minValue, e.maxValue, selectedCategory);
   };
+
   return (
     <div>
-      {/* <div>
-        <div className="text-sm breadcrumbs">
-          <ul>
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <a>Documents</a>
-            </li>
-            <li>
-              <a>Link</a>
-            </li>
-          </ul>
-        </div>
-      </div> */}
-      <div className=" mr-20">
+      <div className="mr-10">
         <p className="font-bold text-[18px]">Category</p>
         <div className="divider"></div>
         <div className="form-control">
@@ -45,18 +29,6 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
             />
           </label>
         </div>
-        {/* <div className="form-control">
-          <label className="label cursor-pointer">
-            <span className="label-text">Single Page Animated Card</span>
-            <input
-              type="radio"
-              name="category"
-              className="radio checked:bg-black"
-              checked={selectedCategory === "singlePageAnimatedCard"}
-              onChange={() => setSelectedCategory("singlePageAnimatedCard")}
-            />
-          </label>
-        </div> */}
         <div className="form-control">
           <label className="label cursor-pointer">
             <span className="label-text">Multi Page Card</span>
@@ -86,10 +58,7 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
           barRightColor="#ffffff"
           thumbLeftColor="#23272A"
           thumbRightColor="#23272A"
-          onInput={(e) => {
-            handleInput(e);
-            
-          }}
+          onInput={handleInput}
         />
         <div className="flex flew-row items-center mt-5">
           <input
@@ -99,14 +68,6 @@ const PortfolioSidebar = ({ onApplyFilters }) => {
             disabled={true}
             value={`$${minValue} - $${maxValue}`}
           />
-          <button
-            className="btn btn-primary btn-md text-white font-sans leading-relaxed "
-            onClick={() => {
-              console.log(`Min: ${minValue}, Max: ${maxValue}`);
-            }}
-          >
-            Apply
-          </button>
         </div>
       </div>
     </div>

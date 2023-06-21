@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "../Cards/Cards";
 import { data } from "../../Data/Card_Data";
 import PortfolioPagination from "./PortfolioPagination";
@@ -11,26 +11,47 @@ const PortfolioCards = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
+  const [filteredCards, setFilteredCards] = useState([]);
 
-  // Apply filtering based on selectedCategory and selectedFilter
-  let filteredCards = data;
+  useEffect(() => {
+    // Randomize price values in the data array
 
-  if (selectedCategory === "singlePageCard") {
-    filteredCards = filteredCards.filter(
-      (item) => item.cardCategory === "singlePageCard"
-    );
-  }
-  if (selectedCategory === "multiPageCard") {
-    filteredCards = filteredCards.filter(
-      (item) => item.cardCategory === "multiPageCard"
-    );
-  }
 
-  if (selectedFilter === "highestPrice") {
-    filteredCards = filteredCards.sort(
-      (a, b) => parseFloat(b.price) - parseFloat(a.price)
+    // Apply filtering based on selectedCategory and selectedFilter
+    let cards = data;
+
+    if (selectedFilter === "Default") {
+      cards = data;
+    }
+    
+    if (selectedCategory === "singlePageCard") {
+      cards = cards.filter((item) => item.cardCategory === "singlePageCard");
+    }
+    if (selectedCategory === "multiPageCard") {
+      cards = cards.filter((item) => item.cardCategory === "multiPageCard");
+    }
+
+    if (selectedFilter === "Highest Price") {
+      cards = cards.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+
+    if (selectedFilter === "Lowest Price") {
+      cards = cards.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    }
+
+    if (selectedFilter === "Popular") {
+      cards = cards.filter((item) => item.popularity > 4.5);
+      cards = cards.sort((a, b) => b.popularity - a.popularity);
+    }
+
+    cards = cards.filter(
+      (item) => parseFloat(item.price) >= minValue && parseFloat(item.price) <= maxValue
     );
-  }
+
+
+
+    setFilteredCards(cards);
+  }, [minValue, maxValue, selectedCategory, selectedFilter]);
 
   // Apply pagination
   const indexOfLastCard = currentPage * cardsPerPage;
@@ -45,7 +66,9 @@ const PortfolioCards = ({
     <div className="ml-[1rem] md:ml-14">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 min-h-[120vh]">
         {currentCards.map((item, index) => (
-          <Cards key={index} items={item} />
+          <>
+            <Cards key={index} items={item} />
+          </>
         ))}
       </div>
       <div className="mt-10">

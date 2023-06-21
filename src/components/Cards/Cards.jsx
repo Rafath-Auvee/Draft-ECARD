@@ -22,6 +22,7 @@ const Cards = ({ items }) => {
             ৳{items.price}
             </p>
           </div>
+          <p>Popularity: {items.popularity}</p>
         </div>
    
     </div>

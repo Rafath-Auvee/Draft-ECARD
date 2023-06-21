@@ -1,8 +1,8 @@
 export let data = [
   {
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: "2,500",
+    title: "First Card - Marble Textured Welcome Board",
+    price: 3768,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -10,7 +10,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 4032,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -18,7 +18,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "6,500",
+    price: 9266,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -26,7 +26,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "6,500",
+    price: 7326,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -34,7 +34,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 7611,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -42,7 +42,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 3168,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -50,7 +50,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 9290,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -58,7 +58,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 2731,
     buttonText: "View Design",
     cardType: "Single Page",
     cardCategory: "singlePageCard",
@@ -66,7 +66,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 4216,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -74,7 +74,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 8114,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -82,7 +82,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 478,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -90,7 +90,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 971,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -98,7 +98,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 4824,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -106,7 +106,7 @@ export let data = [
   {
     imageUrl: "/Home/card_preview.png",
     title: "Marble Textured Welcome Board",
-    price: "2,500",
+    price: 6018,
     buttonText: "View Design",
     cardType: "Multiple Page",
     cardCategory: "multiPageCard",
@@ -123,3 +123,5 @@ data = data.map((item) => {
 
   return item;
 });
+
+
