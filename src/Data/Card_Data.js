@@ -1,127 +1,152 @@
 export let data = [
   {
+    id: "96",
     imageUrl: "/Home/card_preview.png",
-    title: "First Card - Marble Textured Welcome Board",
-    price: 3768,
+    title: "Maldonado Rwanda distance",
+    price: 3085,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 5,
     cardCategory: "singlePageCard",
   },
   {
+    id: "11",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 4032,
+    title: "Burns Portugal jungle",
+    price: 3049,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 1,
     cardCategory: "singlePageCard",
   },
   {
+    id: "96",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 9266,
+    title: "Graham San Marino hour",
+    price: 1325,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 2,
     cardCategory: "singlePageCard",
   },
   {
+    id: "74",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 7326,
+    title: "Martin Bhutan lot",
+    price: 2950,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 5,
     cardCategory: "singlePageCard",
   },
   {
+    id: "28",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 7611,
+    title: "Quinn Svalbard & Jan Mayen condition",
+    price: 1009,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 7,
     cardCategory: "singlePageCard",
   },
   {
+    id: "98",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 3168,
+    title: "Sparks Mozambique fresh",
+    price: 3854,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 7,
     cardCategory: "singlePageCard",
   },
   {
+    id: "13",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 9290,
+    title: "Mills Peru exist",
+    price: 2671,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 2,
     cardCategory: "singlePageCard",
   },
   {
+    id: "9",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 2731,
+    title: "Cross Chile possible",
+    price: 2482,
     buttonText: "View Design",
     cardType: "Single Page",
+    popularity: 9,
     cardCategory: "singlePageCard",
   },
   {
+    id: "54",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 4216,
+    title: "Cunningham Dominican Republic right",
+    price: 4141,
     buttonText: "View Design",
     cardType: "Multiple Page",
+    popularity: 1,
     cardCategory: "multiPageCard",
   },
   {
+    id: "47",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 8114,
+    title: "Wolfe South Sudan quietly",
+    price: 8334,
     buttonText: "View Design",
     cardType: "Multiple Page",
+    popularity: 9,
     cardCategory: "multiPageCard",
   },
   {
+    id: "86",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 478,
+    title: "Horton American Samoa dig",
+    price: 1754,
     buttonText: "View Design",
     cardType: "Multiple Page",
+    popularity: 4,
     cardCategory: "multiPageCard",
   },
   {
+    id: "48",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 971,
+    title: "Hernandez Macau SAR China donkey",
+    price: 9549,
     buttonText: "View Design",
     cardType: "Multiple Page",
+    popularity: 9,
+    cardCategory: "multiPageCard",
+  },
+
+  {
+    id: "39",
+    imageUrl: "/Home/card_preview.png",
+    title: "West São Tomé and Príncipe coming",
+    price: 5523,
+    buttonText: "View Design",
+    cardType: "Multiple Page",
+    popularity: 9,
     cardCategory: "multiPageCard",
   },
   {
+    id: "23",
     imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 4824,
+    title: "Potter Comoros rose",
+    price: 9320,
     buttonText: "View Design",
     cardType: "Multiple Page",
-    cardCategory: "multiPageCard",
-  },
-  {
-    imageUrl: "/Home/card_preview.png",
-    title: "Marble Textured Welcome Board",
-    price: 6018,
-    buttonText: "View Design",
-    cardType: "Multiple Page",
+    popularity: 8,
     cardCategory: "multiPageCard",
   },
 ];
 
+// // Add popularity rating
+// data = data.map((item) => {
+//   // Generate a random popularity rating between 1 and 5
+//   const randomPopularity = Math.floor(Math.random() * 5) + 1;
+//   item.popularity = randomPopularity;
 
-
-// Add popularity rating
-data = data.map((item) => {
-  // Generate a random popularity rating between 1 and 5
-  const randomPopularity = Math.floor(Math.random() * 5) + 1;
-  item.popularity = randomPopularity;
-
-  return item;
-});
-
-
+//   return item;
+// });
