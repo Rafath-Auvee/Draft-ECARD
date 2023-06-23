@@ -27,7 +27,9 @@ const page = () => {
             <div className="text-zinc-800 text-[32px] font-semibold leading-10 mt-5">
               Marbel Textured Welcome Board
             </div>
-            <p className="mt-5 ">Welcome your guests with our pretty welcome boards!</p>
+            <p className="mt-5 ">
+              Welcome your guests with our pretty welcome boards!
+            </p>
             <div className=" text-zinc-800 text-[40px] font-bold capitalize leading-10 my-5">
               ৳2,500
             </div>
