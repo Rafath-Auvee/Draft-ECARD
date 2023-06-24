@@ -16,28 +16,36 @@ const Page = () => {
 
   const getSortedOrders = () => {
     let filteredOrders = orders;
-  
+
     // Filter by status
     if (sortOrder === "paid") {
-      filteredOrders = filteredOrders.filter((order) => order.status === "paid");
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === "paid"
+      );
     } else if (sortOrder === "pending") {
-      filteredOrders = filteredOrders.filter((order) => order.status === "pending");
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === "pending"
+      );
     }
-  
+
     // Sort by price
     if (sortOrder === "priceDesc") {
       filteredOrders = filteredOrders.sort((a, b) => b.price - a.price);
     } else if (sortOrder === "priceAsc") {
       filteredOrders = filteredOrders.sort((a, b) => a.price - b.price);
     }
-  
+
     // Sort by card name
     if (sortOrder === "cardsDesc") {
-      filteredOrders = filteredOrders.sort((a, b) => b.card.localeCompare(a.card));
+      filteredOrders = filteredOrders.sort((a, b) =>
+        b.card.localeCompare(a.card)
+      );
     } else if (sortOrder === "cardsAsc") {
-      filteredOrders = filteredOrders.sort((a, b) => a.card.localeCompare(b.card));
+      filteredOrders = filteredOrders.sort((a, b) =>
+        a.card.localeCompare(b.card)
+      );
     }
-  
+
     return filteredOrders;
   };
 
@@ -159,29 +167,37 @@ const Page = () => {
               <div className="relative">
                 <button className="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1">
                   <span className="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2">
-                    <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-3 h-3"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                        />
-                      </svg>
-                    </div>
+                    {/*  */}
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0} className="">
-                        <div className="w-10 rounded-full">
-                          <p>Filters </p>
-                        </div>
+                      <div className="flex flex-row justify-center items-center"> 
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-3 h-3"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                          />
+                        </svg>
+                      </div>
+                     
+                      <div className="ml-3">
+                        
+                          <div className="w-10 rounded-full">
+                            <p>Filters </p>
+                          </div>
+                        
+                        {DropDownFilter()}
+                      </div>
+                      </div>
                       </label>
-                      {DropDownFilter()}
                     </div>
                   </span>
                 </button>
@@ -274,7 +290,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                {sortedOrders.map((order) => (
+                  {sortedOrders.map((order) => (
                     <tr key={order.id}>
                       <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
                         #{order.id}
