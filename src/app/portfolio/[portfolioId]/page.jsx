@@ -56,7 +56,6 @@ const page = () => {
             Our Popular Cards
           </h1>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-20 md:place-items-center  gap-4 md:mx-10 lg:mx-24 ">
           {data.map((items, index) => {
             if (cardCount >= cardLimit) {
