@@ -1,8 +1,108 @@
+"use client";
+
 import Navbar from "@/components/Navbar/Navbar";
-import React from "react";
+import React, { useState } from "react";
 import { orders } from "../../Data/Order_Data";
 
-const page = () => {
+const Page = () => {
+  const [sortOrder, setSortOrder] = useState(null);
+  const handleSort = (field) => {
+    if (sortOrder === field) {
+      setSortOrder(null);
+    } else {
+      setSortOrder(field);
+    }
+  };
+
+  const getSortedOrders = () => {
+    let filteredOrders = orders;
+  
+    // Filter by status
+    if (sortOrder === "paid") {
+      filteredOrders = filteredOrders.filter((order) => order.status === "paid");
+    } else if (sortOrder === "pending") {
+      filteredOrders = filteredOrders.filter((order) => order.status === "pending");
+    }
+  
+    // Sort by price
+    if (sortOrder === "priceDesc") {
+      filteredOrders = filteredOrders.sort((a, b) => b.price - a.price);
+    } else if (sortOrder === "priceAsc") {
+      filteredOrders = filteredOrders.sort((a, b) => a.price - b.price);
+    }
+  
+    // Sort by card name
+    if (sortOrder === "cardsDesc") {
+      filteredOrders = filteredOrders.sort((a, b) => b.card.localeCompare(a.card));
+    } else if (sortOrder === "cardsAsc") {
+      filteredOrders = filteredOrders.sort((a, b) => a.card.localeCompare(b.card));
+    }
+  
+    return filteredOrders;
+  };
+
+  const sortedOrders = getSortedOrders();
+
+  const DropDownFilter = () => {
+    return (
+      <ul
+        tabIndex={0}
+        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+      >
+        <li>
+          {sortOrder !== "cardsAsc" && (
+            <p
+              className="justify-between w-full"
+              onClick={() => handleSort("cardsAsc")}
+            >
+              Cards: A-Z
+            </p>
+          )}
+          {sortOrder !== "cardsDesc" && (
+            <p
+              className="justify-between w-full"
+              onClick={() => handleSort("cardsDesc")}
+            >
+              Cards: Z-A
+            </p>
+          )}
+        </li>
+        <li>
+          <p
+            className="justify-between w-full"
+            onClick={() => handleSort("priceDesc")}
+          >
+            Price: High to Low
+          </p>
+        </li>
+        <li>
+          <p
+            className="justify-between w-full"
+            onClick={() => handleSort("priceAsc")}
+          >
+            Price: Low to High
+          </p>
+        </li>
+        <li>
+          <p
+            className="justify-between w-full"
+            onClick={() => handleSort("paid")}
+          >
+            Show Paid
+          </p>
+        </li>
+        <li>
+          <p
+            className="justify-between w-full"
+            onClick={() => handleSort("pending")}
+          >
+            Show Pending
+          </p>
+        </li>
+      </ul>
+    );
+  };
+
   const getStatusComponent = (status) => {
     if (status === "paid") {
       return (
@@ -75,7 +175,14 @@ const page = () => {
                         />
                       </svg>
                     </div>
-                    <div className="hidden sm:block">Filters</div>
+                    <div className="dropdown dropdown-end">
+                      <label tabIndex={0} className="">
+                        <div className="w-10 rounded-full">
+                          <p>Filters </p>
+                        </div>
+                      </label>
+                      {DropDownFilter()}
+                    </div>
                   </span>
                 </button>
               </div>
@@ -167,7 +274,7 @@ const page = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {orders.map((order) => (
+                {sortedOrders.map((order) => (
                     <tr key={order.id}>
                       <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
                         #{order.id}
@@ -198,4 +305,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
