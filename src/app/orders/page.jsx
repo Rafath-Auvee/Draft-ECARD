@@ -1,74 +1,12 @@
 import Navbar from "@/components/Navbar/Navbar";
 import React from "react";
+import { orders } from "../../Data/Order_Data";
 
 const page = () => {
-  const orders = [
-    {
-      id: 69,
-      card: "Asymmetrical Symmetry – ACRYLIC INVITATION SET",
-      price: 9991,
-      status: "paid",
-    },
-    {
-      id: 60,
-      card: "Marble Textured Welcome Board",
-      price: 8014,
-      status: "pending",
-    },
-    {
-      id: 28,
-      card: "Marble Textured Welcome Board",
-      price: 9471,
-      status: "paid",
-    },
-    {
-      id: 42,
-      card: "Marble Textured Welcome Board",
-      price: 5661,
-      status: "paid",
-    },
-    {
-      id: 13,
-      card: "Marble Textured Welcome Board",
-      price: 1911,
-      status: "paid",
-    },
-    {
-      id: 61,
-      card: "Marble Textured Welcome Board",
-      price: 6578,
-      status: "pending",
-    },
-    {
-      id: 73,
-      card: "Marble Textured Welcome Board",
-      price: 2222,
-      status: "pending",
-    },
-    {
-      id: 84,
-      card: "Marble Textured Welcome Board",
-      price: 4606,
-      status: "paid",
-    },
-    {
-      id: 100,
-      card: "Marble Textured Welcome Board",
-      price: 7534,
-      status: "pending",
-    },
-    {
-      id: 41,
-      card: "Marble Textured Welcome Board",
-      price: 9331,
-      status: "paid",
-    },
-  ];
-
   const getStatusComponent = (status) => {
     if (status === "paid") {
       return (
-        <div className="flex text-center justify-end ">
+        <div className="flex text-center justify-end">
           <div className="bg-green-200 text-green-600 uppercase px-3 py-1 rounded text-[12px] font-normal leading-none tracking-wide">
             Paid
           </div>
@@ -76,7 +14,7 @@ const page = () => {
       );
     } else if (status === "pending") {
       return (
-        <div className="flex text-center justify-end ">
+        <div className="flex text-center justify-end">
           <div className="bg-amber-200 text-amber-600 text-[12px] font-normal leading-none tracking-wide uppercase px-3 py-1 rounded">
             Pending
           </div>
@@ -145,13 +83,13 @@ const page = () => {
           </div>
 
           <div className="p-1.5 w-full inline-block align-middle">
-            <div className="overflow-hidden border rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200">
+            <div className="overflow-x-auto md:overflow-hidden border rounded-lg">
+              <table className="min-w-full divide-y divide-gray-200 ">
                 <thead className="bg-gray-50">
                   <tr>
                     <th
                       scope="col"
-                      className="flex items-center px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      className="flex items-center px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
                       Orders
                       <svg
@@ -172,7 +110,7 @@ const page = () => {
 
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
                       <span className="inline-flex items-center">
                         Card
@@ -194,7 +132,7 @@ const page = () => {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
                       <span className="inline-flex items-center">
                         Price
@@ -216,13 +154,13 @@ const page = () => {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase"
                     >
                       Status
                     </th>
                     {/* <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase"
                     >
                       Delete
                     </th> */}
@@ -231,20 +169,22 @@ const page = () => {
                 <tbody className="divide-y divide-gray-200">
                   {orders.map((order) => (
                     <tr key={order.id}>
-                      <td className="px-6 py-4 text-primary text-[12px] font-normal tracking-wide">
+                      <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
                         #{order.id}
                       </td>
-                      <td className="px-6 py-4 text-primary text-[12px] font-normal leading-none tracking-wide">
+                      <td className="px-6 py-4 text-primary text-xs font-normal leading-none tracking-wide">
                         {order.card}
                       </td>
-                      <td className="px-6 py-4  text-primary text-[12px] font-normal tracking-wide">
-                      ৳ {order.price}
+                      <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
+                        ৳ {order.price}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
                         <div>{getStatusComponent(order.status)}</div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                        <button className="text-primary bg-stone-200 px-4 py-1 rounded">Download</button>
+                        <button className="text-primary bg-stone-200 px-4 py-1 rounded">
+                          Download
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -257,4 +197,5 @@ const page = () => {
     </div>
   );
 };
+
 export default page;
