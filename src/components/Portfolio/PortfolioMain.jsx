@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import PortfolioCards from "@/components/Portfolio/PortfolioCards";
 import PortfolioSidebar from "@/components/Portfolio/PortfolioSidebar";
 import PortfolioTop from "@/components/Portfolio/PortfolioTop";
+import FilterButton from "./FilterButton";
 
 const PortfolioMain = () => {
   const [minValue, setMinValue] = useState(0);
@@ -25,15 +26,18 @@ const PortfolioMain = () => {
     setMinValue(minValue);
     setMaxValue(maxValue);
     setSelectedCategory(selectedCategory);
-    console.log(
-      `Min: ${minValue}, Max: ${maxValue}, Category: ${selectedCategory}`
-    );
+    // console.log(
+    //   `Min: ${minValue}, Max: ${maxValue}, Category: ${selectedCategory}`
+    // );
   };
 
   return (
     <div>
       <div className="lg:mx-16 mt-20">
         <PortfolioTop onFilterChange={handleFilterChange} />
+        <div className="flex items-center justify-center ml-10 mt-10 md:hidden">
+          <PortfolioSidebar onApplyFilters={handleFilters} />
+        </div>
         <div className="flex flex-row mt-10">
           <div className="lg:w-3/12 lg:flex hidden">
             <PortfolioSidebar onApplyFilters={handleFilters} />

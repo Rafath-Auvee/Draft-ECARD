@@ -1,15 +1,18 @@
 "use client";
 
-import Image from "next/image";
-import Iphone from "/public/Home/iPhone.png";
-import { BsArrowRight } from "react-icons/bs";
-import Footer from "@/components/Footer/Footer";
-import Navbar from "@/components/Navbar/Navbar";
+import Cards from "../../components/Cards/Cards";
+import { draft } from "../../Data/Draft_Data";
 
-export default function Home() {
+const ExperimentalCard = () => {
   return (
-    <div>
-      
+    <div className="ml-[1rem] md:ml-14">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 min-h-[120vh]">
+        {draft.map((item, index) => (
+          <Cards key={index} items={item} />
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default ExperimentalCard;

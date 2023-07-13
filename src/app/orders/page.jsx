@@ -348,7 +348,7 @@ const Page = () => {
                     {/*  */}
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0} className="">
-                        <div className="flex flex-row justify-center items-center">
+                        <div className="flex flex-row justify-center items-center ">
                           <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"

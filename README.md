@@ -1,234 +1,135 @@
-import Navbar from "@/components/Navbar/Navbar";
-import React from "react";
+Problem Statement: In NextJS 13 with app router, I want to pass data from "/experimental" to dynamic route "/experimental/${id}. It gives me 'router.query' as it is undefined.
 
-const page = () => {
+I tried using 'next/navigation' in the nextjs 13 with app router. I can't pass the data to one component to another.
+
+Here is my Json data
+
+draft.js
+
+export const draft = [
+  {
+    id: 1,
+    title: "Burkina Faso serve Togo Vincent student",
+    imageUrl: "/cards/1.jpg",
+    imageType: "single image",
+    price: 8000,
+    buttonText: "View Design",
+    cardType: "Single Page",
+    popularity: 1,
+    cardCategory: "singlePageCard",
+  },
+];
+
+export default draft;
+
+
+Here is my ExperimentCard where I pass and mapping the Draft.js data object 
+
+
+import Cards from "../../components/Cards/Cards";
+import { draft } from "../../Data/Draft_Data";
+
+const ExperimentalCard = () => {
   return (
-    <div>
-      <Navbar />
-      <div className="flex flex-col mt-10 mx-2 md:mx-16 border-stone-300 border px-10 py-10">
-        <div className="overflow-x-auto">
-          <div className="flex justify-between py-3 pl-2">
-            <div className="relative max-w-xs">
-              <label htmlFor="hs-table-search" className="sr-only">
-                Search
-              </label>
-              <input
-                type="text"
-                name="hs-table-search"
-                id="hs-table-search"
-                className="block w-full p-3 pl-10 text-sm border-gray-500 border rounded-md placeholder:font-sans placeholder:text-primary placeholder-transparent placeholder-opacity-0 bg-transparent"
-                placeholder="Search..."
-              />
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <svg
-                  className="h-3.5 w-3.5 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <button className="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1">
-                  <span className="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2">
-                    <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-3 h-3"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="hidden sm:block">Filters</div>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-1.5 w-full inline-block align-middle">
-            <div className="overflow-hidden border rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="py-3 pl-4">
-                      <div className="flex items-center h-5">
-                        <input
-                          id="checkbox-all"
-                          type="checkbox"
-                          className="text-blue-600 border-gray-200 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="checkbox" className="sr-only">
-                          Checkbox
-                        </label>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="flex items-center px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                    >
-                      ID
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={1}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 13l-5 5m0 0l-5-5m5 5V6"
-                        />
-                      </svg>
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                    >
-                      <span className="inline-flex items-center">
-                        Name
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M7 11l5-5m0 0l5 5m-5-5v12"
-                          />
-                        </svg>
-                      </span>
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                    >
-                      <span className="inline-flex items-center">
-                        Email
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17 13l-5 5m0 0l-5-5m5 5V6"
-                          />
-                        </svg>
-                      </span>
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                    >
-                      Edit
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                    >
-                      Delete
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  <tr>
-                    <td className="py-3 pl-4">
-                      <div className="flex items-center h-5">
-                        <input
-                          type="checkbox"
-                          className="text-blue-600 border-gray-200 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="checkbox" className="sr-only">
-                          Checkbox
-                        </label>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                      1
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                      Jone Doe
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                      jonne62@gmail.com
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        className="text-green-500 hover:text-green-700"
-                        href="#"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <button className="text-primary">Download</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pl-4">
-                      <div className="flex items-center h-5">
-                        <input
-                          type="checkbox"
-                          className="text-blue-600 border-gray-200 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="checkbox" className="sr-only">
-                          Checkbox
-                        </label>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                      1
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                      Jone Doe
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                      jonne62@gmail.com
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        className="text-green-500 hover:text-green-700"
-                        href="#"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <button className="text-primary">Download</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+    <div className="ml-[1rem] md:ml-14">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 min-h-[120vh]">
+        {draft.map((item, index) => (
+          <Cards key={index} items={item} />
+        ))}
       </div>
     </div>
   );
 };
-export default page;
+
+export default ExperimentalCard;
+
+
+And the Card components will like this. And From Cards Components I want to pass data to dynamic route "/experimental/${id}.
+
+
+Cards.jsx
+
+'use client'
+ 
+import { useRouter } from 'next/navigation'
+import React from "react";
+
+const Cards = ({ items }) => {
+
+  const router = useRouter()
+  
+  const handleCardClick = (id) => {
+    router.push(`/experimental/${id}`);
+  };
+
+  return (
+    <div>
+      
+        <div className="mx-5  lg:mx-10">
+          <div
+            className="w-full h-[30rem] md:h-[25rem]  lg:h-[20rem] items-center bg-contain bg-no-repeat"
+            style={{ backgroundImage: `url('${items.imageUrl}')` }}
+            onClick={() => handleCardClick(item.id)}
+          >
+            <div className="bg-[#23272a93] relative z-0 w-32 mb-4 ml-4 h-11 text-center items-center flex rounded-sm justify-center ">
+              <p className="text-base-100 uppercase">{items.cardType}</p>
+            </div>
+          </div>
+          <div className="flex flex-row mt-4 justify-between">
+            <h2 className="font-normal text-[1.5rem] md:text-[1.4rem] lg:text-xl basis-2/3">
+              {items.title}
+            </h2>
+            <p className="font-bold text-2xl lg:text-xl basis-1/3 text-right md:text-left lg:text-right">
+            ৳{items.price}
+            </p>
+          </div>
+          {/* <p>Popularity: {items.popularity}</p> */}
+        </div>
+   
+    </div>
+  );
+};
+
+export default Cards;
+When I click the component it will navigate to the dynamic link "/experimental/${id}". It gives me an error
+
+[id]/page.jsx
+
+'use client'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+
+const Page = () => {
+  const router = useRouter();
+  const { id } = router.query; 
+
+  return (
+    <div>
+      <h1>Experimental Card Details</h1>
+      <p>Card ID: {id}</p>
+      <p>Card title: {title}</p>
+      <p>Card imageUrl: {imageUrl}</p>
+      <p>Card imageType: {imageType}</p>
+      <p>Card price: {price}</p>
+      <p>Card buttonText: {buttonText}</p>
+      <p>Card cardType: {cardType}</p>
+      <p>Card popularity: {popularity}</p>
+      <p>Card cardCategory: {cardCategory}</p>
+    </div>
+  );
+}
+
+export default Page
+
+
+Unhandled Runtime Error TypeError: Cannot destructure property 'id' of 'router.query' as it is undefined.
+
+src\app\experimental\[id]\page.jsx (7:10) @ id
+
+   5 | const Page = () => {
+   6 | const router = useRouter();
+>  7 | const { id } = router.query; 
+     |        ^
+   8 | 
+   9 | return (
+  10 |   <div>
