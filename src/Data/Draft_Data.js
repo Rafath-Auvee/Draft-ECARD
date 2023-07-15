@@ -1,13 +1,15 @@
 export const draft = [
   {
     id: 1,
-    title: "Burkina Faso serve Togo Vincent student",
+    title: "Marble Textured Welcome Board",
     imageUrl: "/cards/1.jpg",
     imageType: "single image",
     price: 8000,
     buttonText: "View Design",
     cardType: "Single Page",
     popularity: 1,
+    description:
+      "Welcome your guests with elegance using our marble-textured welcome board, a sophisticated addition to any entryway.",
     cardCategory: "singlePageCard",
     textStyles: [
       {
@@ -34,13 +36,15 @@ export const draft = [
   },
   {
     id: 2,
-    title: "Armenia tide Paraguay Emily factor",
+    title: "Enchanting Forest Adventure",
     imageUrl: "/cards/2.jpg",
     imageType: "single image",
     price: 4545,
     buttonText: "View Design",
     cardType: "Single Page",
     popularity: 5,
+    description:
+      "Embark on an enchanting forest adventure with this whimsical card, featuring cute woodland creatures and lush green landscapes.",
     cardCategory: "singlePageCard",
     textStyles: [
       {
@@ -67,13 +71,15 @@ export const draft = [
   },
   {
     id: 3,
-    title: "Example Image 3",
+    title: "Starry Night Sky Greeting",
     imageUrl: "/cards/3.jpg",
     imageType: "single image",
     price: 9169,
     buttonText: "View Design",
     cardType: "Single Page",
     popularity: 5,
+    description:
+      "Greet your loved ones under a starry night sky with this magical card, capturing the beauty of a celestial wonder.",
     cardCategory: "singlePageCard",
     textStyles: [
       {
@@ -110,14 +116,15 @@ export const draft = [
   },
   {
     id: 4,
-    title: "Example Image 1",
+    title: "Beachside Paradise Escape",
     imageType: "multiple image",
     price: 4131,
     imageUrl: "/cards/double/1_1.jpg",
     buttonText: "View Design",
     cardType: "Multiple Page",
-    popularity: 9,
     popularity: 4,
+    description:
+      "Transport yourself to a beachside paradise with this serene card, inviting you to relax and unwind with its soothing coastal vibes.",
     cardCategory: "multiPageCard",
     images: [
       {

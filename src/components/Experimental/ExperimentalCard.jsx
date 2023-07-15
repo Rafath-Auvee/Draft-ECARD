@@ -16,7 +16,7 @@ const ExperimentalCard = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true); // Set loading state to true before filtering
+    setIsLoading(true);
 
     let cards = draft;
 
@@ -45,20 +45,13 @@ const ExperimentalCard = ({
         parseFloat(item.price) >= minValue && parseFloat(item.price) <= maxValue
     );
 
-    // Simulate a delay to see the loading state
-    // setTimeout(() => {
     setFilteredCards(cards);
-    setIsLoading(false); // Clear loading state after filtering
-    // }, 2000); // Adjust the delay time as needed
+    setIsLoading(false);
   }, [minValue, maxValue, selectedCategory, selectedFilter]);
 
-  // Apply pagination
   const indexOfLastCard = currentPage * cardsPerPage;
-  // console.log("🚀 ~ file: ExperimentalCard.jsx:56 ~ indexOfLastCard:", indexOfLastCard)
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  // console.log("🚀 ~ file: ExperimentalCard.jsx:58 ~ indexOfFirstCard:", indexOfFirstCard)
   const currentCards = filteredCards.slice(indexOfFirstCard, indexOfLastCard);
-  // console.log("🚀 ~ file: ExperimentalCard.jsx:60 ~ currentCards:", currentCards)
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
