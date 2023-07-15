@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { SlMagnifier } from "react-icons/sl";
 import { FiMenu } from "react-icons/fi";
@@ -14,7 +13,7 @@ const Navbar = () => {
         <div className="navbar-end hidden md:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <Link href="/draft" >How It Works</Link>
+              <Link href="/draft">How It Works</Link>
             </li>
             <li>
               <Link href="/register">Sign Up</Link>
@@ -25,7 +24,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-      <div className="navbar bg-transparent">
+      <div className="navbar bg-transparent relative">
         <div className="navbar-start ">
           <div>
             <Logo />
@@ -43,7 +42,7 @@ const Navbar = () => {
             <li>
               <Link href="/">Physical Wedding Cards</Link>
             </li>
-            
+
             <li>
               <Link href="/experimental">Experiment</Link>
             </li>
@@ -52,17 +51,13 @@ const Navbar = () => {
         <div className="navbar-end ">
           <div className="flex justify-end md:hidden">
             <div className="drawer drawer-end">
-              <input
-                id="my-drawer-4"
-                type="checkbox"
-                className="drawer-toggle"
-              />
+              <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
               <div className="drawer-content">
                 <label htmlFor="my-drawer-4" className="drawer-button">
                   <FiMenu />
                 </label>
               </div>
-              <div className="drawer-side">
+              <div className="drawer-side" style={{ zIndex: 9999 }}>
                 <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
                   <li>
@@ -95,7 +90,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search here..."
-                className="ml-2  w-24 md:w-60 placeholder:font-sans placeholder:text-primary placeholder-transparent placeholder-opacity-0 bg-transparent"
+                className="ml-2 w-24 md:w-60 placeholder:font-sans placeholder:text-primary placeholder-transparent placeholder-opacity-0 bg-transparent"
               />
             </div>
           </div>

@@ -47,7 +47,7 @@ const CardDetails = ({ card, cardLimit }) => {
                 />
               </div>
 
-              <div className="h-[300px] w-9/12 my-auto md:ml-10 lg:ml-20">
+              <div className="h-[300px] w-full md:w-9/12 my-auto md:ml-10 lg:ml-20">
                 <div className="flex flex-col justify-start mx-5 mt-10 md:mt-0">
                   <div className="HeartIcon">
                     <div className="w-12 h-12 p-[12px] rounded-[40px] border  border-stone-300 justify-start items-start gap-[10px] inline-flex">
