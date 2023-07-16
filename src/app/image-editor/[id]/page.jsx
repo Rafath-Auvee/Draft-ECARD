@@ -412,7 +412,7 @@ const ImageEditor = ({ params }) => {
 
               {/* left and top position  */}
 
-              <div>
+              {/* <div>
                 <label htmlFor={`leftInput-${selectedTextIndex}`}>
                   Left Position:
                 </label>
@@ -468,7 +468,7 @@ const ImageEditor = ({ params }) => {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 {/* <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
