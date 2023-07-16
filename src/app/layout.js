@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Fraunces } from "next/font/google";
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });

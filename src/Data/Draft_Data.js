@@ -1,15 +1,46 @@
+//     MAHBUBUL HOQUE & JOYNOB REKHA
+// Cordially Request The honour of
+// your Gracious presence at the
+// Wedding Reception
+// of their son
 export const draft = [
+  {
+    // id: 100,
+    // title: "Amazing Sunset",
+    // imageType: "/cards/main/1.jpg",
+    // price: "/cards/main/1.jpg",
+    // imageUrl: "single image",
+    // url: 9.99,
+    // buttonText: "View Design",
+    // cardType: "Single Page",
+    // popularity: 10,
+    // description: "Experience the breathtaking view of an amazing sunset over the ocean.",
+    // cardCategory: "singlePageCard",
+
+    id: 100,
+    title: "Beautiful Mountain Landscape",
+    imageUrl: "/cards/main/1.jpg",
+    url: "/cards/main/1.jpg",
+    imageType: "single image",
+    price: 6000,
+    buttonText: "View Design",
+    cardType: "Single Page",
+    popularity: 10,
+    description: "Welcome your guests with elegance using our marble-textured welcome board, a sophisticated addition to any entryway.",
+    cardCategory: "singlePageCard",
+    
+  },
   {
     id: 1,
     title: "Marble Textured Welcome Board",
     imageUrl: "/cards/1.jpg",
+    url: "/cards/1.jpg",
     imageType: "single image",
     price: 8000,
     buttonText: "View Design",
     cardType: "Single Page",
     popularity: 1,
-    description:
-      "Welcome your guests with elegance using our marble-textured welcome board, a sophisticated addition to any entryway.",
+    description: "Welcome your guests with elegance using our marble-textured welcome board, a sophisticated addition to any entryway.",
     cardCategory: "singlePageCard",
     textStyles: [
       {
@@ -38,6 +69,7 @@ export const draft = [
     id: 2,
     title: "Enchanting Forest Adventure",
     imageUrl: "/cards/2.jpg",
+    url: "/cards/2.jpg",
     imageType: "single image",
     price: 4545,
     buttonText: "View Design",
@@ -73,6 +105,7 @@ export const draft = [
     id: 3,
     title: "Starry Night Sky Greeting",
     imageUrl: "/cards/3.jpg",
+    url: "/cards/3.jpg",
     imageType: "single image",
     price: 9169,
     buttonText: "View Design",
@@ -120,6 +153,7 @@ export const draft = [
     imageType: "multiple image",
     price: 4131,
     imageUrl: "/cards/double/1_1.jpg",
+    url: "/cards/double/1_1.jpg",
     buttonText: "View Design",
     cardType: "Multiple Page",
     popularity: 4,

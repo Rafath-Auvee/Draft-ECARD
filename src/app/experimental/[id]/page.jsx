@@ -9,6 +9,8 @@ import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 import CardDynamic from "/public/card-preview/card.svg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 
 const cardLimit = 4;
 let cardCount = 0;
@@ -25,6 +27,20 @@ const LoadingOverlay = () => (
 );
 
 const CardDetails = ({ card, cardLimit }) => {
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  const handleImageLoad = (event) => {
+    setImageDimensions({
+      width: event.target.naturalWidth,
+      height: event.target.naturalHeight,
+    });
+  };
+
+  const navigate = useRouter();
+
   const filteredCards = data.filter(
     (items) => card.cardType === items.cardType
   );
@@ -42,8 +58,9 @@ const CardDetails = ({ card, cardLimit }) => {
                   src={card.imageUrl}
                   alt="Card Preview"
                   layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
+                  objectFit="contain" // Use "contain" to keep the image within the container without cropping
+                  className="rounded-md max-h-[500px] max-w-[300px] md:max-w-[400px] lg:max-w-[500px]"
+                  onLoad={handleImageLoad}
                 />
               </div>
 
@@ -63,20 +80,23 @@ const CardDetails = ({ card, cardLimit }) => {
                   <div className=" text-zinc-800 text-[40px] font-bold capitalize leading-10 my-5">
                     ৳{card.price}
                   </div>
-                  <div className=" h-12 p-[0px] flex-col justify-start items-start inline-flex">
-                    <div className="self-stretch h-12 p-[0px] flex-col justify-start items-start flex">
-                      <div className="self-stretch h-12 px-6 py-[10px] bg-zinc-800 rounded-md flex-col justify-center items-center gap-[10px] flex">
-                        <div className="p-[0px] justify-center items-center gap-[7px] inline-flex">
-                          <div className="text-center text-white text-[18px] font-medium leading-7">
-                            Customize with My Content
-                          </div>
-                          <div className="w-[20px] h-[20px] relative">
-                            <div className="w-[20px] h-[20px] left-[0px] top-[0px] absolute"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {/* <p>Actual Width: {imageDimensions.width}</p>
+                  <p>Actual Height: {imageDimensions.height}</p> */}
+                 <div className="h-12 p-0 flex flex-col justify-start items-start inline-flex">
+  <div className="self-stretch h-12 p-0 flex flex-col justify-start items-start">
+    <button className="self-stretch h-12 px-6 py-2 bg-zinc-800 rounded-md flex flex-col justify-center items-center gap-2 focus:outline-none" onClick={() => navigate.push(`/image-editor/${card.id}`)}>
+      <div className="justify-center items-center gap-2 inline-flex">
+        <div className="text-center text-white text-lg font-medium leading-7">
+          Customize with My Content
+        </div>
+        <div className="w-6 h-6 relative">
+          <div className="w-6 h-6 left-0 top-0 absolute"></div>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
+
                 </div>
               </div>
             </div>
