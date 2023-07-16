@@ -9,6 +9,25 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "ChopinScript";
+  src: url("../fonts/ChopinScript.otf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AlegreyaSC-Regular";
+  src: url("../fonts/AlegreyaSC-Regular.ttf");
+
+}
+
+@font-face {
+  font-family: "AlegreyaSC-Bold";
+  src: url("../fonts/AlegreyaSC-Bold.ttf");
+
+}
+
 html,
 body {
   font-family: Satoshi;

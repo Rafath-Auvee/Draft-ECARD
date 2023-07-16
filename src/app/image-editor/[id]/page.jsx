@@ -17,12 +17,14 @@ const ImageEditor = ({ params }) => {
   const canvasRef = useRef(null);
   const imageData = images.find((image) => image.id === parseInt(params.id));
 
+
   const handleSaveClick = () => {
     let previewData = null; // Declare the previewData variable outside the conditional statements
+    
 
     if (imageData.imageType === "single image") {
       previewData = {
-        url: imageData.url,
+        url:imageData.url,
         imageType: imageData.imageType,
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
@@ -33,7 +35,7 @@ const ImageEditor = ({ params }) => {
           fontSize: textStyle.fontSize,
           backgroundColor: textStyle.backgroundColor,
           padding: textStyle.padding,
-        })),
+        })),      
       };
     } else if (imageData.imageType === "multiple image") {
       previewData = {
@@ -61,6 +63,8 @@ const ImageEditor = ({ params }) => {
     // Navigate to the "/preview" page
     window.location.href = "/preview";
   };
+
+
 
   const multipleImageFontSizes =
     imageData.imageType === "multiple image"
@@ -295,10 +299,18 @@ const ImageEditor = ({ params }) => {
   };
 
   const handleTextClick = (index) => {
-    if (selectedTextIndex !== index) {
+    const selectedTextStyle = textStyles[index];
+    const lines = selectedTextStyle.text.split('\n');
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = prevTextStyles.map((style, i) => ({
+        ...style,
+        isSelected: index === i,
+      }));
       setSelectedTextIndex(index);
-    }
+      return updatedTextStyles;
+    });
   };
+  
 
   // Text Changing Function
 
@@ -338,7 +350,7 @@ const ImageEditor = ({ params }) => {
       top: data.y,
     };
     setTextStyles(updatedTextStyles);
-
+  
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
         (img) => img.url === selectedImage
@@ -346,44 +358,43 @@ const ImageEditor = ({ params }) => {
       selectedImageData.textStyles = updatedTextStyles;
     }
   };
+  
 
   // modal close & open
-
   return (
     <>
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        <h1 className="text-center text-3xl font-bold leading-5 mt-10">
-          {/* Image Editor */}
-          {imageData.title}
-        </h1>
-        {/* {selectedTextIndex !== null && (
+      <h1 className="text-center text-3xl font-bold leading-5 mt-5">
+        Image Editor
+      </h1>
+      {/* {selectedTextIndex !== null && (
         <p>Selected Text: {textStyles[selectedTextIndex].text}</p>
       )} */}
 
-        <div id="canvas" className="my-5" onClick={handleCanvasClick}>
-          {/* Your canvas content */}
-          {selectedTextIndex !== null ? (
-            <div className="flex justify-center mt-4">
+      <div id="canvas" className="my-5" onClick={handleCanvasClick}>
+        {/* Your canvas content */}
+        {selectedTextIndex !== null && (
+          <div className="flex justify-center mt-4">
+            <div
+              key={selectedTextIndex}
+              className={`grid gap-4 grid-cols-3 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+            >
               <div
-                key={selectedTextIndex}
-                className={`grid gap-4 grid-cols-3 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+                className="flex flex-col justify-center align-center items-center cursor-pointer"
+                onClick={() => setShowModal(true)}
               >
-                <div
-                  className="flex flex-col justify-center align-center items-center cursor-pointer"
-                  onClick={() => setShowModal(true)}
+                <button className="text-3xl">
+                  <CiEdit />
+                </button>
+                <label
+                  className="font-bold cursor-pointer"
+                  htmlFor={`textInput-${selectedTextIndex}`}
                 >
-                  <button className="text-3xl">
-                    <CiEdit />
-                  </button>
-                  <label
-                    className="font-bold cursor-pointer"
-                    htmlFor={`textInput-${selectedTextIndex}`}
-                  >
-                    Edit
-                  </label>
-                  <div className="flex">
-                    {/* {showModal ? (
+                  Edit
+                </label>
+                <div className="flex">
+                  {/* {showModal ? (
                     <input
                       id={`textInput-${selectedTextIndex}`}
                       type="text"
@@ -396,12 +407,12 @@ const ImageEditor = ({ params }) => {
                       Edit Text
                     </button>
                   )} */}
-                  </div>
                 </div>
+              </div>
 
-                {/* left and top position  */}
+              {/* left and top position  */}
 
-                <div>
+              <div>
                 <label htmlFor={`leftInput-${selectedTextIndex}`}>
                   Left Position:
                 </label>
@@ -459,181 +470,181 @@ const ImageEditor = ({ params }) => {
                 </div>
               </div>
 
-                <div>
-                  <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
+              <div>
+                {/* <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
                   Font Size:
-                </label>
-                  <div className="flex">
-                    <input
-                      id={`fontSizeInput-${selectedTextIndex}`}
-                      type="number"
-                      value={
-                        imageData.imageType === "multiple image"
-                          ? selectedImageTextStyles[selectedTextIndex].fontSize
-                          : textStyles[selectedTextIndex].fontSize
-                      }
-                      onChange={(e) =>
-                        handleFontSizeChange(selectedTextIndex, e)
-                      }
-                      onInput={(e) =>
-                        handleFontSizeChange(selectedTextIndex, e)
-                      }
-                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
-                      min="5" // Add this line to prevent negative values
-                    />
+                </label> */}
+                <div className="flex">
+                  <input
+                    id={`fontSizeInput-${selectedTextIndex}`}
+                    type="number"
+                    value={
+                      imageData.imageType === "multiple image"
+                        ? selectedImageTextStyles[selectedTextIndex].fontSize
+                        : textStyles[selectedTextIndex].fontSize
+                    }
+                    onChange={(e) => handleFontSizeChange(selectedTextIndex, e)}
+                    onInput={(e) => handleFontSizeChange(selectedTextIndex, e)}
+                    className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                    min="5" // Add this line to prevent negative values
+                  />
 
-                    <div className="flex mt-2">
-                      <button
-                        onClick={() => incrementFontSize(selectedTextIndex)}
-                        className="bg-gray-200 rounded px-2 py-1 mr-1"
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={() => decrementFontSize(selectedTextIndex)}
-                        className="bg-gray-200 rounded px-2 py-1"
-                      >
-                        -
-                      </button>
-                    </div>
+                  <div className="flex mt-2">
+                    <button
+                      onClick={() => incrementFontSize(selectedTextIndex)}
+                      className="bg-gray-200 rounded px-2 py-1 mr-1"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => decrementFontSize(selectedTextIndex)}
+                      className="bg-gray-200 rounded px-2 py-1"
+                    >
+                      -
+                    </button>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button
-                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-                    onClick={handleSaveClick}
-                  >
-                    Next
-                  </button>
-                </div>
+              <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                <button
+                  className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                  onClick={handleSaveClick}
+                >
+                  Next
+                </button>
               </div>
             </div>
-          ) : (
-            <div className="h-20" /> // This div will keep the space even when selectedTextIndex is null
-          )}
-
-          {showModal ? (
-            <>
-              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
-                <div className="relative w-full my-6 mx-auto max-w-3xl">
-                  {/*content*/}
-                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                      <h3 className="text-1xl font-semibold">
-                        Update Your Text
-                      </h3>
-                      <button
-                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={() => setShowModal(false)}
-                      >
-                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                          ×
-                        </span>
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div className="relative p-6 flex-auto">
-                      <input
-                        id={`textInput-${selectedTextIndex}`}
-                        type="text"
-                        value={textStyles[selectedTextIndex].text}
-                        onChange={(e) => handleTextChange(selectedTextIndex, e)}
-                        className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full"
-                      />
-                    </div>
-                    {/*footer*/}
-                    <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                      <button
-                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Close
-                      </button>
-                      <button
-                        className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-            </>
-          ) : null}
-        </div>
-
-        <div className="relative">
-          <canvas
-            ref={canvasRef}
-            className="border border-gray-500"
-            width={500}
-            height={500}
-          ></canvas>
-          {textStyles.map((textStyle, index) => (
-            <Draggable
-              key={index}
-              position={{ x: textStyle.left, y: textStyle.top }}
-              onStop={(e, data) => handleTextDragStop(index, data)}
-              bounds="parent" // Restrict dragging within the parent container (canvas)
-            >
-              <div
-                className={`absolute ${
-                  selectedTextIndex === index
-                    ? "border-gray-500  border-2 border-dashed"
-                    : ""
-                }`}
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={() => handleTextClick(index)}
-              >
-                <div
-                  style={{
-                    color: "black",
-                    fontFamily: textStyle.fontFamily,
-                    fontSize: `${textStyle.fontSize}px`,
-                  }}
-                >
-                  {textStyle.text}
-                </div>
-              </div>
-            </Draggable>
-          ))}
-        </div>
-
-        {imageData && imageData.imageType === "multiple image" && (
-          <div className="flex justify-center mt-4">
-            {imageData.images.map((image, index) => (
-              <div className="flex flex-col text-center mx-3" key={index}>
-                <Image
-                  width={0}
-                  height={0}
-                  key={image.id}
-                  src={image.url}
-                  alt={`Image ${image.id}`}
-                  className={`w-16 h-16 mx-1 cursor-pointer ${
-                    selectedImage === image.url
-                      ? "border-2 border-blue-500"
-                      : ""
-                  }`}
-                  onClick={() => handleImageClick(image.url)}
-                />
-                <p>Page {index + 1}</p>
-              </div>
-            ))}
           </div>
         )}
 
-        {/* <PreviewCard imageData={previewData} /> */}
+        {showModal ? (
+          <>
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
+              <div className="relative w-full my-6 mx-auto max-w-3xl">
+                {/*content*/}
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                  {/*header*/}
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                    <h3 className="text-1xl font-semibold">Update Your Text</h3>
+                    <button
+                      className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                        ×
+                      </span>
+                    </button>
+                  </div>
+                  {/*body*/}
+                  <div className="relative p-6 flex-auto">
+                    <input
+                      id={`textInput-${selectedTextIndex}`}
+                      type="text"
+                      value={textStyles[selectedTextIndex].text}
+                      onChange={(e) => handleTextChange(selectedTextIndex, e)}
+                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full"
+                      style={{ whiteSpace: "pre-wrap" }}
+                    />
+                  </div>
+                  {/*footer*/}
+                  <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                    <button
+                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Close
+                    </button>
+                    <button
+                      className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
+        ) : null}
+      </div>
 
-        {/* <PreviewCard imageData={previewData} /> */}
-        {/* {imageData.imageType === "multiple image" && (
+
+      {/* canvas and textStyles  */}
+
+      <div className="relative">
+  <canvas
+    ref={canvasRef}
+    className="border border-gray-500"
+    width={900}
+    height={1200}
+  ></canvas>
+  {textStyles.map((textStyle, index) => (
+    <Draggable
+      key={index}
+      position={{ x: textStyle.left, y: textStyle.top }}
+      onStop={(e, data) => handleTextDragStop(index, data)}
+      bounds="parent"
+    >
+      <div
+        className={`absolute ${
+          textStyle.isSelected ? "border-gray-500  border-2 border-dashed" : ""
+        }`}
+        style={{
+          whiteSpace: "pre-wrap",
+          cursor: "pointer",
+          textAlign: textStyle.textAlign, // Set the textAlign property
+        }}
+        onClick={() => handleTextClick(index)}
+      >
+        {textStyle.text.split('\n').map((line, lineIndex) => (
+          <div
+            key={lineIndex}
+            style={{
+              color: textStyle.backgroundColor,
+              fontFamily: textStyle.fontFamily,
+              fontSize: `${textStyle.fontSize}px`,
+              textAlign: textStyle.textAlign, // Center align the text
+            }}
+          >
+            {line}
+          </div>
+        ))}
+      </div>
+    </Draggable>
+  ))}
+</div>
+
+
+
+      {imageData && imageData.imageType === "multiple image" && (
+        <div className="flex justify-center mt-4">
+          {imageData.images.map((image, index) => (
+            <div className="flex flex-col text-center mx-3" key={index}>
+              <Image
+                width={0}
+                height={0}
+                key={image.id}
+                src={image.url}
+                alt={`Image ${image.id}`}
+                className={`w-16 h-16 mx-1 cursor-pointer ${
+                  selectedImage === image.url ? "border-2 border-blue-500" : ""
+                }`}
+                onClick={() => handleImageClick(image.url)}
+              />
+              <p>Page {index+1}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* <PreviewCard imageData={previewData} /> */}
+
+      {/* <PreviewCard imageData={previewData} /> */}
+      {/* {imageData.imageType === "multiple image" && (
         <div className="mt-4">
           <h3 className="text-xl font-bold">Font Sizes:</h3>
           <ul>
@@ -651,23 +662,22 @@ const ImageEditor = ({ params }) => {
         </div>
       )} */}
 
-        <div className="flex mt-4 align-center justify-center">
-          <button
-            className="bg-gray-200 rounded px-4 py-2 mr-2 "
-            onClick={handleSaveClick}
-          >
-            Save
-          </button>
+      <div className="flex mt-4 align-center justify-center">
+        <button
+          className="bg-gray-200 rounded px-4 py-2 mr-2 "
+          onClick={handleSaveClick}
+        >
+          Save
+        </button>
 
-          <Link href="/image-picker">
-            <p className="bg-gray-200 rounded px-4 py-2 mr-2">Back</p>
-          </Link>
-          <Link href="/">
-            <p className="bg-gray-200 rounded px-4 py-2">Home</p>
-          </Link>
-        </div>
-        {/* <Toaster /> */}
+        <Link href="/image-picker">
+          <p className="bg-gray-200 rounded px-4 py-2 mr-2">Back</p>
+        </Link>
+        <Link href="/">
+          <p className="bg-gray-200 rounded px-4 py-2">Home</p>
+        </Link>
       </div>
+    </div>
       <Footer />
     </>
   );

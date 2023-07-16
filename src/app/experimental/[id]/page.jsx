@@ -11,7 +11,6 @@ import CardDynamic from "/public/card-preview/card.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-
 const cardLimit = 4;
 let cardCount = 0;
 
@@ -80,23 +79,27 @@ const CardDetails = ({ card, cardLimit }) => {
                   <div className=" text-zinc-800 text-[40px] font-bold capitalize leading-10 my-5">
                     ৳{card.price}
                   </div>
-                  {/* <p>Actual Width: {imageDimensions.width}</p>
-                  <p>Actual Height: {imageDimensions.height}</p> */}
-                 <div className="h-12 p-0 flex flex-col justify-start items-start inline-flex">
-  <div className="self-stretch h-12 p-0 flex flex-col justify-start items-start">
-    <button className="self-stretch h-12 px-6 py-2 bg-zinc-800 rounded-md flex flex-col justify-center items-center gap-2 focus:outline-none" onClick={() => navigate.push(`/image-editor/${card.id}`)}>
-      <div className="justify-center items-center gap-2 inline-flex">
-        <div className="text-center text-white text-lg font-medium leading-7">
-          Customize with My Content
-        </div>
-        <div className="w-6 h-6 relative">
-          <div className="w-6 h-6 left-0 top-0 absolute"></div>
-        </div>
-      </div>
-    </button>
-  </div>
-</div>
-
+                  {/* <p>Actual Width: {imageDimensions.width}</p> */}
+                  {/* <p>Actual Height: {imageDimensions.height}</p> */}
+                  <div className="h-12 p-0 flex flex-col justify-start items-start inline-flex">
+                    <div className="self-stretch h-12 p-0 flex flex-col justify-start items-start">
+                      <button
+                        className="self-stretch h-12 px-6 py-2 bg-zinc-800 rounded-md flex flex-col justify-center items-center gap-2 focus:outline-none"
+                        onClick={() =>
+                          navigate.push(`/image-editor/${card.id}`)
+                        }
+                      >
+                        <div className="justify-center items-center gap-2 inline-flex">
+                          <div className="text-center text-white text-lg font-medium leading-7">
+                            Customize with My Content
+                          </div>
+                          <div className="w-6 h-6 relative">
+                            <div className="w-6 h-6 left-0 top-0 absolute"></div>
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
