@@ -10,6 +10,16 @@ import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 import draft from "@/Data/Draft_Data";
+import {
+  FiAlignLeft,
+  FiAlignCenter,
+  FiAlignRight,
+  FiArrowUp,
+  FiArrowDown,
+  FiArrowLeft,
+  FiArrowRight,
+  FiRefreshCw,
+} from "react-icons/fi";
 
 const ImageEditor = ({ params }) => {
   const [devtools, setDevtools] = useState(true);
@@ -19,6 +29,15 @@ const ImageEditor = ({ params }) => {
   const canvasRef = useRef(null);
   const imageData = images.find((image) => image.id === parseInt(params.id));
 
+  const handleTextAlignChange = (alignment) => {
+    if (selectedTextIndex !== null) {
+      const updatedTextStyles = [...textStyles];
+      updatedTextStyles[selectedTextIndex].textAlign = alignment;
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  
   const handleSaveClick = () => {
     let previewData = null; // Declare the previewData variable outside the conditional statements
 
@@ -296,7 +315,6 @@ const ImageEditor = ({ params }) => {
     setTextStyles(updatedTextStyles);
   };
 
-
   // Text Changing Function
 
   const handleTextChange = (index, e) => {
@@ -325,10 +343,8 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-
-
-   // Function to handle text element drag stop
-   const handleTextDragStop = (index, data) => {
+  // Function to handle text element drag stop
+  const handleTextDragStop = (index, data) => {
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
       ...updatedTextStyles[index],
@@ -359,7 +375,6 @@ const ImageEditor = ({ params }) => {
     });
   };
 
-
   const handleMoveToXAxisLeft = (index, axis) => {
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
@@ -369,45 +384,82 @@ const ImageEditor = ({ params }) => {
     setTextStyles(updatedTextStyles);
   };
 
+  const handleCenterText = () => {
+    const updatedTextStyles = [...textStyles];
+    const canvasWidth = canvasRef.current.offsetWidth;
 
-  
-  // Function to move selected text to the right (horizontally)
-  const handleMoveRight = () => {
     if (selectedTextIndex !== null) {
-      setSelectedTextIndex((prevIndex) => {
-        const updatedTextStyles = [...textStyles];
-        const canvasWidth = canvasRef.current.width;
-        const textElement = document.getElementById(`textElement_${prevIndex}`);
-        if (!textElement) return prevIndex; // If the element is not available, return the previous index
-        const textWidth = textElement.getBoundingClientRect().width;
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textWidth = textElement.getBoundingClientRect().width;
 
-        // Calculate the new X position for the selected text, ensuring it doesn't cross the canvas border
-        updatedTextStyles[prevIndex].left = Math.min(canvasWidth - textWidth, updatedTextStyles[prevIndex].left + 10);
-
-        setTextStyles(updatedTextStyles);
-        return prevIndex;
-      });
+      updatedTextStyles[selectedTextIndex].left = Math.max(
+        (canvasWidth - textWidth) / 2,
+        0
+      );
+      setTextStyles(updatedTextStyles);
     }
   };
-  
 
-    // useEffect hook to update the text element after component mount and selectedTextIndex changes
-    useEffect(() => {
-      if (selectedTextIndex !== null) {
-        const textElement = document.getElementById(`textElement_${selectedTextIndex}`);
-        if (textElement) {
-          const textWidth = textElement.getBoundingClientRect().width;
-          const canvasWidth = canvasRef.current.width;
-          setTextStyles((prevTextStyles) => {
-            const updatedTextStyles = [...prevTextStyles];
-            updatedTextStyles[selectedTextIndex].left = Math.min(canvasWidth - textWidth, updatedTextStyles[selectedTextIndex].left);
-            return updatedTextStyles;
-          });
-        }
+  const handleCenterTextYAxis = () => {
+    const updatedTextStyles = [...textStyles];
+
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const canvasHeight = canvasRef.current.offsetHeight;
+      const textHeight = textElement.getBoundingClientRect().height;
+
+      updatedTextStyles[selectedTextIndex].top =
+        (canvasHeight - textHeight) / 2;
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  // Function to move selected text to the right (horizontally)
+  const handleMoveToXAxisRight = () => {
+    const updatedTextStyles = [...textStyles];
+    const canvasWidth = canvasRef.current.offsetWidth;
+
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textWidth = textElement.getBoundingClientRect().width;
+
+      updatedTextStyles[selectedTextIndex].left = Math.max(
+        canvasWidth - textWidth,
+        0
+      );
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  // useEffect hook to update the text element after component mount and selectedTextIndex changes
+  useEffect(() => {
+    if (selectedTextIndex !== null) {
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      if (textElement) {
+        const textWidth = textElement.getBoundingClientRect().width;
+        const canvasWidth = canvasRef.current.width;
+        setTextStyles((prevTextStyles) => {
+          const updatedTextStyles = [...prevTextStyles];
+          updatedTextStyles[selectedTextIndex].left = Math.min(
+            canvasWidth - textWidth,
+            updatedTextStyles[selectedTextIndex].left
+          );
+          return updatedTextStyles;
+        });
       }
-    }, [selectedTextIndex]);
-    
-
+    }
+  }, [selectedTextIndex]);
 
   // modal close & open
   return (
@@ -524,6 +576,31 @@ const ImageEditor = ({ params }) => {
                       </div>
                     </div>
 
+                    <div className="flex flex-col text-center">
+                      <label className="mb-2">Text Align </label>
+                      <div> 
+
+                      <button
+                        className="bg-primary text-white mb-2 px-2 py-2 mr-2"
+                        onClick={() => handleTextAlignChange("left")}
+                      >
+                        <FiAlignLeft /> {/* Use the Align Left Icon */}
+                      </button>
+                      <button
+                        className="bg-primary text-white mb-2 px-2 py-2 mr-2"
+                        onClick={() => handleTextAlignChange("center")}
+                      >
+                        <FiAlignCenter /> {/* Use the Align Center Icon */}
+                      </button>
+                      <button
+                        className="bg-primary text-white mb-2 px-2 py-2"
+                        onClick={() => handleTextAlignChange("right")}
+                      >
+                        <FiAlignRight /> {/* Use the Align Right Icon */}
+                      </button>
+                      </div>
+                      
+                    </div>
                     <div className="text-center flex flex-col justify-center items-center">
                       <div>
                         <button
@@ -536,39 +613,42 @@ const ImageEditor = ({ params }) => {
                         </button>
                       </div>
                       <div>
-  <button
-    className="bg-primary text-white mb-2"
-
-  >
-    Center X-Axis
-  </button>
-</div>
+                        <button
+                          onClick={handleCenterText}
+                          className="bg-primary text-white mb-2"
+                        >
+                          Center X-Axis
+                        </button>
+                      </div>
                       <div>
-                         <button className="bg-primary text-white mb-2" onClick={handleMoveRight}>
+                        <button
+                          className="bg-primary text-white mb-2"
+                          onClick={handleMoveToXAxisRight}
+                        >
                           Right X-Axis
                         </button>
                       </div>
                       <div>
                         <button className="bg-primary text-white mb-2">
-                          Left Y-Axis
+                          Top Y-Axis
                         </button>
                       </div>
                       <div>
-                        <button className="bg-primary text-white mb-2">
+                        <button
+                          onClick={handleCenterTextYAxis}
+                          className="bg-primary text-white mb-2"
+                        >
                           Center Y-Axis
                         </button>
                       </div>
                       <div>
                         <button className="bg-primary text-white mb-2">
-                          Right Y-Axis
+                          Bottom Y-Axis
                         </button>
                       </div>
 
                       <div>
-                        <button 
-                        >
-                          Reset Position
-                        </button>
+                        <button>Reset Position</button>
                       </div>
                     </div>
                   </>
@@ -693,23 +773,25 @@ const ImageEditor = ({ params }) => {
           ></canvas>
           {textStyles.map((textStyle, index) => (
             <Draggable
-          key={index}
-          position={{ x: textStyle.left, y: textStyle.top }}
-          onStop={(e, data) => handleTextDragStop(index, data)}
-          bounds="parent"
-        >
-          <div
-            id={`textElement_${index}`} // Set a unique ID for each text element
-            className={`absolute ${
-              textStyle.isSelected ? "border-gray-500  border-2 border-dashed" : ""
-            }`}
-            style={{
-              whiteSpace: "pre-wrap",
-              cursor: "pointer",
-              textAlign: textStyle.textAlign,
-            }}
-            onClick={() => handleTextClick(index)}
-          >
+              key={index}
+              position={{ x: textStyle.left, y: textStyle.top }}
+              onStop={(e, data) => handleTextDragStop(index, data)}
+              bounds="parent"
+            >
+              <div
+                id={`textElement_${index}`} // Set a unique ID for each text element
+                className={`absolute ${
+                  textStyle.isSelected
+                    ? "border-gray-500  border-2 border-dashed"
+                    : ""
+                }`}
+                style={{
+                  whiteSpace: "pre-wrap",
+                  cursor: "pointer",
+                  textAlign: textStyle.textAlign,
+                }}
+                onClick={() => handleTextClick(index)}
+              >
                 {textStyle.text.split("\n").map((line, lineIndex) => (
                   <div
                     key={lineIndex}
