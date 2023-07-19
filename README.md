@@ -1,245 +1,779 @@
-Implement handleResetPosition using the json in the ImageEditor component. 
+"use client";
+import Draggable from "react-draggable";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import images from "../../../Data/Draft_Data";
+import { CiEdit } from "react-icons/ci";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
+import Footer from "@/components/Footer/Footer";
+import Navbar from "@/components/Navbar/Navbar";
+import draft from "@/Data/Draft_Data";
+import {
+  FiAlignLeft,
+  FiAlignCenter,
+  FiAlignRight,
+  FiArrowDown,
+  FiArrowUp,
+  FiArrowRight,
+  FiArrowLeft,
+} from "react-icons/fi";
 
-if clicked then position will go to the json value and take top and left for specific text in the json and place the value in the text and remember data will take from the json.
+import { BsArrowsCollapse } from "react-icons/bs";
+import {
+  BiArrowToLeft,
+  BiArrowToRight,
+  BiArrowToTop,
+  BiArrowToBottom,
+  BiHorizontalCenter,
+} from "react-icons/bi";
 
-For single image json 
+const ImageEditor = ({ params }) => {
+  const [devtools, setDevtools] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [previewData, setPreviewData] = useState(null);
+  const router = useRouter();
+  const canvasRef = useRef(null);
+  const imageData = images.find((image) => image.id === parseInt(params.id));
 
-{
-    id: 100,
-    title: "Beautiful Mountain Landscape",
-    imageUrl: "/cards/main/1/1.jpg",
-    url: "/cards/main/1/BG.png",
-    imageType: "single image",
-    price: 6000,
-    buttonText: "View Design",
-    cardType: "Single Page",
-    popularity: 10,
-    description: "Welcome your guests with elegance using our marble-textured welcome board, a sophisticated addition to any entryway.",
-    cardCategory: "singlePageCard",
-    textStyles: [
-      {
-        id: 1,
-        text: "MAHBUBUL HOQUE & JOYNOB REKHA\nCordially Request The honour of\nyour Gracious presence at the\nWedding Reception\nof their son",
-        left: 305,
-        top: -952,
-        color: "white",
-        fontSize: "17px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 2,
-        text: "Murtaz Ahmed",
-        left: 257,
-        top: -782,
-        color: "white",
-        fontSize: "65px",
-        backgroundColor: "rgb(255, 255, 255)",
-        textAlign: "center",
-        fontFamily: "ChopinScript",
-      },
-      {
-        id: 3,
-        text: "With",
-        left: 412,
-        top: -671,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 4,
-        text: "Mehmuna Runa",
-        left: 248,
-        top: -662,
-        color: "white",
-        fontSize: "65px",
-        backgroundColor: "rgb(255, 255, 255)",
-        textAlign: "center",
-        fontFamily: "ChopinScript",
-        
-      },
-      {
-        id: 5,
-        text: "Daughter of MD Lutfor Rahman & Shahana Begum",
-        left: 216,
-        top: -562,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 6,
-        text: "01 | January | 2022",
-        left: 282,
-        top: -471,
-        color: "white",
-        fontSize: "40px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 7,
-        text: "Saturday, 7:00 pm",
-        left: 369,
-        top: -407,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 8,
-        text: "International Convention City Bashundhara",
-        left: 243,
-        top: -337,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 9,
-        text: "Purbachal Express Hwy, Dhaka",
-        left: 307,
-        top: -311,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-      {
-        id: 10,
-        text: "RSVP: +8801511-181952",
-        left: 355,
-        top: -224,
-        color: "white",
-        fontSize: "20px",
-        backgroundColor: "rgb(255, 255, 255)",
-        fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
-      },
-    ],
-    
-  },
+  const handleTextAlignChange = (alignment) => {
+    if (selectedTextIndex !== null) {
+      const updatedTextStyles = [...textStyles];
+      updatedTextStyles[selectedTextIndex].textAlign = alignment;
+      setTextStyles(updatedTextStyles);
+    }
+  };
 
+  const handleSaveClick = () => {
+    let previewData = null;
+    if (imageData.imageType === "single image") {
+      previewData = {
+        url: imageData.url,
+        imageType: imageData.imageType,
+        textStyles: textStyles.map((textStyle) => ({
+          id: textStyle.id,
+          text: textStyle.text,
+          left: textStyle.left,
+          top: textStyle.top,
+          color: textStyle.color,
+          fontSize: textStyle.fontSize,
+          backgroundColor: textStyle.backgroundColor,
+          padding: textStyle.padding,
+        })),
+      };
+    } else if (imageData.imageType === "multiple image") {
+      previewData = {
+        imageType: imageData.imageType,
+        images: imageData.images.map((image) => ({
+          id: image.id,
+          url: image.url,
+          textStyles: image.textStyles.map((textStyle) => ({
+            id: textStyle.id,
+            text: textStyle.text,
+            left: textStyle.left,
+            top: textStyle.top,
+            color: textStyle.color,
+            fontSize: textStyle.fontSize,
+            backgroundColor: textStyle.backgroundColor,
+            padding: textStyle.padding,
+          })),
+        })),
+      };
+    }
 
-for multiple image json
+    localStorage.setItem("previewData", JSON.stringify(previewData));
+    window.location.href = "/preview";
+  };
 
-  {
-    id: 4,
-    title: "Beachside Paradise Escape",
-    imageType: "multiple image",
-    price: 4131,
-    imageUrl: "/cards/double/1_1.jpg",
-    url: "/cards/double/1_1.jpg",
-    buttonText: "View Design",
-    cardType: "Multiple Page",
-    popularity: 4,
-    description:
-      "Transport yourself to a beachside paradise with this serene card, inviting you to relax and unwind with its soothing coastal vibes.",
-    cardCategory: "multiPageCard",
-    images: [
-      {
-        id: 1,
-        url: "/cards/double/1_1.jpg",
-        textStyles: [
-          {
-            id: 1,
-            text: "Save The Date 1",
-            left: 127,
-            top: -281,
-            color: "white",
-            fontSize: "30px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-          {
-            id: 2,
-            text: "Another Text",
-            left: 220,
-            top: -209,
-            color: "white",
-            fontSize: "24px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-        ],
-      },
-      {
-        id: 2,
-        url: "/cards/double/1_2.jpg",
-        textStyles: [
-          {
-            id: 1,
-            text: "Save The Date 2",
-            left: 157,
-            top: -265,
-            color: "white",
-            fontSize: "24px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-          {
-            id: 2,
-            text: "Another Text",
-            left: 228,
-            top: -225,
-            color: "white",
-            fontSize: "28px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-        ],
-      },
-      {
-        id: 3,
-        url: "/cards/double/1_3.jpg",
-        textStyles: [
-          {
-            id: 1,
-            text: "One Text",
-            left: 137,
-            top: -428,
-            color: "white",
-            fontSize: "18px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-          {
-            id: 2,
-            text: "Two Text",
-            left: 194,
-            top: -330,
-            color: "white",
-            fontSize: "20px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-          {
-            id: 3,
-            text: "Three Text",
-            left: 232,
-            top: -235,
-            color: "white",
-            fontSize: "50px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "10px",
-          },
-        ],
-      },
-      // Add more image objects for the first object if needed
-    ],
-  },
+  const multipleImageFontSizes =
+    imageData.imageType === "multiple image"
+      ? imageData.images.map((image) =>
+          image.textStyles.map((textStyle) => textStyle.fontSize)
+        )
+      : [];
 
+  const [textStyles, setTextStyles] = useState(
+    imageData?.textStyles?.map((textStyle) => ({
+      ...textStyle,
+      fontSize: parseInt(textStyle.fontSize),
+    })) || []
+  );
+  const [selectedTextIndex, setSelectedTextIndex] = useState(null);
+  const [editingTextIndex, setEditingTextIndex] = useState(null);
 
-if I handleResetPosition  then it will take top and left value from json then place the text there.
+  const [selectedImage, setSelectedImage] = useState(
+    imageData?.images ? imageData.images[0].url : null
+  );
+
+  const [selectedImageTextStyles, setSelectedImageTextStyles] = useState(
+    imageData?.images ? imageData.images[0].textStyles : []
+  );
+
+  const handleImageClick = (url) => {
+    setSelectedImage(url);
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    const selectedImageData = imageData.images.find(
+      (image) => image.url === url
+    );
+    const image = document.createElement("img");
+    image.src = url;
+    image.onload = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      selectedImageData.textStyles.forEach((textStyle) => {
+        context.fillStyle = textStyle.backgroundColor;
+        context.fillRect(
+          textStyle.left,
+          textStyle.top,
+          textStyle.width,
+          textStyle.height
+        );
+      });
+      setTextStyles(
+        selectedImageData.textStyles.map((textStyle) => ({
+          ...textStyle,
+          fontSize: parseInt(textStyle.fontSize),
+        }))
+      );
+      setSelectedImageTextStyles(selectedImageData.textStyles);
+    };
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    if (imageData.imageType === "multiple image") {
+      const selectedImageData = imageData.images.find(
+        (image) => image.url === selectedImage
+      );
+
+      if (selectedImageData) {
+        const image = document.createElement("img");
+        image.src = selectedImage;
+
+        image.onload = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          selectedImageData.textStyles.forEach((textStyle) => {
+            context.fillStyle = textStyle.backgroundColor;
+            context.fillRect(
+              textStyle.left,
+              textStyle.top,
+              textStyle.width,
+              textStyle.height
+            );
+          });
+          setTextStyles(
+            selectedImageData.textStyles.map((textStyle) => ({
+              ...textStyle,
+              fontSize: parseInt(textStyle.fontSize),
+            }))
+          );
+          setSelectedImageTextStyles(selectedImageData.textStyles);
+        };
+      }
+    } else {
+      const image = document.createElement("img");
+      image.src = imageData.url;
+
+      image.onload = () => {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        textStyles.forEach((textStyle) => {
+          context.fillStyle = textStyle.backgroundColor;
+          context.fillRect(
+            textStyle.left,
+            textStyle.top,
+            textStyle.width,
+            textStyle.height
+          );
+        });
+      };
+    }
+  }, [imageData, selectedImage, textStyles]);
+
+  const handleFontSizeChange = (index, e) => {
+    const fontSize = parseInt(e.target.value);
+
+    if (!isNaN(fontSize)) {
+      const updatedTextStyles = textStyles.map((textStyle, i) => {
+        if (i === index) {
+          return {
+            ...textStyle,
+            fontSize,
+          };
+        }
+        return textStyle;
+      });
+
+      setTextStyles(updatedTextStyles);
+
+      if (imageData.imageType === "multiple image") {
+        const selectedImageData = imageData.images.find(
+          (img) => img.url === selectedImage
+        );
+        selectedImageData.textStyles = updatedTextStyles;
+        setSelectedImageTextStyles(updatedTextStyles);
+      }
+    }
+  };
+
+  const handleLeftChange = (index, e) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      left: parseInt(e.target.value),
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const handleTopChange = (index, e) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      top: parseInt(e.target.value),
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const incrementLeft = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      left: updatedTextStyles[index].left + 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const decrementLeft = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      left: updatedTextStyles[index].left - 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const incrementTop = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      top: updatedTextStyles[index].top + 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const decrementTop = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      top: updatedTextStyles[index].top - 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const incrementFontSize = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      fontSize: updatedTextStyles[index].fontSize + 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const decrementFontSize = (index) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      fontSize: updatedTextStyles[index].fontSize - 1,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const handleTextChange = (index, e) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      text: e.target.value,
+    };
+    setTextStyles(updatedTextStyles);
+
+    if (imageData.imageType === "multiple image") {
+      const selectedImageData = imageData.images.find(
+        (img) => img.url === selectedImage
+      );
+      selectedImageData.textStyles = updatedTextStyles;
+      setSelectedImageTextStyles(updatedTextStyles);
+    }
+  };
+
+  const handleCanvasClick = (e) => {
+    const canvas = document.getElementById("canvas");
+    if (!canvas.contains(e.target)) {
+      setSelectedTextIndex(null);
+    }
+  };
+
+  const handleTextDragStop = (index, data) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      left: data.x,
+      top: data.y,
+    };
+    setTextStyles(updatedTextStyles);
+
+    if (imageData.imageType === "multiple image") {
+      const selectedImageData = imageData.images.find(
+        (img) => img.url === selectedImage
+      );
+      selectedImageData.textStyles = updatedTextStyles;
+    }
+  };
+
+  const handleTextClick = (index) => {
+    const selectedTextStyle = textStyles[index];
+    const lines = selectedTextStyle.text.split("\n");
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = prevTextStyles.map((style, i) => ({
+        ...style,
+        isSelected: index === i,
+      }));
+      setSelectedTextIndex(index);
+      return updatedTextStyles;
+    });
+  };
+
+  const handleMoveToXAxisLeft = (index, axis) => {
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles[index] = {
+      ...updatedTextStyles[index],
+      [axis]: 0,
+    };
+    setTextStyles(updatedTextStyles);
+  };
+
+  const handleCenterText = () => {
+    const updatedTextStyles = [...textStyles];
+    const canvasWidth = canvasRef.current.offsetWidth;
+
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textWidth = textElement.getBoundingClientRect().width;
+
+      updatedTextStyles[selectedTextIndex].left = Math.max(
+        (canvasWidth - textWidth) / 2,
+        0
+      );
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  const handleCenterTextYAxis = () => {
+    const updatedTextStyles = [...textStyles];
+
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const canvasHeight = canvasRef.current.offsetHeight;
+      const textHeight = textElement.getBoundingClientRect().height;
+
+      updatedTextStyles[selectedTextIndex].top =
+        (canvasHeight - textHeight) / 2;
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  const handleMoveToXAxisRight = () => {
+    const updatedTextStyles = [...textStyles];
+    const canvasWidth = canvasRef.current.offsetWidth;
+
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textWidth = textElement.getBoundingClientRect().width;
+
+      updatedTextStyles[selectedTextIndex].left = Math.max(
+        canvasWidth - textWidth,
+        0
+      );
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedTextIndex !== null) {
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      if (textElement) {
+        const textWidth = textElement.getBoundingClientRect().width;
+        const canvasWidth = canvasRef.current.width;
+        setTextStyles((prevTextStyles) => {
+          const updatedTextStyles = [...prevTextStyles];
+          updatedTextStyles[selectedTextIndex].left = Math.min(
+            canvasWidth - textWidth,
+            updatedTextStyles[selectedTextIndex].left
+          );
+          return updatedTextStyles;
+        });
+      }
+    }
+  }, [selectedTextIndex]);
+
+  return (
+    <>
+      <Navbar />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
+        <h1 className="text-center text-3xl font-bold leading-5 mt-5">
+          {imageData.title}
+        </h1>
+
+        <div id="canvas" className="my-5" onClick={handleCanvasClick}>
+          {selectedTextIndex !== null && (
+            <div className="flex justify-center mt-4">
+              <div
+                key={selectedTextIndex}
+                className={`grid gap-4 grid-cols-3 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+              >
+                <div
+                  className="flex flex-col justify-center align-center items-center cursor-pointer"
+                  onClick={() => setShowModal(true)}
+                >
+                  <button className="text-3xl">
+                    <CiEdit />
+                  </button>
+                  <label
+                    className="font-bold cursor-pointer"
+                    htmlFor={`textInput-${selectedTextIndex}`}
+                  >
+                    Edit
+                  </label>
+                  
+                </div>
+
+                {devtools && (
+                  <>
+                    <div>
+                      <label htmlFor={`leftInput-${selectedTextIndex}`}>
+                        X-Axis:
+                      </label>
+                      <div className="flex">
+                        <input
+                          id={`leftInput-${selectedTextIndex}`}
+                          type="number"
+                          value={textStyles[selectedTextIndex].left}
+                          onChange={(e) =>
+                            handleLeftChange(selectedTextIndex, e)
+                          }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
+                        />
+                        <div className="flex mt-2">
+                          <button
+                            onClick={() => incrementLeft(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1 mr-1"
+                          >
+                            +
+                          </button>
+                          <button
+                            onClick={() => decrementLeft(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1"
+                          >
+                            -
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor={`topInput-${selectedTextIndex}`}>
+                        Y-Axis
+                      </label>
+                      <div className="flex">
+                        <input
+                          id={`topInput-${selectedTextIndex}`}
+                          type="number"
+                          value={textStyles[selectedTextIndex].top}
+                          onChange={(e) =>
+                            handleTopChange(selectedTextIndex, e)
+                          }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
+                        />
+                        <div className="flex mt-2">
+                          <button
+                            onClick={() => incrementTop(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1 mr-1"
+                          >
+                            +
+                          </button>
+                          <button
+                            onClick={() => decrementTop(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1"
+                          >
+                            -
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col text-center">
+                      <label className="mb-2">Text Align </label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          onClick={() => handleTextAlignChange("left")}
+                        >
+                          <FiAlignLeft /> {/* Use the Align Left Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          onClick={() => handleTextAlignChange("center")}
+                        >
+                          <FiAlignCenter /> {/* Use the Align Center Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          onClick={() => handleTextAlignChange("right")}
+                        >
+                          <FiAlignRight /> {/* Use the Align Right Icon */}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (X-Axis)</label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          onClick={() =>
+                            handleMoveToXAxisLeft(selectedTextIndex, "left")
+                          }
+                        >
+                          <BiArrowToLeft />
+                        </button>
+
+                        <button
+                          onClick={handleCenterText}
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                        >
+                          <BiHorizontalCenter />
+                        </button>
+
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          onClick={handleMoveToXAxisRight}
+                        >
+                          <BiArrowToRight />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (Y-Axis)</label>
+                      <div>
+                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                          <BiArrowToTop />
+                        </button>
+                        <button
+                          onClick={handleCenterTextYAxis}
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                        >
+                          <BsArrowsCollapse />
+                        </button>
+                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                          <BiArrowToBottom />
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div className="flex flex-col justify-center  items-center text-left">
+                  <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
+                    Font Size:
+                  </label>
+                  <div className="flex">
+                    <input
+                      id={`fontSizeInput-${selectedTextIndex}`}
+                      type="number"
+                      value={
+                        imageData.imageType === "multiple image"
+                          ? selectedImageTextStyles[selectedTextIndex].fontSize
+                          : textStyles[selectedTextIndex].fontSize
+                      }
+                      onChange={(e) =>
+                        handleFontSizeChange(selectedTextIndex, e)
+                      }
+                      onInput={(e) =>
+                        handleFontSizeChange(selectedTextIndex, e)
+                      }
+                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                      min="5"
+                    />
+
+                    <div className="flex mt-2">
+                      <button
+                        onClick={() => incrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1 mr-1"
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() => decrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                  <button
+                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                    onClick={handleSaveClick}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showModal ? (
+            <>
+              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
+                <div className="relative w-full my-6 mx-auto max-w-3xl">
+                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                      <h3 className="text-1xl font-semibold">
+                        Update Your Text
+                      </h3>
+                      <button
+                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                        onClick={() => setShowModal(false)}
+                      >
+                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                          ×
+                        </span>
+                      </button>
+                    </div>
+
+                    <div className="relative p-6 flex-auto">
+                      <textarea
+                        id={`textInput-${selectedTextIndex}`}
+                        value={textStyles[selectedTextIndex].text}
+                        onChange={(e) => handleTextChange(selectedTextIndex, e)}
+                        className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full resize-none"
+                        style={{ whiteSpace: "pre-wrap" }}
+                        rows={4} 
+                      />
+                    </div>
+                    <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                      <button
+                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Close
+                      </button>
+                      <button
+                        className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            </>
+          ) : null}
+        </div>
+
+        <div className="relative">
+          <canvas
+            ref={canvasRef}
+            className="border border-gray-500"
+            width={900}
+            height={1200}
+          ></canvas>
+          {textStyles.map((textStyle, index) => (
+            <Draggable
+              key={index}
+              position={{ x: textStyle.left, y: textStyle.top }}
+              onStop={(e, data) => handleTextDragStop(index, data)}
+              bounds="parent"
+            >
+              <div
+                id={`textElement_${index}`} // Set a unique ID for each text element
+                className={`absolute ${
+                  textStyle.isSelected
+                    ? "border-gray-500  border-2 border-dashed"
+                    : ""
+                }`}
+                style={{
+                  whiteSpace: "pre-wrap",
+                  cursor: "pointer",
+                  textAlign: textStyle.textAlign,
+                }}
+                onClick={() => handleTextClick(index)}
+              >
+                {textStyle.text.split("\n").map((line, lineIndex) => (
+                  <div
+                    key={lineIndex}
+                    style={{
+                      color: textStyle.backgroundColor,
+                      fontFamily: textStyle.fontFamily,
+                      fontSize: `${textStyle.fontSize}px`,
+                      textAlign: textStyle.textAlign, // Center align the text
+                    }}
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+            </Draggable>
+          ))}
+        </div>
+
+        {imageData && imageData.imageType === "multiple image" && (
+          <div className="flex justify-center mt-4">
+            {imageData.images.map((image, index) => (
+              <div className="flex flex-col text-center mx-3" key={index}>
+                <Image
+                  width={0}
+                  height={0}
+                  key={image.id}
+                  src={image.url}
+                  alt={`Image ${image.id}`}
+                  className={`w-16 h-16 mx-1 cursor-pointer ${
+                    selectedImage === image.url
+                      ? "border-2 border-blue-500"
+                      : ""
+                  }`}
+                  onClick={() => handleImageClick(image.url)}
+                />
+                <p>Page {index + 1}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+export default ImageEditor;

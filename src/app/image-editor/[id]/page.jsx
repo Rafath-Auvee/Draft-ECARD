@@ -14,12 +14,20 @@ import {
   FiAlignLeft,
   FiAlignCenter,
   FiAlignRight,
-  FiArrowUp,
   FiArrowDown,
-  FiArrowLeft,
+  FiArrowUp,
   FiArrowRight,
-  FiRefreshCw,
+  FiArrowLeft,
 } from "react-icons/fi";
+
+import { BsArrowsCollapse } from "react-icons/bs";
+import {
+  BiArrowToLeft,
+  BiArrowToRight,
+  BiArrowToTop,
+  BiArrowToBottom,
+  BiHorizontalCenter,
+} from "react-icons/bi";
 
 const ImageEditor = ({ params }) => {
   const [devtools, setDevtools] = useState(true);
@@ -37,10 +45,8 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-  
   const handleSaveClick = () => {
-    let previewData = null; // Declare the previewData variable outside the conditional statements
-
+    let previewData = null;
     if (imageData.imageType === "single image") {
       previewData = {
         url: imageData.url,
@@ -77,9 +83,6 @@ const ImageEditor = ({ params }) => {
     }
 
     localStorage.setItem("previewData", JSON.stringify(previewData));
-    // Save the preview data in localStorage
-
-    // Navigate to the "/preview" page
     window.location.href = "/preview";
   };
 
@@ -90,7 +93,6 @@ const ImageEditor = ({ params }) => {
         )
       : [];
 
-  // Add a conditional check for imageData before accessing its properties
   const [textStyles, setTextStyles] = useState(
     imageData?.textStyles?.map((textStyle) => ({
       ...textStyle,
@@ -110,25 +112,16 @@ const ImageEditor = ({ params }) => {
 
   const handleImageClick = (url) => {
     setSelectedImage(url);
-
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-
     const selectedImageData = imageData.images.find(
       (image) => image.url === url
     );
-
-    const image = document.createElement("img"); // Create an HTMLImageElement
+    const image = document.createElement("img");
     image.src = url;
-
     image.onload = () => {
-      // Clear the canvas
       context.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw the image on the canvas
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-      // Loop through the text styles of the selected image and draw the overlay markers on the canvas
       selectedImageData.textStyles.forEach((textStyle) => {
         context.fillStyle = textStyle.backgroundColor;
         context.fillRect(
@@ -138,16 +131,12 @@ const ImageEditor = ({ params }) => {
           textStyle.height
         );
       });
-
-      // Update the textStyles state with the initial textStyles of the selected image
       setTextStyles(
         selectedImageData.textStyles.map((textStyle) => ({
           ...textStyle,
           fontSize: parseInt(textStyle.fontSize),
         }))
       );
-
-      // Update the selectedImageTextStyles state with the initial textStyles of the selected image
       setSelectedImageTextStyles(selectedImageData.textStyles);
     };
   };
@@ -162,17 +151,12 @@ const ImageEditor = ({ params }) => {
       );
 
       if (selectedImageData) {
-        const image = document.createElement("img"); // Create a new instance of HTMLImageElement
+        const image = document.createElement("img");
         image.src = selectedImage;
 
         image.onload = () => {
-          // Clear the canvas
           context.clearRect(0, 0, canvas.width, canvas.height);
-
-          // Draw the image on the canvas
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-          // Loop through the text styles of the selected image and draw the overlay markers on the canvas
           selectedImageData.textStyles.forEach((textStyle) => {
             context.fillStyle = textStyle.backgroundColor;
             context.fillRect(
@@ -182,28 +166,21 @@ const ImageEditor = ({ params }) => {
               textStyle.height
             );
           });
-
-          // Update the textStyles state with the initial textStyles of the selected image
           setTextStyles(
             selectedImageData.textStyles.map((textStyle) => ({
               ...textStyle,
               fontSize: parseInt(textStyle.fontSize),
             }))
           );
-
-          // Update the selectedImageTextStyles state with the initial textStyles of the selected image
           setSelectedImageTextStyles(selectedImageData.textStyles);
         };
       }
     } else {
-      const image = document.createElement("img"); // Create a new instance of HTMLImageElement
+      const image = document.createElement("img");
       image.src = imageData.url;
 
       image.onload = () => {
-        // Draw the image on the canvas
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        // Loop through the text styles and draw the overlay markers on the canvas
         textStyles.forEach((textStyle) => {
           context.fillStyle = textStyle.backgroundColor;
           context.fillRect(
@@ -315,8 +292,6 @@ const ImageEditor = ({ params }) => {
     setTextStyles(updatedTextStyles);
   };
 
-  // Text Changing Function
-
   const handleTextChange = (index, e) => {
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
@@ -330,8 +305,6 @@ const ImageEditor = ({ params }) => {
         (img) => img.url === selectedImage
       );
       selectedImageData.textStyles = updatedTextStyles;
-
-      // Update the selectedImageTextStyles state with the updated textStyles of the selected image
       setSelectedImageTextStyles(updatedTextStyles);
     }
   };
@@ -343,7 +316,6 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-  // Function to handle text element drag stop
   const handleTextDragStop = (index, data) => {
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
@@ -361,7 +333,6 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-  // Function to handle text element click
   const handleTextClick = (index) => {
     const selectedTextStyle = textStyles[index];
     const lines = selectedTextStyle.text.split("\n");
@@ -420,7 +391,6 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-  // Function to move selected text to the right (horizontally)
   const handleMoveToXAxisRight = () => {
     const updatedTextStyles = [...textStyles];
     const canvasWidth = canvasRef.current.offsetWidth;
@@ -440,7 +410,6 @@ const ImageEditor = ({ params }) => {
     }
   };
 
-  // useEffect hook to update the text element after component mount and selectedTextIndex changes
   useEffect(() => {
     if (selectedTextIndex !== null) {
       const textElement = document.getElementById(
@@ -461,20 +430,15 @@ const ImageEditor = ({ params }) => {
     }
   }, [selectedTextIndex]);
 
-  // modal close & open
   return (
     <>
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
-          Image Editor
+          {imageData.title}
         </h1>
-        {/* {selectedTextIndex !== null && (
-        <p>Selected Text: {textStyles[selectedTextIndex].text}</p>
-      )} */}
 
         <div id="canvas" className="my-5" onClick={handleCanvasClick}>
-          {/* Your canvas content */}
           {selectedTextIndex !== null && (
             <div className="flex justify-center mt-4">
               <div
@@ -494,24 +458,9 @@ const ImageEditor = ({ params }) => {
                   >
                     Edit
                   </label>
-                  <div className="flex">
-                    {/* {showModal ? (
-                    <input
-                      id={`textInput-${selectedTextIndex}`}
-                      type="text"
-                      value={textStyles[selectedTextIndex].text}
-                      onChange={(e) => handleTextChange(selectedTextIndex, e)}
-                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-32"
-                    />
-                  ) : (
-                    <button onClick={() => setShowModal(true)}>
-                      Edit Text
-                    </button>
-                  )} */}
-                  </div>
+                  
                 </div>
 
-                {/* left and top position  */}
                 {devtools && (
                   <>
                     <div>
@@ -578,83 +527,77 @@ const ImageEditor = ({ params }) => {
 
                     <div className="flex flex-col text-center">
                       <label className="mb-2">Text Align </label>
-                      <div> 
-
-                      <button
-                        className="bg-primary text-white mb-2 px-2 py-2 mr-2"
-                        onClick={() => handleTextAlignChange("left")}
-                      >
-                        <FiAlignLeft /> {/* Use the Align Left Icon */}
-                      </button>
-                      <button
-                        className="bg-primary text-white mb-2 px-2 py-2 mr-2"
-                        onClick={() => handleTextAlignChange("center")}
-                      >
-                        <FiAlignCenter /> {/* Use the Align Center Icon */}
-                      </button>
-                      <button
-                        className="bg-primary text-white mb-2 px-2 py-2"
-                        onClick={() => handleTextAlignChange("right")}
-                      >
-                        <FiAlignRight /> {/* Use the Align Right Icon */}
-                      </button>
-                      </div>
-                      
-                    </div>
-                    <div className="text-center flex flex-col justify-center items-center">
                       <div>
                         <button
-                          className="bg-primary text-white mb-2"
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          onClick={() => handleTextAlignChange("left")}
+                        >
+                          <FiAlignLeft /> {/* Use the Align Left Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          onClick={() => handleTextAlignChange("center")}
+                        >
+                          <FiAlignCenter /> {/* Use the Align Center Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          onClick={() => handleTextAlignChange("right")}
+                        >
+                          <FiAlignRight /> {/* Use the Align Right Icon */}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (X-Axis)</label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
                           onClick={() =>
                             handleMoveToXAxisLeft(selectedTextIndex, "left")
                           }
                         >
-                          Left X-Axis
+                          <BiArrowToLeft />
                         </button>
-                      </div>
-                      <div>
+
                         <button
                           onClick={handleCenterText}
-                          className="bg-primary text-white mb-2"
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
                         >
-                          Center X-Axis
+                          <BiHorizontalCenter />
                         </button>
-                      </div>
-                      <div>
+
                         <button
-                          className="bg-primary text-white mb-2"
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
                           onClick={handleMoveToXAxisRight}
                         >
-                          Right X-Axis
+                          <BiArrowToRight />
                         </button>
-                      </div>
-                      <div>
-                        <button className="bg-primary text-white mb-2">
-                          Top Y-Axis
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          onClick={handleCenterTextYAxis}
-                          className="bg-primary text-white mb-2"
-                        >
-                          Center Y-Axis
-                        </button>
-                      </div>
-                      <div>
-                        <button className="bg-primary text-white mb-2">
-                          Bottom Y-Axis
-                        </button>
-                      </div>
-
-                      <div>
-                        <button>Reset Position</button>
                       </div>
                     </div>
+
+                    {/* <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (Y-Axis)</label>
+                      <div>
+                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                          <BiArrowToTop />
+                        </button>
+                        <button
+                          onClick={handleCenterTextYAxis}
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                        >
+                          <BsArrowsCollapse />
+                        </button>
+                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                          <BiArrowToBottom />
+                        </button>
+                      </div>
+                    </div> */}
                   </>
                 )}
 
-                <div>
+                <div className="flex flex-col justify-center  items-center text-left">
                   <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
                     Font Size:
                   </label>
@@ -674,7 +617,7 @@ const ImageEditor = ({ params }) => {
                         handleFontSizeChange(selectedTextIndex, e)
                       }
                       className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
-                      min="5" // Add this line to prevent negative values
+                      min="5"
                     />
 
                     <div className="flex mt-2">
@@ -710,9 +653,7 @@ const ImageEditor = ({ params }) => {
             <>
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
                 <div className="relative w-full my-6 mx-auto max-w-3xl">
-                  {/*content*/}
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                       <h3 className="text-1xl font-semibold">
                         Update Your Text
@@ -726,18 +667,17 @@ const ImageEditor = ({ params }) => {
                         </span>
                       </button>
                     </div>
-                    {/*body*/}
+
                     <div className="relative p-6 flex-auto">
-                      <input
+                      <textarea
                         id={`textInput-${selectedTextIndex}`}
-                        type="text"
                         value={textStyles[selectedTextIndex].text}
                         onChange={(e) => handleTextChange(selectedTextIndex, e)}
-                        className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full"
+                        className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full resize-none"
                         style={{ whiteSpace: "pre-wrap" }}
+                        rows={4} 
                       />
                     </div>
-                    {/*footer*/}
                     <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                       <button
                         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -761,8 +701,6 @@ const ImageEditor = ({ params }) => {
             </>
           ) : null}
         </div>
-
-        {/* canvas and textStyles  */}
 
         <div className="relative">
           <canvas
@@ -832,43 +770,6 @@ const ImageEditor = ({ params }) => {
             ))}
           </div>
         )}
-
-        {/* <PreviewCard imageData={previewData} /> */}
-
-        {/* <PreviewCard imageData={previewData} /> */}
-        {/* {imageData.imageType === "multiple image" && (
-        <div className="mt-4">
-          <h3 className="text-xl font-bold">Font Sizes:</h3>
-          <ul>
-            {multipleImageFontSizes.map((fontSizes, imageIndex) => (
-              <li key={imageIndex}>
-                <strong>Image {imageIndex + 1}:</strong>
-                <ul>
-                  {fontSizes.map((fontSize, textStyleIndex) => (
-                    <li key={textStyleIndex}>{fontSize}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )} */}
-
-        <div className="flex mt-4 align-center justify-center">
-          <button
-            className="bg-gray-200 rounded px-4 py-2 mr-2 "
-            onClick={handleSaveClick}
-          >
-            Save
-          </button>
-
-          <Link href="/image-picker">
-            <p className="bg-gray-200 rounded px-4 py-2 mr-2">Back</p>
-          </Link>
-          <Link href="/">
-            <p className="bg-gray-200 rounded px-4 py-2">Home</p>
-          </Link>
-        </div>
       </div>
       <Footer />
     </>
