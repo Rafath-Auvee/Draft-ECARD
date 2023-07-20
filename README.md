@@ -1,1 +1,0 @@
-How can I implement the undo changes functionalites? if the user want to undo the position or undo remove text in the component
