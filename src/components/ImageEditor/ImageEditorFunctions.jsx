@@ -26,7 +26,7 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 
-const useImageEditorLogic = ({ params, images }) => {
+const ImageEditorFunctions = ({ params, images }) => {
   const [devtools, setDevtools] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
@@ -449,4 +449,4 @@ const useImageEditorLogic = ({ params, images }) => {
   
 };
 
-export default useImageEditorLogic;
+export default ImageEditorFunctions;

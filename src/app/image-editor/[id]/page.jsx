@@ -6,11 +6,10 @@ import images from "../../../Data/Draft_Data";
 import { CiEdit } from "react-icons/ci";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 import draft from "@/Data/Draft_Data";
-import useImageEditorLogic from "@/components/ImageEditor/Functions";
+import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 
 import {
   FiAlignLeft,
@@ -82,7 +81,7 @@ const ImageEditor = ({ params }) => {
     handleCenterText,
     handleCenterTextYAxis,
     handleMoveToXAxisRight,
-  } = useImageEditorLogic({ params, images });
+  } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
     const canvas = canvasRef.current;
