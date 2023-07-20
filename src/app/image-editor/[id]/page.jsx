@@ -81,6 +81,7 @@ const ImageEditor = ({ params }) => {
     handleMoveToXAxisRight,
     handleMoveToYAxisTop,
     handleMoveToYAxisBottom,
+    handleMoveToYAxisCenter,
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -313,12 +314,19 @@ const ImageEditor = ({ params }) => {
                         >
                           <BiArrowToTop />
                         </button>
-                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          onClick={() =>
+                            handleMoveToYAxisCenter(selectedTextIndex)
+                          }
+                        >
                           <BsArrowsCollapse />
                         </button>
                         <button
                           className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
-                          onClick={() => handleMoveToYAxisBottom(selectedTextIndex, "top")}
+                          onClick={() =>
+                            handleMoveToYAxisBottom(selectedTextIndex, "top")
+                          }
                         >
                           <BiArrowToBottom />
                         </button>

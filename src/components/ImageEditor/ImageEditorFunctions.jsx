@@ -390,6 +390,31 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   };
 
+  const handleMoveToYAxisCenter = (selectedTextIndex) => {
+    const updatedTextStyles = [...textStyles];
+    const canvasHeight = -canvasRef.current.offsetHeight;
+  
+    if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textHeight = textElement.getBoundingClientRect().height;
+      
+      console.log(textHeight, "textHeight")
+      console.log(canvasHeight, "canvasHeight")
+      console.log(canvasHeight + textHeight, "canvasHeight + textHeight")
+      console.log((canvasHeight + textHeight)/2, "(canvasHeight + textHeight)/2")
+      // updatedTextStyles[selectedTextIndex].top = Math.max(
+      //   (canvasHeight + textHeight) / 2,
+      //   0
+      // );
+      // setTextStyles(updatedTextStyles);
+    }
+  };
+  
+
+
   const handleMoveToYAxisBottom = (index, axis) => {
     if (selectedTextIndex !== null) {
       const updatedTextStyles = [...textStyles];
@@ -463,6 +488,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleMoveToXAxisRight,
     handleMoveToYAxisTop,
     handleMoveToYAxisBottom,
+    handleMoveToYAxisCenter,
   };
 };
 
