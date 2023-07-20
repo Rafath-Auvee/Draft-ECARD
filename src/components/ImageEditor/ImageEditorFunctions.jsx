@@ -393,27 +393,34 @@ const ImageEditorFunctions = ({ params, images }) => {
   const handleMoveToYAxisCenter = (selectedTextIndex) => {
     const updatedTextStyles = [...textStyles];
     const canvasHeight = -canvasRef.current.offsetHeight;
-  
+
     if (selectedTextIndex !== null) {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
       );
       const textHeight = textElement.getBoundingClientRect().height;
-      
-      console.log(textHeight, "textHeight")
-      console.log(canvasHeight, "canvasHeight")
-      console.log(canvasHeight + textHeight, "canvasHeight + textHeight")
-      console.log((canvasHeight + textHeight)/2, "(canvasHeight + textHeight)/2")
-      // updatedTextStyles[selectedTextIndex].top = Math.max(
-      //   (canvasHeight + textHeight) / 2,
-      //   0
-      // );
-      // setTextStyles(updatedTextStyles);
+
+      console.log(textHeight, "textHeight");
+      console.log(canvasHeight, "canvasHeight");
+      console.log(canvasHeight + textHeight, "canvasHeight + textHeight");
+      console.log(
+        (canvasHeight + textHeight) / 2 + textHeight,
+        "(canvasHeight + textHeight)/2"
+      );
+      // updatedTextStyles[selectedTextIndex].top =
+      //   (canvasHeight + textHeight) / 2 + textHeight;
+
+      const newY = (canvasHeight + textHeight) / 2 - textHeight;
+
+      console.log(newY, "newY");
+      updatedTextStyles[selectedTextIndex] = {
+        ...updatedTextStyles[selectedTextIndex],
+        top: newY,
+      };
+      setTextStyles(updatedTextStyles);
     }
   };
-  
-
 
   const handleMoveToYAxisBottom = (index, axis) => {
     if (selectedTextIndex !== null) {
@@ -428,7 +435,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       // Calculate the new y position to move to the bottom without crossing the border
       const newY = 0 - textHeight;
 
-      console.log(newY)
+      console.log(newY);
 
       updatedTextStyles[selectedTextIndex] = {
         ...selectedTextStyle,
