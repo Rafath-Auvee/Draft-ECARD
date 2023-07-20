@@ -31,7 +31,6 @@ import {
 } from "react-icons/bi";
 
 const ImageEditor = ({ params }) => {
-
   const {
     devtools,
     setDevtools,
@@ -79,8 +78,9 @@ const ImageEditor = ({ params }) => {
     handleTextClick,
     handleMoveToXAxisLeft,
     handleCenterText,
-    handleCenterTextYAxis,
     handleMoveToXAxisRight,
+    handleMoveToYAxisTop,
+    handleMoveToYAxisBottom,
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -137,8 +137,6 @@ const ImageEditor = ({ params }) => {
       };
     }
   }, [imageData, selectedImage, textStyles]);
-
-
 
   useEffect(() => {
     if (selectedTextIndex !== null) {
@@ -309,16 +307,19 @@ const ImageEditor = ({ params }) => {
                     <div className="text-center flex flex-col justify-center items-center">
                       <label className="mb-2">Position (Y-Axis)</label>
                       <div>
-                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          onClick={handleMoveToYAxisTop}
+                        >
                           <BiArrowToTop />
                         </button>
-                        <button
-                          onClick={handleCenterTextYAxis}
-                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
-                        >
+                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
                           <BsArrowsCollapse />
                         </button>
-                        <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          onClick={() => handleMoveToYAxisBottom(selectedTextIndex, "top")}
+                        >
                           <BiArrowToBottom />
                         </button>
                       </div>

@@ -360,23 +360,6 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   };
 
-  const handleCenterTextYAxis = () => {
-    const updatedTextStyles = [...textStyles];
-
-    if (selectedTextIndex !== null) {
-      const selectedTextStyle = textStyles[selectedTextIndex];
-      const textElement = document.getElementById(
-        `textElement_${selectedTextIndex}`
-      );
-      const canvasHeight = canvasRef.current.offsetHeight;
-      const textHeight = textElement.getBoundingClientRect().height;
-
-      updatedTextStyles[selectedTextIndex].top =
-        (canvasHeight - textHeight) / 2;
-      setTextStyles(updatedTextStyles);
-    }
-  };
-
   const handleMoveToXAxisRight = () => {
     const updatedTextStyles = [...textStyles];
     const canvasWidth = canvasRef.current.offsetWidth;
@@ -392,6 +375,40 @@ const ImageEditorFunctions = ({ params, images }) => {
         canvasWidth - textWidth,
         0
       );
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  const handleMoveToYAxisTop = () => {
+    if (selectedTextIndex !== null) {
+      const updatedTextStyles = [...textStyles];
+      updatedTextStyles[selectedTextIndex] = {
+        ...updatedTextStyles[selectedTextIndex],
+        top: -1202,
+      };
+      setTextStyles(updatedTextStyles);
+    }
+  };
+
+  const handleMoveToYAxisBottom = (index, axis) => {
+    if (selectedTextIndex !== null) {
+      const updatedTextStyles = [...textStyles];
+      const canvasHeight = canvasRef.current.offsetHeight;
+      const selectedTextStyle = updatedTextStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textHeight = textElement.getBoundingClientRect().height;
+
+      // Calculate the new y position to move to the bottom without crossing the border
+      const newY = 0 - textHeight;
+
+      console.log(newY)
+
+      updatedTextStyles[selectedTextIndex] = {
+        ...selectedTextStyle,
+        [axis]: newY,
+      };
       setTextStyles(updatedTextStyles);
     }
   };
@@ -443,10 +460,10 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleTextClick,
     handleMoveToXAxisLeft,
     handleCenterText,
-    handleCenterTextYAxis,
     handleMoveToXAxisRight,
+    handleMoveToYAxisTop,
+    handleMoveToYAxisBottom,
   };
-  
 };
 
 export default ImageEditorFunctions;
