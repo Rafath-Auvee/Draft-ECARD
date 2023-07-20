@@ -12,6 +12,8 @@ import Navbar from "@/components/Navbar/Navbar";
 import draft from "@/Data/Draft_Data";
 import ImageModal from "@/components/ImageModal/ImageModal";
 
+
+
 import {
   FiAlignLeft,
   FiAlignCenter,
@@ -33,15 +35,8 @@ import {
 
 const ImageEditor = ({ params }) => {
   const [devtools, setDevtools] = useState(true);
-  // user -> false
-  // admin -> true
-
   const [showModal, setShowModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
-
-  const [undoHistory, setUndoHistory] = useState([]);
-  const [redoHistory, setRedoHistory] = useState([]);
-
   const router = useRouter();
   const canvasRef = useRef(null);
   const imageData = images.find((image) => image.id === parseInt(params.id));
@@ -51,46 +46,18 @@ const ImageEditor = ({ params }) => {
       const updatedTextStyles = [...textStyles];
       updatedTextStyles[selectedTextIndex].textAlign = alignment;
       setTextStyles(updatedTextStyles);
-
-      setUndoHistory([...undoHistory, textStylesRef.current]);
     }
   };
 
-  const handleTextDelete = (e, index) => {
-    e.stopPropagation(); // Prevent the click from triggering text selection
-
-    // Deselect the text
-    setTextStyles((prevTextStyles) =>
-      prevTextStyles.map((style, i) => ({
-        ...style,
-        isSelected: false,
-      }))
-    );
-
-    // Remove the selected text element
-    setTextStyles((prevTextStyles) =>
-      prevTextStyles.filter((_, i) => i !== index)
-    );
-
-    // Record the change in the undo history
-    setUndoHistory([...undoHistory, textStylesRef.current]);
-  };
-
-  const handleUndo = () => {
-    if (undoHistory.length > 0) {
-      const prevTextStyles = undoHistory.pop();
-      setRedoHistory([...redoHistory, textStylesRef.current]);
-      setTextStyles(prevTextStyles);
-    }
-  };
-
-  const handleRedo = () => {
-    if (redoHistory.length > 0) {
-      const nextTextStyles = redoHistory.pop();
-      setUndoHistory([...undoHistory, textStylesRef.current]);
-      setTextStyles(nextTextStyles);
-    }
-  };
+    // Function to remove the selected text when the close button is clicked
+    const handleRemoveText = (index) => {
+      setTextStyles((prevTextStyles) => {
+        const updatedTextStyles = [...prevTextStyles];
+        updatedTextStyles.splice(index, 1); // Remove the selected text element
+        setSelectedTextIndex(null); // Reset the selected text index
+        return updatedTextStyles;
+      });
+    };
 
   const handleSaveClick = () => {
     let previewData = null;
@@ -146,9 +113,6 @@ const ImageEditor = ({ params }) => {
       fontSize: parseInt(textStyle.fontSize),
     })) || []
   );
-
-  const textStylesRef = useRef(textStyles);
-
   const [selectedTextIndex, setSelectedTextIndex] = useState(null);
   const [editingTextIndex, setEditingTextIndex] = useState(null);
 
@@ -194,8 +158,6 @@ const ImageEditor = ({ params }) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-
-    textStylesRef.current = textStyles;
 
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
@@ -376,7 +338,6 @@ const ImageEditor = ({ params }) => {
       top: data.y,
     };
     setTextStyles(updatedTextStyles);
-    setUndoHistory([...undoHistory, textStylesRef.current]);
 
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
@@ -496,7 +457,7 @@ const ImageEditor = ({ params }) => {
             <div className="flex justify-center mt-4">
               <div
                 key={selectedTextIndex}
-                className={`grid gap-4 grid-cols-5 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+                className={`grid gap-4 grid-cols-3 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
               >
                 <div
                   className="flex flex-col justify-center align-center items-center cursor-pointer"
@@ -629,7 +590,7 @@ const ImageEditor = ({ params }) => {
                       </div>
                     </div>
 
-                    <div className="text-center flex flex-col justify-center items-center">
+                    {/* <div className="text-center flex flex-col justify-center items-center">
                       <label className="mb-2">Position (Y-Axis)</label>
                       <div>
                         <button className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1">
@@ -645,7 +606,7 @@ const ImageEditor = ({ params }) => {
                           <BiArrowToBottom />
                         </button>
                       </div>
-                    </div>
+                    </div> */}
                   </>
                 )}
 
@@ -692,26 +653,9 @@ const ImageEditor = ({ params }) => {
                 <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                   <button
                     className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-                    onClick={handleUndo}
-                  >
-                    Undo
-                  </button>
-                </div>
-                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button
-                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-                    onClick={handleRedo}
-                  >
-                    Redo
-                  </button>
-                </div>
-
-                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button
-                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
                     onClick={handleSaveClick}
                   >
-                    Save & Preview
+                    Next
                   </button>
                 </div>
               </div>
@@ -824,7 +768,7 @@ const ImageEditor = ({ params }) => {
                 {textStyle.isSelected && ( // Only display the close icon if the text is selected
                   <button
                     className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
-                    onClick={(e) => handleTextDelete(e, index)}
+                    onClick={() => handleRemoveText(index)} // Define handleRemoveText function to remove the selected text
                   >
                     <IoCloseSharp size={20} />
                   </button>
