@@ -12,6 +12,8 @@ import Navbar from "@/components/Navbar/Navbar";
 import draft from "@/Data/Draft_Data";
 import ImageModal from "@/components/ImageModal/ImageModal";
 
+
+
 import {
   FiAlignLeft,
   FiAlignCenter,
@@ -21,7 +23,7 @@ import {
   FiArrowRight,
   FiArrowLeft,
 } from "react-icons/fi";
-
+import { IoCloseSharp } from "react-icons/io5";
 import { BsArrowsCollapse } from "react-icons/bs";
 import {
   BiArrowToLeft,
@@ -46,6 +48,16 @@ const ImageEditor = ({ params }) => {
       setTextStyles(updatedTextStyles);
     }
   };
+
+    // Function to remove the selected text when the close button is clicked
+    const handleRemoveText = (index) => {
+      setTextStyles((prevTextStyles) => {
+        const updatedTextStyles = [...prevTextStyles];
+        updatedTextStyles.splice(index, 1); // Remove the selected text element
+        setSelectedTextIndex(null); // Reset the selected text index
+        return updatedTextStyles;
+      });
+    };
 
   const handleSaveClick = () => {
     let previewData = null;
@@ -478,7 +490,7 @@ const ImageEditor = ({ params }) => {
                           }
                           className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
                         />
-                        <div className="flex mt-2">
+                        {/* <div className="flex mt-2">
                           <button
                             onClick={() => incrementLeft(selectedTextIndex)}
                             className="bg-gray-200 rounded px-2 py-1 mr-1"
@@ -491,7 +503,7 @@ const ImageEditor = ({ params }) => {
                           >
                             -
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 
@@ -509,7 +521,7 @@ const ImageEditor = ({ params }) => {
                           }
                           className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
                         />
-                        <div className="flex mt-2">
+                        {/* <div className="flex mt-2">
                           <button
                             onClick={() => incrementTop(selectedTextIndex)}
                             className="bg-gray-200 rounded px-2 py-1 mr-1"
@@ -522,7 +534,7 @@ const ImageEditor = ({ params }) => {
                           >
                             -
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 
@@ -753,6 +765,14 @@ const ImageEditor = ({ params }) => {
                     {line}
                   </div>
                 ))}
+                {textStyle.isSelected && ( // Only display the close icon if the text is selected
+                  <button
+                    className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
+                    onClick={() => handleRemoveText(index)} // Define handleRemoveText function to remove the selected text
+                  >
+                    <IoCloseSharp size={20} />
+                  </button>
+                )}
               </div>
             </Draggable>
           ))}
