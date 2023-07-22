@@ -11,6 +11,8 @@ import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 import draft from "@/Data/Draft_Data";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
+import PreviewModal from "@/components/PreviewModal/PreviewModal";
+
 
 import {
   FiAlignLeft,
@@ -88,6 +90,10 @@ const ImageEditor = ({ params }) => {
     handleLineHeightChange,
     letterSpacing,
     handleLetterSpacingChange,
+    handleToggleDevtools,
+    closePreviewModal,
+    isPreviewModalOpen,
+    setIsPreviewModalOpen,
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -165,10 +171,20 @@ const ImageEditor = ({ params }) => {
     }
   }, [selectedTextIndex]);
 
+  const gridColumns = devtools ? "grid-cols-7" : "grid-cols-4";
+
   return (
     <>
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
+        <button
+          className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+          onClick={handleToggleDevtools}
+        >
+          Devtools: {/* <span style={{ marginLeft: "10px" }}> */}
+          {devtools ? "True" : "False"}
+          {/* </span> */}
+        </button>
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
           {imageData.title}
         </h1>
@@ -178,7 +194,7 @@ const ImageEditor = ({ params }) => {
             <div className="flex justify-center mt-4">
               <div
                 key={selectedTextIndex}
-                className={`grid gap-4 grid-cols-4 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+                className={`grid gap-4 ${gridColumns} px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
               >
                 <div
                   className="flex flex-col justify-center align-center items-center cursor-pointer"
@@ -193,6 +209,46 @@ const ImageEditor = ({ params }) => {
                   >
                     Edit
                   </label>
+                </div>
+
+                <div className="flex flex-col justify-center  items-center text-left">
+                  <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
+                    Font Size:
+                  </label>
+                  <div className="flex">
+                    <input
+                      id={`fontSizeInput-${selectedTextIndex}`}
+                      type="number"
+                      value={
+                        imageData.imageType === "multiple image"
+                          ? selectedImageTextStyles[selectedTextIndex].fontSize
+                          : textStyles[selectedTextIndex].fontSize
+                      }
+                      onChange={(e) =>
+                        handleFontSizeChange(selectedTextIndex, e)
+                      }
+                      onInput={(e) =>
+                        handleFontSizeChange(selectedTextIndex, e)
+                      }
+                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                      min="5"
+                    />
+
+                    <div className="flex mt-2">
+                      <button
+                        onClick={() => incrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1 mr-1"
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() => decrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 {devtools && (
@@ -391,48 +447,26 @@ const ImageEditor = ({ params }) => {
                         />
                       </div>
                     </div>
-                  </>
-                )}
 
-                <div className="flex flex-col justify-center  items-center text-left">
-                  <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
-                    Font Size:
-                  </label>
-                  <div className="flex">
-                    <input
-                      id={`fontSizeInput-${selectedTextIndex}`}
-                      type="number"
-                      value={
-                        imageData.imageType === "multiple image"
-                          ? selectedImageTextStyles[selectedTextIndex].fontSize
-                          : textStyles[selectedTextIndex].fontSize
-                      }
-                      onChange={(e) =>
-                        handleFontSizeChange(selectedTextIndex, e)
-                      }
-                      onInput={(e) =>
-                        handleFontSizeChange(selectedTextIndex, e)
-                      }
-                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
-                      min="5"
-                    />
-
-                    <div className="flex mt-2">
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                       <button
-                        onClick={() => incrementFontSize(selectedTextIndex)}
-                        className="bg-gray-200 rounded px-2 py-1 mr-1"
+                        className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                        onClick={handleSaveClick}
                       >
-                        +
-                      </button>
-                      <button
-                        onClick={() => decrementFontSize(selectedTextIndex)}
-                        className="bg-gray-200 rounded px-2 py-1"
-                      >
-                        -
+                        Save
                       </button>
                     </div>
-                  </div>
-                </div>
+
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                      <button
+                        className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                        onClick={handleRedo}
+                      >
+                        Redo
+                      </button>
+                    </div>
+                  </>
+                )}
 
                 <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                   <button
@@ -444,19 +478,7 @@ const ImageEditor = ({ params }) => {
                 </div>
 
                 <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button
-                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-                    onClick={handleRedo}
-                  >
-                    Redo
-                  </button>
-                </div>
-
-                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button
-                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-                    onClick={handleSaveClick}
-                  >
+                  <button className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 ">
                     Save & Preview
                   </button>
                 </div>
@@ -594,7 +616,12 @@ const ImageEditor = ({ params }) => {
             ))}
           </div>
         )}
+
+        {isPreviewModalOpen && (
+          <PreviewModal previewData={previewData} onClose={closePreviewModal} />
+        )}
       </div>
+
       <Footer />
     </>
   );

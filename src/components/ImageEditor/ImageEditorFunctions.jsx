@@ -32,9 +32,13 @@ const ImageEditorFunctions = ({ params, images }) => {
   const [previewData, setPreviewData] = useState(null);
   const [undoHistory, setUndoHistory] = useState([]);
   const [redoHistory, setRedoHistory] = useState([]);
-  // New state variables for line height and letter spacing
   const [lineHeight, setLineHeight] = useState(1.5);
   const [letterSpacing, setLetterSpacing] = useState(0);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+  const handleToggleDevtools = () => {
+    setDevtools((prevDevtools) => !prevDevtools);
+  };
 
   const router = useRouter();
   const canvasRef = useRef(null);
@@ -80,47 +84,6 @@ const ImageEditorFunctions = ({ params, images }) => {
       setUndoHistory([...undoHistory, textStylesRef.current]);
       setTextStyles(nextTextStyles);
     }
-  };
-
-  const handleSaveClick = () => {
-    let previewData = null;
-    if (imageData.imageType === "single image") {
-      previewData = {
-        url: imageData.url,
-        imageType: imageData.imageType,
-        textStyles: textStyles.map((textStyle) => ({
-          id: textStyle.id,
-          text: textStyle.text,
-          left: textStyle.left,
-          top: textStyle.top,
-          color: textStyle.color,
-          fontSize: textStyle.fontSize,
-          backgroundColor: textStyle.backgroundColor,
-          padding: textStyle.padding,
-        })),
-      };
-    } else if (imageData.imageType === "multiple image") {
-      previewData = {
-        imageType: imageData.imageType,
-        images: imageData.images.map((image) => ({
-          id: image.id,
-          url: image.url,
-          textStyles: image.textStyles.map((textStyle) => ({
-            id: textStyle.id,
-            text: textStyle.text,
-            left: textStyle.left,
-            top: textStyle.top,
-            color: textStyle.color,
-            fontSize: textStyle.fontSize,
-            backgroundColor: textStyle.backgroundColor,
-            padding: textStyle.padding,
-          })),
-        })),
-      };
-    }
-
-    localStorage.setItem("previewData", JSON.stringify(previewData));
-    window.location.href = "/preview";
   };
 
   const multipleImageFontSizes =
@@ -479,6 +442,80 @@ const ImageEditorFunctions = ({ params, images }) => {
     });
   };
 
+  const handleSaveClick = () => {
+    let previewData = null;
+    if (imageData.imageType === "single image") {
+      previewData = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        textStyles: textStyles.map((textStyle) => ({
+          id: textStyle.id,
+          text: textStyle.text,
+          left: textStyle.left,
+          top: textStyle.top,
+          color: textStyle.color,
+          fontSize: textStyle.fontSize,
+          backgroundColor: textStyle.backgroundColor,
+          padding: textStyle.padding,
+          fontFamily: textStyle.fontFamily,
+          textAlign: textStyle.textAlign,
+          lineHeight: textStyle.lineHeight,
+          letterSpacing: textStyle.letterSpacing,
+        })),
+      };
+    } else if (imageData.imageType === "multiple image") {
+      previewData = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        images: imageData.images.map((image) => ({
+          id: image.id,
+          url: image.url,
+          textStyles: image.textStyles.map((textStyle) => ({
+            id: textStyle.id,
+            text: textStyle.text,
+            left: textStyle.left,
+            top: textStyle.top,
+            color: textStyle.color,
+            fontSize: textStyle.fontSize,
+            backgroundColor: textStyle.backgroundColor,
+            padding: textStyle.padding,
+            fontFamily: textStyle.fontFamily,
+            textAlign: textStyle.textAlign,
+            lineHeight: textStyle.lineHeight,
+            letterSpacing: textStyle.letterSpacing,
+          })),
+        })),
+      };
+    }
+
+    localStorage.setItem("previewData", JSON.stringify(previewData));
+    // window.location.href = "/preview";
+    setPreviewData(previewData);
+    setIsPreviewModalOpen(true);
+  };
+
+  const closePreviewModal = () => {
+    setIsPreviewModalOpen(false);
+  };
+
   return {
     devtools,
     setDevtools,
@@ -535,6 +572,10 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleLineHeightChange,
     letterSpacing,
     handleLetterSpacingChange,
+    handleToggleDevtools,
+    closePreviewModal,
+    isPreviewModalOpen,
+    setIsPreviewModalOpen,
   };
 };
 

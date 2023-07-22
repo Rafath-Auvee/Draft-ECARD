@@ -263,8 +263,7 @@ export const draft = [
     buttonText: "View Design",
     cardType: "Multiple Page",
     popularity: 4,
-    description:
-      "Transport yourself to a beachside paradise with this serene card, inviting you to relax and unwind with its soothing coastal vibes.",
+    description: "Transport yourself to a beachside paradise with this serene card, inviting you to relax and unwind with its soothing coastal vibes.",
     cardCategory: "multiPageCard",
     images: [
       {
