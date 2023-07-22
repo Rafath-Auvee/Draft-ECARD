@@ -23,6 +23,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 2,
@@ -34,6 +35,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         textAlign: "center",
         fontFamily: "ChopinScript",
+        lineHeight: 1.7,
       },
       {
         id: 3,
@@ -45,6 +47,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 4,
@@ -56,7 +59,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         textAlign: "center",
         fontFamily: "ChopinScript",
-        
+        lineHeight: 1.7,
       },
       {
         id: 5,
@@ -68,6 +71,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 6,
@@ -79,6 +83,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 7,
@@ -90,6 +95,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 8,
@@ -101,6 +107,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 9,
@@ -112,6 +119,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
       {
         id: 10,
@@ -123,6 +131,7 @@ export const draft = [
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
         textAlign: "center",
+        lineHeight: 1.7,
       },
     ],
     

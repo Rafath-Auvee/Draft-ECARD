@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import images from "../../../Data/Draft_Data";
+import { fonts } from "../../../Data/Fonts_Data";
 import { CiEdit } from "react-icons/ci";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -82,6 +83,11 @@ const ImageEditor = ({ params }) => {
     handleMoveToYAxisTop,
     handleMoveToYAxisBottom,
     handleMoveToYAxisCenter,
+    handleFontChange,
+    lineHeight,
+    handleLineHeightChange,
+    letterSpacing,
+    handleLetterSpacingChange,
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -172,7 +178,7 @@ const ImageEditor = ({ params }) => {
             <div className="flex justify-center mt-4">
               <div
                 key={selectedTextIndex}
-                className={`grid gap-4 grid-cols-5 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+                className={`grid gap-4 grid-cols-4 px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
               >
                 <div
                   className="flex flex-col justify-center align-center items-center cursor-pointer"
@@ -332,6 +338,59 @@ const ImageEditor = ({ params }) => {
                         </button>
                       </div>
                     </div>
+
+                    <div className="font-dropdown text-center flex flex-col justify-center items-center">
+                      <label htmlFor="font-select">Select Font:</label>
+                      <div className="border border-black rounded-md px-2 py-2">
+                        <select
+                          id="font-select"
+                          value={textStyles[selectedTextIndex].fontFamily}
+                          onChange={(e) =>
+                            handleFontChange(selectedTextIndex, e.target.value)
+                          }
+                        >
+                          {fonts.map((font) => (
+                            <option key={font.id} value={font.name}>
+                              {font.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Line Height</label>
+                      <div>
+                        <input
+                          type="number"
+                          value={lineHeight}
+                          onChange={(e) =>
+                            handleLineHeightChange(parseFloat(e.target.value))
+                          }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                          step="0.1"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Letter Spacing</label>
+                      <div>
+                        <input
+                          type="number"
+                          value={letterSpacing}
+                          onChange={(e) =>
+                            handleLetterSpacingChange(
+                              parseFloat(e.target.value)
+                            )
+                          }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                          step="0.1"
+                          min="0"
+                        />
+                      </div>
+                    </div>
                   </>
                 )}
 
@@ -383,6 +442,7 @@ const ImageEditor = ({ params }) => {
                     Undo
                   </button>
                 </div>
+
                 <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                   <button
                     className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
@@ -481,6 +541,8 @@ const ImageEditor = ({ params }) => {
                   whiteSpace: "pre-wrap",
                   cursor: "pointer",
                   textAlign: textStyle.textAlign,
+                  lineHeight: textStyle.lineHeight || 1.5, // Set initial line height from JSON or default to 1.5
+                  letterSpacing: textStyle.letterSpacing || 0, // Set initial letter spacing from JSON or default to 0
                 }}
                 onClick={() => handleTextClick(index)}
               >

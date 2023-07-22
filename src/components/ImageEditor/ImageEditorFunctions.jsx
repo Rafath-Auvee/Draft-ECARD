@@ -32,6 +32,9 @@ const ImageEditorFunctions = ({ params, images }) => {
   const [previewData, setPreviewData] = useState(null);
   const [undoHistory, setUndoHistory] = useState([]);
   const [redoHistory, setRedoHistory] = useState([]);
+  // New state variables for line height and letter spacing
+  const [lineHeight, setLineHeight] = useState(1.5);
+  const [letterSpacing, setLetterSpacing] = useState(0);
 
   const router = useRouter();
   const canvasRef = useRef(null);
@@ -319,19 +322,6 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   };
 
-  const handleTextClick = (index) => {
-    const selectedTextStyle = textStyles[index];
-    const lines = selectedTextStyle.text.split("\n");
-    setTextStyles((prevTextStyles) => {
-      const updatedTextStyles = prevTextStyles.map((style, i) => ({
-        ...style,
-        isSelected: index === i,
-      }));
-      setSelectedTextIndex(index);
-      return updatedTextStyles;
-    });
-  };
-
   const handleMoveToXAxisLeft = (index, axis) => {
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
@@ -445,6 +435,50 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   };
 
+  // Function to handle font change
+  const handleFontChange = (index, selectedFont) => {
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = [...prevTextStyles];
+      updatedTextStyles[index].fontFamily = selectedFont;
+      return updatedTextStyles;
+    });
+  };
+
+  const handleTextClick = (index) => {
+    const selectedTextStyle = textStyles[index];
+    const lines = selectedTextStyle.text.split("\n");
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = prevTextStyles.map((style, i) => ({
+        ...style,
+        isSelected: index === i,
+      }));
+      setSelectedTextIndex(index);
+      setLineHeight(selectedTextStyle.lineHeight || 1.5); // Set initial line height from JSON or default to 1.5
+      setLetterSpacing(selectedTextStyle.letterSpacing || 0); // Set initial letter spacing from JSON or default to 0
+      return updatedTextStyles;
+    });
+  };
+
+  // Function to handle line height change
+  const handleLineHeightChange = (lineHeightValue) => {
+    setLineHeight(lineHeightValue);
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = [...prevTextStyles];
+      updatedTextStyles[selectedTextIndex].lineHeight = lineHeightValue;
+      return updatedTextStyles;
+    });
+  };
+
+  // Function to handle letter spacing change
+  const handleLetterSpacingChange = (letterSpacingValue) => {
+    setLetterSpacing(letterSpacingValue);
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = [...prevTextStyles];
+      updatedTextStyles[selectedTextIndex].letterSpacing = letterSpacingValue;
+      return updatedTextStyles;
+    });
+  };
+
   return {
     devtools,
     setDevtools,
@@ -496,6 +530,11 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleMoveToYAxisTop,
     handleMoveToYAxisBottom,
     handleMoveToYAxisCenter,
+    handleFontChange,
+    lineHeight,
+    handleLineHeightChange,
+    letterSpacing,
+    handleLetterSpacingChange,
   };
 };
 
