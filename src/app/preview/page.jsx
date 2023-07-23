@@ -27,8 +27,41 @@ const Preview = () => {
   const handleItemClick = async (item) => {
     setIsDownloading(true);
     console.log(`Clicked on ${item}`);
+  
+    const canvas = canvasRef.current;
+  
+    // Determine the image format based on the item clicked
+    const imageFormat = item === "Download as JPEG" ? "image/jpeg" : "image/png";
+    const filenameExtension = item === "Download as JPEG" ? "jpeg" : "png";
+  
+    // Get the current date and time in the specified format
+    const currentDateTime = new Date().toLocaleString("en-US", {
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  
+    // Get the image title
+    const imageTitle = editorPreviewData?.title || "Untitled";
+  
+    // Combine the components to create the filename
+    const filename = `${currentDateTime}_${imageTitle}.${filenameExtension}`;
+  
+    // Convert canvas content to a data URL with the appropriate image format
+    const dataURL = canvas.toDataURL(imageFormat);
+  
+    // Create a link element to trigger the download
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = filename;
+    link.click();
+  
     setIsDownloading(false);
   };
+  
 
   const {
     title,
