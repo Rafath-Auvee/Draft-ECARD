@@ -13,7 +13,6 @@ import draft from "@/Data/Draft_Data";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 import PreviewModal from "@/components/PreviewModal/PreviewModal";
 
-
 import {
   FiAlignLeft,
   FiAlignCenter,
@@ -32,6 +31,8 @@ import {
   BiArrowToBottom,
   BiHorizontalCenter,
 } from "react-icons/bi";
+
+import { usePreviewDataContext } from "../../../components/PreviewDataContext/PreviewDataContext";
 
 const ImageEditor = ({ params }) => {
   const {
@@ -95,6 +96,8 @@ const ImageEditor = ({ params }) => {
     isPreviewModalOpen,
     setIsPreviewModalOpen,
   } = ImageEditorFunctions({ params, images });
+
+  const { editorPreviewData, setEditorPreviewData } = usePreviewDataContext();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -172,6 +175,74 @@ const ImageEditor = ({ params }) => {
   }, [selectedTextIndex]);
 
   const gridColumns = devtools ? "grid-cols-7" : "grid-cols-4";
+
+  const handleSaveAndPreviewClick = () => {
+    let dataForPreview = null;
+    if (imageData.imageType === "single image") {
+      dataForPreview = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        textStyles: textStyles.map((textStyle) => ({
+          id: textStyle.id,
+          text: textStyle.text,
+          left: textStyle.left,
+          top: textStyle.top,
+          color: textStyle.color,
+          fontSize: textStyle.fontSize,
+          backgroundColor: textStyle.backgroundColor,
+          padding: textStyle.padding,
+          fontFamily: textStyle.fontFamily,
+          textAlign: textStyle.textAlign,
+          lineHeight: textStyle.lineHeight,
+          letterSpacing: textStyle.letterSpacing,
+        })),
+      };
+    } else if (imageData.imageType === "multiple image") {
+      dataForPreview = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        images: imageData.images.map((image) => ({
+          id: image.id,
+          url: image.url,
+          textStyles: image.textStyles.map((textStyle) => ({
+            id: textStyle.id,
+            text: textStyle.text,
+            left: textStyle.left,
+            top: textStyle.top,
+            color: textStyle.color,
+            fontSize: textStyle.fontSize,
+            backgroundColor: textStyle.backgroundColor,
+            padding: textStyle.padding,
+            fontFamily: textStyle.fontFamily,
+            textAlign: textStyle.textAlign,
+            lineHeight: textStyle.lineHeight,
+            letterSpacing: textStyle.letterSpacing,
+          })),
+        })),
+      };
+    }
+
+    setEditorPreviewData(dataForPreview);
+    router.push("/preview");
+  };
 
   return (
     <>
@@ -478,7 +549,10 @@ const ImageEditor = ({ params }) => {
                 </div>
 
                 <div className="flex flex-col justify-center align-center items-center cursor-pointer">
-                  <button className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 ">
+                  <button
+                    onClick={handleSaveAndPreviewClick}
+                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                  >
                     Save & Preview
                   </button>
                 </div>
