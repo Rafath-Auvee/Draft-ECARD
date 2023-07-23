@@ -12,8 +12,23 @@ import Navbar from "@/components/Navbar/Navbar";
 
 const Preview = () => {
   const canvasRef = useRef(null);
+  const [permanentTexts, setPermanentTexts] = useState([]);
   const { editorPreviewData } = usePreviewDataContext();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
   console.log(editorPreviewData);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleItemClick = async (item) => {
+    setIsDownloading(true);
+    console.log(`Clicked on ${item}`);
+    setIsDownloading(false);
+  };
 
   const {
     title,
@@ -27,51 +42,51 @@ const Preview = () => {
     description,
     cardCategory,
     textStyles,
-  } = editorPreviewData || {}
+  } = editorPreviewData || {};
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    textStylesRef.current = textStyles;
+    if (editorPreviewData) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (editorPreviewData.imageType === "multiple image") {
-      const selectedImageData = editorPreviewData.images.find(
-        (image) => image.url === selectedImage
-      );
-
-      if (selectedImageData) {
-        const image = document.createElement("img");
-        image.src = selectedImage;
-
-        image.onload = () => {
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          context.drawImage(image, 0, 0, canvas.width, canvas.height);
-          selectedImageData.textStyles.forEach((textStyle) => {
-            context.fillStyle = textStyle.backgroundColor;
-            context.fillRect(
-              textStyle.left,
-              textStyle.top,
-              textStyle.width,
-              textStyle.height
-            );
-          });
-          setTextStyles(
-            selectedImageData.textStyles.map((textStyle) => ({
-              ...textStyle,
-              fontSize: parseInt(textStyle.fontSize),
-            }))
-          );
-          setSelectedImageTextStyles(selectedImageData.textStyles);
+      // Draw the background image if needed
+      if (editorPreviewData.imageUrl) {
+        const backgroundImage = document.createElement("img");
+        backgroundImage.src = editorPreviewData.imageUrl;
+        backgroundImage.onload = () => {
+          context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
         };
       }
-    } else {
-      const image = document.createElement("img");
-      image.src = editorPreviewData.url;
 
-      image.onload = () => {
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-        textStyles.forEach((textStyle) => {
+      // Draw the permanent texts on the canvas
+      permanentTexts.forEach((textStyle) => {
+        context.fillStyle = textStyle.backgroundColor;
+        context.fillRect(
+          textStyle.left,
+          textStyle.top,
+          textStyle.width,
+          textStyle.height
+        );
+
+        context.font = `${textStyle.fontSize}px ${textStyle.fontFamily}`;
+        context.fillStyle = textStyle.color;
+        context.textAlign = textStyle.textAlign;
+        context.textBaseline = "middle";
+        context.lineHeight = textStyle.lineHeight || 1.5;
+        context.letterSpacing = textStyle.letterSpacing || 0;
+
+        const lines = textStyle.text.split("\n");
+        lines.forEach((line, index) => {
+          const y = textStyle.top + index * context.lineHeight;
+          context.fillText(line, textStyle.left, y);
+        });
+      });
+
+      // Draw the current text styles from editor preview data
+      if (editorPreviewData.textStyles) {
+        editorPreviewData.textStyles.forEach((textStyle) => {
           context.fillStyle = textStyle.backgroundColor;
           context.fillRect(
             textStyle.left,
@@ -79,10 +94,21 @@ const Preview = () => {
             textStyle.width,
             textStyle.height
           );
+
+          context.font = `${textStyle.fontSize}px ${textStyle.fontFamily}`;
+          context.fillStyle = textStyle.color;
+          context.textAlign = textStyle.textAlign;
+          context.textBaseline = "middle";
+
+          const lines = textStyle.text.split("\n");
+          lines.forEach((line, index) => {
+            const y = textStyle.top + index * textStyle.lineHeight;
+            context.fillText(line, textStyle.left, y);
+          });
         });
-      };
+      }
     }
-  }, [editorPreviewData, textStyles]);
+  }, [editorPreviewData, permanentTexts]);
 
   const textStylesRef = useRef(textStyles);
 
@@ -105,7 +131,7 @@ const Preview = () => {
             width={900}
             height={1200}
           ></canvas>
-          {textStyles.map((textStyle, index) => (
+          {/* {textStyles.map((textStyle, index) => (
             <Draggable
               key={index}
               position={{ x: textStyle.left, y: textStyle.top }}
@@ -144,29 +170,94 @@ const Preview = () => {
                 ))}
               </div>
             </Draggable>
-          ))}
+          ))} */}
         </div>
 
-        {editorPreviewData && editorPreviewData.imageType === "multiple image" && (
-          <div className="flex justify-center mt-4">
-            {images.map((image, index) => (
-              <div className="flex flex-col text-center mx-3" key={index}>
-                <Image
-                  width={0}
-                  height={0}
-                  key={image.id}
-                  src={image.url}
-                  alt={`Image ${image.id}`}
-                  className={`w-16 h-16 mx-1 cursor-pointer ${
-                    selectedImage === image.url
-                      ? "border-2 border-blue-500"
-                      : ""
-                  }`}
-                  onClick={() => handleImageClick(image.url)}
+        {editorPreviewData &&
+          editorPreviewData.imageType === "multiple image" && (
+            <div className="flex justify-center mt-4">
+              {images.map((image, index) => (
+                <div className="flex flex-col text-center mx-3" key={index}>
+                  <Image
+                    width={0}
+                    height={0}
+                    key={image.id}
+                    src={image.url}
+                    alt={`Image ${image.id}`}
+                    className={`w-16 h-16 mx-1 cursor-pointer ${
+                      selectedImage === image.url
+                        ? "border-2 border-blue-500"
+                        : ""
+                    }`}
+                    onClick={() => handleImageClick(image.url)}
+                  />
+                  <p>Page {index + 1}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        <div className="relative inline-block text-left mt-10">
+          <div>
+            <button
+              type="button"
+              className="inline-flex justify-center w-full rounded-lg shadow-sm px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              id="dropdown-button"
+              aria-haspopup="true"
+              aria-expanded={isOpen ? "true" : "false"}
+              onClick={toggleDropdown}
+            >
+              Download
+              <svg
+                className="-mr-1 ml-2 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 3.586L4.707 8.879a1 1 0 0 0 0 1.414l5.293 5.293a1 1 0 0 0 1.414-1.414L7.414 10l4.293-4.293a1 1 0 1 0-1.414-1.414z"
+                  clipRule="evenodd"
                 />
-                <p>Page {index + 1}</p>
+              </svg>
+            </button>
+          </div>
+
+          {isOpen && (
+            <div
+              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="dropdown-button"
+            >
+              <div className="py-1" role="none">
+                <button
+                  className="text-sm text-gray-700 block px-4 py-2 w-full text-left"
+                  role="menuitem"
+                  onClick={() => handleItemClick("Download as JPEG")}
+                >
+                  Download as JPEG
+                </button>
+                <button
+                  className="text-sm text-gray-700 block px-4 py-2 w-full text-left"
+                  role="menuitem"
+                  onClick={() => handleItemClick("Download as PNG")}
+                >
+                  Download as PNG
+                </button>
               </div>
-            ))}
+            </div>
+          )}
+        </div>
+
+        {isDownloading && (
+          <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white rounded p-4">
+              <p className="text-lg font-semibold">Downloading...</p>
+              <div className="mt-2">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
+              </div>
+            </div>
           </div>
         )}
       </div>
