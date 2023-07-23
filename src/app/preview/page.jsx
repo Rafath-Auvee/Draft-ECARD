@@ -27,7 +27,7 @@ const Preview = () => {
     description,
     cardCategory,
     textStyles,
-  } = editorPreviewData;
+  } = editorPreviewData || {}
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,7 +95,7 @@ const Preview = () => {
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
         <h1 className="text-center text-3xl font-bold leading-5 my-5">
-          {title}
+          {editorPreviewData.title}
         </h1>
 
         <div className="relative">
@@ -147,7 +147,7 @@ const Preview = () => {
           ))}
         </div>
 
-        {editorPreviewData && imageType === "multiple image" && (
+        {editorPreviewData && editorPreviewData.imageType === "multiple image" && (
           <div className="flex justify-center mt-4">
             {images.map((image, index) => (
               <div className="flex flex-col text-center mx-3" key={index}>
