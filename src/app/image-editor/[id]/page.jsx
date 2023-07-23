@@ -1,16 +1,20 @@
 "use client";
 import Draggable from "react-draggable";
+import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import images from "../../../Data/Draft_Data";
-import { fonts } from "../../../Data/Fonts_Data";
-import { CiEdit } from "react-icons/ci";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
+
+
+import images from "@/Data/Draft_Data";
+import { fonts } from "@/Data/Fonts_Data";
 import draft from "@/Data/Draft_Data";
-import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
+import { CiEdit } from "react-icons/ci";
+import { useRouter } from "next/navigation";
+
+
 import PreviewModal from "@/components/PreviewModal/PreviewModal";
 
 import {
