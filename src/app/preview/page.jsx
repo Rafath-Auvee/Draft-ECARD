@@ -109,7 +109,7 @@ const Preview = () => {
             <Draggable
               key={index}
               position={{ x: textStyle.left, y: textStyle.top }}
-            //   onStop={(e, data) => handleTextDragStop(index, data)}
+              //   onStop={(e, data) => handleTextDragStop(index, data)}
               bounds="parent"
               disabled={true}
             >
@@ -122,7 +122,7 @@ const Preview = () => {
                 }`}
                 style={{
                   whiteSpace: "pre-wrap",
-                //   cursor: "pointer",
+                  //   cursor: "pointer",
                   textAlign: textStyle.textAlign,
                   lineHeight: textStyle.lineHeight || 1.5, // Set initial line height from JSON or default to 1.5
                   letterSpacing: textStyle.letterSpacing || 0, // Set initial letter spacing from JSON or default to 0

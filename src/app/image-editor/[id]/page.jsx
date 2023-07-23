@@ -7,13 +7,11 @@ import Link from "next/link";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 
-
 import images from "@/Data/Draft_Data";
 import { fonts } from "@/Data/Fonts_Data";
 import draft from "@/Data/Draft_Data";
 import { CiEdit } from "react-icons/ci";
 import { useRouter } from "next/navigation";
-
 
 import PreviewModal from "@/components/PreviewModal/PreviewModal";
 
