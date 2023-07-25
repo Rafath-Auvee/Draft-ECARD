@@ -13,7 +13,7 @@ const Preview = () => {
   const [hoverX, setHoverX] = useState(0);
   const [hoverY, setHoverY] = useState(0);
 
-  const previewData = JSON.parse(localStorage.getItem("previewData"));
+  const [previewData, setPreviewData] = useState(null);
 
   const { title, url, imageType, textStyles } = previewData;
 
@@ -70,142 +70,155 @@ const Preview = () => {
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    // Load previewData from localStorage after component mounts
+    const storedPreviewData =
+      typeof window !== "undefined" && localStorage.getItem("previewData");
+    if (storedPreviewData) {
+      setPreviewData(JSON.parse(storedPreviewData));
+    }
 
-    const renderImage = () => {
-      const image = document.createElement("img");
-      image.src = previewData.url;
+    // Rest of the code inside useEffect...
+  }, []); // Empty dependency array means this effect runs only once after component mounts
 
-      image.onload = () => {
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-        renderTextStyles(); // Call the function here to render text styles after rendering the image.
+  useEffect(() => {
+    if (previewData) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+
+      const renderImage = () => {
+        const image = document.createElement("img");
+        image.src = previewData.url;
+
+        image.onload = () => {
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          renderTextStyles(); // Call the function here to render text styles after rendering the image.
+        };
       };
-    };
 
-    const renderTextStyles = () => {
-      textStyles.forEach((textStyle) => {
-        const {
-          left,
-          top,
-          fontSize,
-          fontFamily,
-          text,
-          lineHeight,
-          letterSpacing,
-          color,
-          textAlign,
-        } = textStyle;
+      const renderTextStyles = () => {
+        textStyles.forEach((textStyle) => {
+          const {
+            left,
+            top,
+            fontSize,
+            fontFamily,
+            text,
+            lineHeight,
+            letterSpacing,
+            color,
+            textAlign,
+          } = textStyle;
 
-        context.font = `${fontSize}px ${fontFamily}`;
-        context.fillStyle = color;
+          context.font = `${fontSize}px ${fontFamily}`;
+          context.fillStyle = color;
 
-        context.lineHeight = lineHeight || 1.5;
-        context.letterSpacing = letterSpacing || 0;
+          context.lineHeight = lineHeight || 1.5;
+          context.letterSpacing = letterSpacing || 0;
 
-        const lines = text.split("\n");
+          const lines = text.split("\n");
 
-        // Render single line of text if there's only one line
-        if (lines.length === 1) {
-          const line = lines[0];
-          const lineY = top + fontSize * context.lineHeight;
-          // Calculate text width and height for single line
-          const textWidth = context.measureText(line).width;
-          const textHeight = fontSize;
-          context.textAlign = textAlign;
+          // Render single line of text if there's only one line
+          if (lines.length === 1) {
+            const line = lines[0];
+            const lineY = top + fontSize * context.lineHeight;
+            // Calculate text width and height for single line
+            const textWidth = context.measureText(line).width;
+            const textHeight = fontSize;
+            context.textAlign = textAlign;
 
-          let x;
-
-          if (textAlign === "center") {
-            x = left + textWidth / 2;
-            console.log("center - x : ", x);
-          } else if (textAlign === "right") {
-            x = left + textWidth;
-            console.log("right - x : ", x);
-          } else {
-            x = left;
-            console.log("left - x : ", x);
-          }
-
-          console.log("Single Line Text - alignment:", line, textAlign);
-          console.log("Single Line Text Width:", textWidth);
-          console.log("Single Line Text Height:", textHeight);
-
-          context.fillText(line, x, lineY);
-        } else {
-          // Render multi-line text
-          const maxLineWidth = Math.max(
-            ...lines.map((line) => context.measureText(line).width)
-          );
-          const textHeight = lines.length * fontSize * context.lineHeight;
-          context.textAlign = textAlign;
-          let y = top;
-
-          lines.forEach((line, index) => {
-            const lineY = y + index * (fontSize * context.lineHeight);
             let x;
 
             if (textAlign === "center") {
-              x = left + maxLineWidth / 2;
-              console.log("Multi-line center - x:", x);
+              x = left + textWidth / 2;
+              console.log("center - x : ", x);
             } else if (textAlign === "right") {
-              x = left + maxLineWidth;
-              console.log("Multi-line right - x:", x);
+              x = left + textWidth;
+              console.log("right - x : ", x);
             } else {
               x = left;
-              console.log("Multi-line left - x:", x);
+              console.log("left - x : ", x);
             }
 
-            console.log("Multi-line Text - alignment:", line, textAlign);
-            console.log(
-              "Multi-line Text Width:",
-              context.measureText(line).width
-            );
-            console.log("Multi-line Text Height:", fontSize);
+            console.log("Single Line Text - alignment:", line, textAlign);
+            console.log("Single Line Text Width:", textWidth);
+            console.log("Single Line Text Height:", textHeight);
+
             context.fillText(line, x, lineY);
-          });
-
-          // Calculate text width and height for multi-line text
-
-          console.log("Multi-Line Text Width:", maxLineWidth);
-          console.log("Multi-Line Text Height:", textHeight);
-        }
-      });
-    };
-
-    if (previewData) {
-      if (previewData.imageType === "multiple image") {
-        const selectedImageData = previewData.images.find(
-          (image) => image.url === selectedImage
-        );
-
-        if (selectedImageData) {
-          const image = document.createElement("img");
-          image.src = selectedImage;
-
-          image.onload = () => {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(image, 0, 0, canvas.width, canvas.height);
-            selectedImageData.textStyles.forEach((textStyle) => {
-              context.fillStyle = textStyle.backgroundColor;
-              context.fillRect(
-                textStyle.left,
-                textStyle.top,
-                textStyle.width,
-                textStyle.height
-              );
-            });
-            setTextStyles(
-              selectedImageData.textStyles.map((textStyle) => ({
-                ...textStyle,
-                fontSize: parseInt(textStyle.fontSize),
-              }))
+          } else {
+            // Render multi-line text
+            const maxLineWidth = Math.max(
+              ...lines.map((line) => context.measureText(line).width)
             );
-            setSelectedImageTextStyles(selectedImageData.textStyles);
-          };
+            const textHeight = lines.length * fontSize * context.lineHeight;
+            context.textAlign = textAlign;
+            let y = top;
+
+            lines.forEach((line, index) => {
+              const lineY = y + index * (fontSize * context.lineHeight);
+              let x;
+
+              if (textAlign === "center") {
+                x = left + maxLineWidth / 2;
+                console.log("Multi-line center - x:", x);
+              } else if (textAlign === "right") {
+                x = left + maxLineWidth;
+                console.log("Multi-line right - x:", x);
+              } else {
+                x = left;
+                console.log("Multi-line left - x:", x);
+              }
+
+              console.log("Multi-line Text - alignment:", line, textAlign);
+              console.log(
+                "Multi-line Text Width:",
+                context.measureText(line).width
+              );
+              console.log("Multi-line Text Height:", fontSize);
+              context.fillText(line, x, lineY);
+            });
+
+            // Calculate text width and height for multi-line text
+
+            console.log("Multi-Line Text Width:", maxLineWidth);
+            console.log("Multi-Line Text Height:", textHeight);
+          }
+        });
+      };
+
+      if (previewData) {
+        if (previewData.imageType === "multiple image") {
+          const selectedImageData = previewData.images.find(
+            (image) => image.url === selectedImage
+          );
+
+          if (selectedImageData) {
+            const image = document.createElement("img");
+            image.src = selectedImage;
+
+            image.onload = () => {
+              context.clearRect(0, 0, canvas.width, canvas.height);
+              context.drawImage(image, 0, 0, canvas.width, canvas.height);
+              selectedImageData.textStyles.forEach((textStyle) => {
+                context.fillStyle = textStyle.backgroundColor;
+                context.fillRect(
+                  textStyle.left,
+                  textStyle.top,
+                  textStyle.width,
+                  textStyle.height
+                );
+              });
+              setTextStyles(
+                selectedImageData.textStyles.map((textStyle) => ({
+                  ...textStyle,
+                  fontSize: parseInt(textStyle.fontSize),
+                }))
+              );
+              setSelectedImageTextStyles(selectedImageData.textStyles);
+            };
+          }
+        } else {
+          renderImage(); // Call the function here to render the image.
         }
-      } else {
-        renderImage(); // Call the function here to render the image.
       }
     }
   }, [previewData]);
