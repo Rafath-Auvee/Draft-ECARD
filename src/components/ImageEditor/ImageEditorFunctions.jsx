@@ -26,6 +26,8 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 
+import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDataContext";
+
 const ImageEditorFunctions = ({ params, images }) => {
   const [devtools, setDevtools] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -35,6 +37,8 @@ const ImageEditorFunctions = ({ params, images }) => {
   const [lineHeight, setLineHeight] = useState(1.5);
   const [letterSpacing, setLetterSpacing] = useState(0);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { editorPreviewData, setEditorPreviewData } = usePreviewDataContext();
 
   const handleToggleDevtools = () => {
     setDevtools((prevDevtools) => !prevDevtools);
@@ -333,11 +337,24 @@ const ImageEditorFunctions = ({ params, images }) => {
   };
 
   const handleMoveToYAxisTop = () => {
+    const updatedTextStyles = [...textStyles];
+    const canvasHeight = canvasRef.current.offsetHeight;
+
     if (selectedTextIndex !== null) {
+      const selectedTextStyle = textStyles[selectedTextIndex];
+      const textElement = document.getElementById(
+        `textElement_${selectedTextIndex}`
+      );
+      const textHeight = textElement.getBoundingClientRect().height;
+
+      console.log(textHeight, "textHeight");
+      console.log(canvasHeight, "canvasHeight");
+      console.log(canvasHeight + textHeight, "canvasHeight + textHeight");
+      const newY = 0 ;
       const updatedTextStyles = [...textStyles];
       updatedTextStyles[selectedTextIndex] = {
         ...updatedTextStyles[selectedTextIndex],
-        top: -1202,
+        top: newY,
       };
       setTextStyles(updatedTextStyles);
     }
@@ -345,7 +362,7 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const handleMoveToYAxisCenter = (selectedTextIndex) => {
     const updatedTextStyles = [...textStyles];
-    const canvasHeight = -canvasRef.current.offsetHeight;
+    const canvasHeight = canvasRef.current.offsetHeight;
 
     if (selectedTextIndex !== null) {
       const selectedTextStyle = textStyles[selectedTextIndex];
@@ -386,7 +403,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const textHeight = textElement.getBoundingClientRect().height;
 
       // Calculate the new y position to move to the bottom without crossing the border
-      const newY = 0 - textHeight;
+      const newY = 1200 - textHeight;
 
       console.log(newY);
 
@@ -516,6 +533,85 @@ const ImageEditorFunctions = ({ params, images }) => {
     setIsPreviewModalOpen(false);
   };
 
+  const [hoverX, setHoverX] = useState(0);
+  const [hoverY, setHoverY] = useState(0);
+
+  const handleCanvasMouseMove = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setHoverX(x);
+    setHoverY(y);
+  };
+  const handleSaveAndPreviewClick = () => {
+    let dataForPreview = null;
+    if (imageData.imageType === "single image") {
+      dataForPreview = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        textStyles: textStyles.map((textStyle) => ({
+          id: textStyle.id,
+          text: textStyle.text,
+          left: textStyle.left,
+          top: textStyle.top,
+          color: textStyle.color,
+          fontSize: textStyle.fontSize,
+          backgroundColor: textStyle.backgroundColor,
+          padding: textStyle.padding,
+          fontFamily: textStyle.fontFamily,
+          textAlign: textStyle.textAlign,
+          lineHeight: textStyle.lineHeight,
+          letterSpacing: textStyle.letterSpacing,
+        })),
+      };
+    } else if (imageData.imageType === "multiple image") {
+      dataForPreview = {
+        id: imageData.id,
+        title: imageData.title,
+        imageUrl: imageData.imageUrl,
+        url: imageData.url,
+        imageType: imageData.imageType,
+        price: imageData.price,
+        buttonText: imageData.buttonText,
+        cardType: imageData.cardType,
+        popularity: imageData.popularity,
+        description: imageData.description,
+        cardCategory: imageData.cardCategory,
+        images: imageData.images.map((image) => ({
+          id: image.id,
+          url: image.url,
+          textStyles: image.textStyles.map((textStyle) => ({
+            id: textStyle.id,
+            text: textStyle.text,
+            left: textStyle.left,
+            top: textStyle.top,
+            color: textStyle.color,
+            fontSize: textStyle.fontSize,
+            backgroundColor: textStyle.backgroundColor,
+            padding: textStyle.padding,
+            fontFamily: textStyle.fontFamily,
+            textAlign: textStyle.textAlign,
+            lineHeight: textStyle.lineHeight,
+            letterSpacing: textStyle.letterSpacing,
+          })),
+        })),
+      };
+    }
+
+    setEditorPreviewData(dataForPreview);
+    router.push("/preview");
+  };
+
   return {
     devtools,
     setDevtools,
@@ -576,6 +672,14 @@ const ImageEditorFunctions = ({ params, images }) => {
     closePreviewModal,
     isPreviewModalOpen,
     setIsPreviewModalOpen,
+    isLoaded,
+    setIsLoaded,
+    hoverX,
+    setHoverX,
+    hoverY,
+    setHoverY,
+    handleCanvasMouseMove,
+    handleSaveAndPreviewClick,
   };
 };
 

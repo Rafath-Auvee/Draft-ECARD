@@ -12,11 +12,22 @@ import Navbar from "@/components/Navbar/Navbar";
 
 const Preview = () => {
   const canvasRef = useRef(null);
-  const [permanentTexts, setPermanentTexts] = useState([]);
   const { editorPreviewData } = usePreviewDataContext();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const [hoverX, setHoverX] = useState(0);
+  const [hoverY, setHoverY] = useState(0);
+
+  const handleCanvasMouseMove = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setHoverX(x);
+    setHoverY(y);
+  };
 
   console.log(editorPreviewData);
 
@@ -27,13 +38,14 @@ const Preview = () => {
   const handleItemClick = async (item) => {
     setIsDownloading(true);
     console.log(`Clicked on ${item}`);
-  
+
     const canvas = canvasRef.current;
-  
+
     // Determine the image format based on the item clicked
-    const imageFormat = item === "Download as JPEG" ? "image/jpeg" : "image/png";
+    const imageFormat =
+      item === "Download as JPEG" ? "image/jpeg" : "image/png";
     const filenameExtension = item === "Download as JPEG" ? "jpeg" : "png";
-  
+
     // Get the current date and time in the specified format
     const currentDateTime = new Date().toLocaleString("en-US", {
       hour12: true,
@@ -43,105 +55,115 @@ const Preview = () => {
       month: "2-digit",
       year: "numeric",
     });
-  
+
     // Get the image title
     const imageTitle = editorPreviewData?.title || "Untitled";
-  
+
     // Combine the components to create the filename
     const filename = `${currentDateTime}_${imageTitle}.${filenameExtension}`;
-  
+
     // Convert canvas content to a data URL with the appropriate image format
     const dataURL = canvas.toDataURL(imageFormat);
-  
+
     // Create a link element to trigger the download
     const link = document.createElement("a");
     link.href = dataURL;
     link.download = filename;
     link.click();
-  
+
     setIsDownloading(false);
   };
-  
 
-  const {
-    title,
-    imageUrl,
-    url,
-    imageType,
-    price,
-    buttonText,
-    cardType,
-    popularity,
-    description,
-    cardCategory,
-    textStyles,
-  } = editorPreviewData || {};
+  console.log(editorPreviewData);
+
+  const { title, url, imageType, textStyles } = editorPreviewData || {};
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    if (editorPreviewData) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
+    textStylesRef.current = textStyles;
 
-      // Draw the background image if needed
-      if (editorPreviewData.imageUrl) {
-        const backgroundImage = document.createElement("img");
-        backgroundImage.src = editorPreviewData.imageUrl;
-        backgroundImage.onload = () => {
-          context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    if (editorPreviewData.imageType === "multiple image") {
+      const selectedImageData = editorPreviewData.images.find(
+        (image) => image.url === selectedImage
+      );
+
+      if (selectedImageData) {
+        const image = document.createElement("img");
+        image.src = selectedImage;
+
+        image.onload = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          selectedImageData.textStyles.forEach((textStyle) => {
+            context.fillStyle = textStyle.backgroundColor;
+            context.fillRect(
+              textStyle.left,
+              textStyle.top,
+              textStyle.width,
+              textStyle.height
+            );
+          });
+          setTextStyles(
+            selectedImageData.textStyles.map((textStyle) => ({
+              ...textStyle,
+              fontSize: parseInt(textStyle.fontSize),
+            }))
+          );
+          setSelectedImageTextStyles(selectedImageData.textStyles);
         };
       }
+    } else {
+      const image = document.createElement("img");
+      image.src = editorPreviewData.url;
 
-      // Draw the permanent texts on the canvas
-      permanentTexts.forEach((textStyle) => {
-        context.fillStyle = textStyle.backgroundColor;
-        context.fillRect(
-          textStyle.left,
-          textStyle.top,
-          textStyle.width,
-          textStyle.height
-        );
+      image.onload = () => {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        context.font = `${textStyle.fontSize}px ${textStyle.fontFamily}`;
-        context.fillStyle = textStyle.color;
-        context.textAlign = textStyle.textAlign;
-        context.textBaseline = "middle";
-        context.lineHeight = textStyle.lineHeight || 1.5;
-        context.letterSpacing = textStyle.letterSpacing || 0;
+        // Draw each text element on the canvas
+        textStyles.forEach((textStyle) => {
+          const {
+            left,
+            top,
+            fontSize,
+            fontFamily,
+            text,
+            lineHeight,
+            letterSpacing,
+            color,
+            textAlign, // Add textAlign to the destructured properties
+          } = textStyle;
+          const lines = text.split("\n");
 
-        const lines = textStyle.text.split("\n");
-        lines.forEach((line, index) => {
-          const y = textStyle.top + index * context.lineHeight;
-          context.fillText(line, textStyle.left, y);
-        });
-      });
+          context.font = `${fontSize}px ${fontFamily}`;
+          context.lineHeight = lineHeight || 1;
+          context.letterSpacing = letterSpacing || 0;
+          context.fillStyle = color;
+          context.textAlign = textAlign; // Set textAlign to "center" if missing
 
-      // Draw the current text styles from editor preview data
-      if (editorPreviewData.textStyles) {
-        editorPreviewData.textStyles.forEach((textStyle) => {
-          context.fillStyle = textStyle.backgroundColor;
-          context.fillRect(
-            textStyle.left,
-            textStyle.top,
-            textStyle.width,
-            textStyle.height
-          );
-
-          context.font = `${textStyle.fontSize}px ${textStyle.fontFamily}`;
-          context.fillStyle = textStyle.color;
-          context.textAlign = textStyle.textAlign;
-          context.textBaseline = "middle";
-
-          const lines = textStyle.text.split("\n");
           lines.forEach((line, index) => {
-            const y = textStyle.top + index * textStyle.lineHeight;
-            context.fillText(line, textStyle.left, y);
+            const y = top + index * (context.lineHeight * fontSize);
+
+            // let x = left;
+            let x;
+            if (textAlign === "center") {
+              const textWidth = context.measureText(line).width;
+              x = left + (textWidth) / 2;
+            } else if (textAlign === "right") {
+              const textWidth = context.measureText(line).width;
+              x = left + canvas.width - textWidth;
+            } else {
+              // Default to left alignment
+              x = left;
+            }
+
+            context.fillText(line, x, y);
           });
         });
-      }
+      };
     }
-  }, [editorPreviewData, permanentTexts]);
+  }, [editorPreviewData, hoverX, hoverY]);
 
   const textStylesRef = useRef(textStyles);
 
@@ -156,13 +178,17 @@ const Preview = () => {
         <h1 className="text-center text-3xl font-bold leading-5 my-5">
           {editorPreviewData.title}
         </h1>
-
+        <div>
+          <h1>X: {hoverX}</h1>
+          <h1>Y: {hoverY}</h1>
+        </div>
         <div className="relative">
           <canvas
             ref={canvasRef}
             className="border border-gray-500"
             width={900}
             height={1200}
+            onMouseMove={handleCanvasMouseMove}
           ></canvas>
           {/* {textStyles.map((textStyle, index) => (
             <Draggable

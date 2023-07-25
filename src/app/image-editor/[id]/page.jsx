@@ -34,7 +34,8 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 
-import { usePreviewDataContext } from "../../../components/PreviewDataContext/PreviewDataContext";
+
+import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 
 const ImageEditor = ({ params }) => {
   const {
@@ -97,9 +98,18 @@ const ImageEditor = ({ params }) => {
     closePreviewModal,
     isPreviewModalOpen,
     setIsPreviewModalOpen,
+
+    hoverX,
+    setHoverX,
+    hoverY,
+    setHoverY,
+    handleCanvasMouseMove,
+    handleSaveAndPreviewClick,
+    isLoaded,
+    setIsLoaded,
   } = ImageEditorFunctions({ params, images });
 
-  const { editorPreviewData, setEditorPreviewData } = usePreviewDataContext();
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -154,7 +164,8 @@ const ImageEditor = ({ params }) => {
         });
       };
     }
-  }, [imageData, selectedImage, textStyles]);
+    setIsLoaded(true);
+  }, [imageData, selectedImage, textStyles, hoverX, hoverY]);
 
   useEffect(() => {
     if (selectedTextIndex !== null) {
@@ -178,76 +189,9 @@ const ImageEditor = ({ params }) => {
 
   const gridColumns = devtools ? "grid-cols-7" : "grid-cols-4";
 
-  const handleSaveAndPreviewClick = () => {
-    let dataForPreview = null;
-    if (imageData.imageType === "single image") {
-      dataForPreview = {
-        id: imageData.id,
-        title: imageData.title,
-        imageUrl: imageData.imageUrl,
-        url: imageData.url,
-        imageType: imageData.imageType,
-        price: imageData.price,
-        buttonText: imageData.buttonText,
-        cardType: imageData.cardType,
-        popularity: imageData.popularity,
-        description: imageData.description,
-        cardCategory: imageData.cardCategory,
-        textStyles: textStyles.map((textStyle) => ({
-          id: textStyle.id,
-          text: textStyle.text,
-          left: textStyle.left,
-          top: textStyle.top,
-          color: textStyle.color,
-          fontSize: textStyle.fontSize,
-          backgroundColor: textStyle.backgroundColor,
-          padding: textStyle.padding,
-          fontFamily: textStyle.fontFamily,
-          textAlign: textStyle.textAlign,
-          lineHeight: textStyle.lineHeight,
-          letterSpacing: textStyle.letterSpacing,
-        })),
-      };
-    } else if (imageData.imageType === "multiple image") {
-      dataForPreview = {
-        id: imageData.id,
-        title: imageData.title,
-        imageUrl: imageData.imageUrl,
-        url: imageData.url,
-        imageType: imageData.imageType,
-        price: imageData.price,
-        buttonText: imageData.buttonText,
-        cardType: imageData.cardType,
-        popularity: imageData.popularity,
-        description: imageData.description,
-        cardCategory: imageData.cardCategory,
-        images: imageData.images.map((image) => ({
-          id: image.id,
-          url: image.url,
-          textStyles: image.textStyles.map((textStyle) => ({
-            id: textStyle.id,
-            text: textStyle.text,
-            left: textStyle.left,
-            top: textStyle.top,
-            color: textStyle.color,
-            fontSize: textStyle.fontSize,
-            backgroundColor: textStyle.backgroundColor,
-            padding: textStyle.padding,
-            fontFamily: textStyle.fontFamily,
-            textAlign: textStyle.textAlign,
-            lineHeight: textStyle.lineHeight,
-            letterSpacing: textStyle.letterSpacing,
-          })),
-        })),
-      };
-    }
-
-    setEditorPreviewData(dataForPreview);
-    router.push("/preview");
-  };
-
   return (
     <>
+      {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
         <button
@@ -261,6 +205,9 @@ const ImageEditor = ({ params }) => {
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
           {imageData.title}
         </h1>
+
+        <h1>{hoverX}</h1>
+        <h1>{hoverY}</h1>
 
         <div id="canvas" className="my-5" onClick={handleCanvasClick}>
           {selectedTextIndex !== null && (
@@ -306,8 +253,7 @@ const ImageEditor = ({ params }) => {
                       className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
                       min="5"
                     />
-
-                    <div className="flex mt-2">
+                    {/* <div className="flex mt-2">
                       <button
                         onClick={() => incrementFontSize(selectedTextIndex)}
                         className="bg-gray-200 rounded px-2 py-1 mr-1"
@@ -320,13 +266,13 @@ const ImageEditor = ({ params }) => {
                       >
                         -
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
                 {devtools && (
                   <>
-                    <div>
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                       <label htmlFor={`leftInput-${selectedTextIndex}`}>
                         X-Axis:
                       </label>
@@ -357,7 +303,7 @@ const ImageEditor = ({ params }) => {
                       </div>
                     </div>
 
-                    <div>
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
                       <label htmlFor={`topInput-${selectedTextIndex}`}>
                         Y-Axis
                       </label>
@@ -614,60 +560,68 @@ const ImageEditor = ({ params }) => {
             </>
           ) : null}
         </div>
+
         <div className="relative">
+          {isLoaded && (
+            <>
+              {textStyles.map((textStyle, index) => (
+                <Draggable
+                  key={index}
+                  position={{ x: textStyle.left, y: textStyle.top }}
+                  onStop={(e, data) => handleTextDragStop(index, data)}
+                  bounds={{ left: 0, right: 900, top: 0, bottom: 1200 }}
+                >
+                  <div
+                    id={`textElement_${index}`} // Set a unique ID for each text element
+                    className={`absolute ${
+                      textStyle.isSelected
+                        ? "border-gray-500  border-2 border-dashed"
+                        : ""
+                    }`}
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      cursor: "pointer",
+                      textAlign: textStyle.textAlign,
+                      lineHeight: textStyle.lineHeight || 1.5, // Set initial line height from JSON or default to 1.5
+                      letterSpacing: textStyle.letterSpacing || 0,
+                    }}
+                    onClick={() => handleTextClick(index)}
+                  >
+                    {textStyle.text.split("\n").map((line, lineIndex) => (
+                      <div
+                        key={lineIndex}
+                        style={{
+                          color: textStyle.backgroundColor,
+                          fontFamily: textStyle.fontFamily,
+                          fontSize: `${textStyle.fontSize}px`,
+                          textAlign: textStyle.textAlign, // Center align the text
+                          // left: textStyle.left, // Set initial letter spacing from JSON or default to 0
+                          // top: textStyle.top, // Set initial letter spacing from JSON or default to 0
+                        }}
+                      >
+                        {line}
+                      </div>
+                    ))}
+                    {textStyle.isSelected && ( // Only display the close icon if the text is selected
+                      <button
+                        className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
+                        onClick={(e) => handleTextDelete(e, index)}
+                      >
+                        <IoCloseSharp size={20} />
+                      </button>
+                    )}
+                  </div>
+                </Draggable>
+              ))}{" "}
+            </>
+          )}
           <canvas
             ref={canvasRef}
             className="border border-gray-500"
             width={900}
             height={1200}
+            onMouseMove={handleCanvasMouseMove}
           ></canvas>
-          {textStyles.map((textStyle, index) => (
-            <Draggable
-              key={index}
-              position={{ x: textStyle.left, y: textStyle.top }}
-              onStop={(e, data) => handleTextDragStop(index, data)}
-              bounds="parent"
-            >
-              <div
-                id={`textElement_${index}`} // Set a unique ID for each text element
-                className={`absolute ${
-                  textStyle.isSelected
-                    ? "border-gray-500  border-2 border-dashed"
-                    : ""
-                }`}
-                style={{
-                  whiteSpace: "pre-wrap",
-                  cursor: "pointer",
-                  textAlign: textStyle.textAlign,
-                  lineHeight: textStyle.lineHeight || 1.5, // Set initial line height from JSON or default to 1.5
-                  letterSpacing: textStyle.letterSpacing || 0, // Set initial letter spacing from JSON or default to 0
-                }}
-                onClick={() => handleTextClick(index)}
-              >
-                {textStyle.text.split("\n").map((line, lineIndex) => (
-                  <div
-                    key={lineIndex}
-                    style={{
-                      color: textStyle.backgroundColor,
-                      fontFamily: textStyle.fontFamily,
-                      fontSize: `${textStyle.fontSize}px`,
-                      textAlign: textStyle.textAlign, // Center align the text
-                    }}
-                  >
-                    {line}
-                  </div>
-                ))}
-                {textStyle.isSelected && ( // Only display the close icon if the text is selected
-                  <button
-                    className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
-                    onClick={(e) => handleTextDelete(e, index)}
-                  >
-                    <IoCloseSharp size={20} />
-                  </button>
-                )}
-              </div>
-            </Draggable>
-          ))}
         </div>
 
         {imageData && imageData.imageType === "multiple image" && (
