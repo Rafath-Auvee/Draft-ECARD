@@ -350,7 +350,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       console.log(textHeight, "textHeight");
       console.log(canvasHeight, "canvasHeight");
       console.log(canvasHeight + textHeight, "canvasHeight + textHeight");
-      const newY = 0 ;
+      const newY = 0;
       const updatedTextStyles = [...textStyles];
       updatedTextStyles[selectedTextIndex] = {
         ...updatedTextStyles[selectedTextIndex],
@@ -608,6 +608,8 @@ const ImageEditorFunctions = ({ params, images }) => {
       };
     }
 
+    const dataToPass = JSON.stringify(editorPreviewData);
+    localStorage.setItem("previewData", dataToPass);
     setEditorPreviewData(dataForPreview);
     router.push("/preview");
   };
