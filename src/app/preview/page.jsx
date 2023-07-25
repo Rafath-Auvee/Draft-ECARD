@@ -13,9 +13,15 @@ const Preview = () => {
   const [hoverX, setHoverX] = useState(0);
   const [hoverY, setHoverY] = useState(0);
 
-  const [previewData, setPreviewData] = useState(null);
+  const previewDataFromLocalStorage =
+    typeof window !== "undefined" && localStorage.getItem("previewData");
 
-  const { title, url, imageType, textStyles } = previewData;
+  const [previewData, setPreviewData] = useState(
+    previewDataFromLocalStorage ? JSON.parse(previewDataFromLocalStorage) : null
+  );
+
+  // Use optional chaining and nullish coalescing to handle potential null or missing properties
+  const { title, url, imageType, textStyles } = previewData ?? {};
 
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
@@ -225,6 +231,11 @@ const Preview = () => {
 
   if (!previewData) {
     return <div className="text-center flex justify-center">No Data Found</div>;
+  }
+
+  if (Object.keys(previewData).length === 0) {
+    // Data is available but empty
+    return <div className="text-center flex justify-center">Empty data</div>;
   }
 
   return (
