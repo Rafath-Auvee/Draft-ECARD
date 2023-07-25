@@ -34,7 +34,6 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 
-
 import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 
 const ImageEditor = ({ params }) => {
@@ -108,8 +107,6 @@ const ImageEditor = ({ params }) => {
     isLoaded,
     setIsLoaded,
   } = ImageEditorFunctions({ params, images });
-
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -206,8 +203,8 @@ const ImageEditor = ({ params }) => {
           {imageData.title}
         </h1>
 
-        <h1>{hoverX}</h1>
-        <h1>{hoverY}</h1>
+        {/* <h1>{hoverX}</h1>
+        <h1>{hoverY}</h1> */}
 
         <div id="canvas" className="my-5" onClick={handleCanvasClick}>
           {selectedTextIndex !== null && (

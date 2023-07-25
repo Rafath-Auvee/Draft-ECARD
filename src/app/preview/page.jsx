@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +14,8 @@ const Preview = () => {
   const [hoverY, setHoverY] = useState(0);
 
   const previewData = JSON.parse(localStorage.getItem("previewData"));
+
+  const { title, url, imageType, textStyles } = previewData;
 
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
@@ -96,7 +99,6 @@ const Preview = () => {
 
         context.font = `${fontSize}px ${fontFamily}`;
         context.fillStyle = color;
-        context.textAlign = textAlign;
 
         context.lineHeight = lineHeight || 1.5;
         context.letterSpacing = letterSpacing || 0;
@@ -107,14 +109,66 @@ const Preview = () => {
         if (lines.length === 1) {
           const line = lines[0];
           const lineY = top + fontSize * context.lineHeight;
-          context.fillText(line, left, lineY);
+          // Calculate text width and height for single line
+          const textWidth = context.measureText(line).width;
+          const textHeight = fontSize;
+          context.textAlign = textAlign;
+
+          let x;
+
+          if (textAlign === "center") {
+            x = left + textWidth / 2;
+            console.log("center - x : ", x);
+          } else if (textAlign === "right") {
+            x = left + textWidth;
+            console.log("right - x : ", x);
+          } else {
+            x = left;
+            console.log("left - x : ", x);
+          }
+
+          console.log("Single Line Text - alignment:", line, textAlign);
+          console.log("Single Line Text Width:", textWidth);
+          console.log("Single Line Text Height:", textHeight);
+
+          context.fillText(line, x, lineY);
         } else {
           // Render multi-line text
+          const maxLineWidth = Math.max(
+            ...lines.map((line) => context.measureText(line).width)
+          );
+          const textHeight = lines.length * fontSize * context.lineHeight;
+          context.textAlign = textAlign;
           let y = top;
+
           lines.forEach((line, index) => {
             const lineY = y + index * (fontSize * context.lineHeight);
-            context.fillText(line, left, lineY);
+            let x;
+
+            if (textAlign === "center") {
+              x = left + maxLineWidth / 2;
+              console.log("Multi-line center - x:", x);
+            } else if (textAlign === "right") {
+              x = left + maxLineWidth;
+              console.log("Multi-line right - x:", x);
+            } else {
+              x = left;
+              console.log("Multi-line left - x:", x);
+            }
+
+            console.log("Multi-line Text - alignment:", line, textAlign);
+            console.log(
+              "Multi-line Text Width:",
+              context.measureText(line).width
+            );
+            console.log("Multi-line Text Height:", fontSize);
+            context.fillText(line, x, lineY);
           });
+
+          // Calculate text width and height for multi-line text
+
+          console.log("Multi-Line Text Width:", maxLineWidth);
+          console.log("Multi-Line Text Height:", textHeight);
         }
       });
     };
@@ -160,8 +214,6 @@ const Preview = () => {
     return <div className="text-center flex justify-center">No Data Found</div>;
   }
 
-  const { title, url, imageType, textStyles } = previewData;
-
   return (
     <>
       <Navbar />
@@ -170,8 +222,8 @@ const Preview = () => {
           {title}
         </h1>
         <div>
-          <h1>X: {hoverX}</h1>
-          <h1>Y: {hoverY}</h1>
+          {/* <h1>X: {hoverX}</h1>
+          <h1>Y: {hoverY}</h1> */}
         </div>
         <div className="relative">
           <canvas
@@ -188,6 +240,7 @@ const Preview = () => {
             {/* Render multiple images */}
           </div>
         )}
+
         <div className="relative inline-block text-left mt-10">
           <div>
             <button
@@ -222,7 +275,22 @@ const Preview = () => {
               aria-orientation="vertical"
               aria-labelledby="dropdown-button"
             >
-              {/* Render dropdown items */}
+              <div className="py-1" role="none">
+                <button
+                  className="text-sm text-gray-700 block px-4 py-2 w-full text-left"
+                  role="menuitem"
+                  onClick={() => handleItemClick("Download as JPEG")}
+                >
+                  Download as JPEG
+                </button>
+                <button
+                  className="text-sm text-gray-700 block px-4 py-2 w-full text-left"
+                  role="menuitem"
+                  onClick={() => handleItemClick("Download as PNG")}
+                >
+                  Download as PNG
+                </button>
+              </div>
             </div>
           )}
         </div>

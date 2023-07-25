@@ -254,3 +254,9 @@ Implement this in useEffect.
       }
     }
   }, [previewData]);
+
+
+  Their text was wrap around with border so that overlay text was starting from exact left and top position
+
+
+But in the Preview Component the text position changed

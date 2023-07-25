@@ -523,7 +523,6 @@ const ImageEditorFunctions = ({ params, images }) => {
       };
     }
 
-    localStorage.setItem("previewData", JSON.stringify(previewData));
     // window.location.href = "/preview";
     setPreviewData(previewData);
     setIsPreviewModalOpen(true);
@@ -608,10 +607,19 @@ const ImageEditorFunctions = ({ params, images }) => {
       };
     }
 
-    const dataToPass = JSON.stringify(editorPreviewData);
+    // setIsLoaded(true);
+    const dataToPass = JSON.stringify(dataForPreview);
+    localStorage.removeItem("previewData");
     localStorage.setItem("previewData", dataToPass);
-    setEditorPreviewData(dataForPreview);
-    router.push("/preview");
+    // setEditorPreviewData(dataToPass);
+
+    // setIsLoaded(false);
+    // router.push("/preview");
+
+    setTimeout(() => {
+      // setIsLoaded(false); 
+      router.push("/preview");
+    }, 1000);
   };
 
   return {

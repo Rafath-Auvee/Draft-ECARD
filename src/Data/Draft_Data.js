@@ -106,7 +106,7 @@ export const draft = [
         fontSize: "20px",
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
+        textAlign: "right",
         lineHeight: 1,
       },
       {
@@ -118,7 +118,7 @@ export const draft = [
         fontSize: "20px",
         backgroundColor: "rgb(255, 255, 255)",
         fontFamily: "AlegreyaSC-Regular",
-        textAlign: "center",
+        textAlign: "left",
         lineHeight: 1,
       },
       {
