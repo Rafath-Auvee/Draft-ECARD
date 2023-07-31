@@ -191,14 +191,13 @@ const ImageEditor = ({ params }) => {
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        <button
+        {/* <button
           className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
           onClick={handleToggleDevtools}
         >
-          Devtools: {/* <span style={{ marginLeft: "10px" }}> */}
+          Devtools:
           {devtools ? "True" : "False"}
-          {/* </span> */}
-        </button>
+        </button> */}
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
           {imageData.title}
         </h1>

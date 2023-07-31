@@ -29,7 +29,10 @@ import {
 import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDataContext";
 
 const ImageEditorFunctions = ({ params, images }) => {
-  const [devtools, setDevtools] = useState(true);
+  const [devtools, setDevtools] = useState(false);
+
+  
+
   const [showModal, setShowModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
   const [undoHistory, setUndoHistory] = useState([]);
