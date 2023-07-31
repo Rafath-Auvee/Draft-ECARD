@@ -4,6 +4,8 @@ import { FiMenu } from "react-icons/fi";
 import Logo from "public/Logo/Navbar-Logo.svg";
 import Link from "next/link";
 
+import AuthProfileMenu from "@/components/AuthProfileMenu/AuthProfileMenu";
+
 const Navbar = () => {
   return (
     <div className="mx-2 md:mx-14 text-[15px]">
@@ -15,12 +17,7 @@ const Navbar = () => {
             <li>
               <Link href="/draft">How It Works</Link>
             </li>
-            <li>
-              <Link href="/register">Sign Up</Link>
-            </li>
-            <li>
-              <Link href="/login">Sign In</Link>
-            </li>
+            <AuthProfileMenu />
           </ul>
         </div>
       </div>
@@ -51,7 +48,11 @@ const Navbar = () => {
         <div className="navbar-end ">
           <div className="flex justify-end md:hidden">
             <div className="drawer drawer-end">
-              <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
+              <input
+                id="my-drawer-4"
+                type="checkbox"
+                className="drawer-toggle"
+              />
               <div className="drawer-content">
                 <label htmlFor="my-drawer-4" className="drawer-button">
                   <FiMenu />
@@ -73,13 +74,7 @@ const Navbar = () => {
                   <li>
                     <Link href="#">How It Works</Link>
                   </li>
-                  <li>
-                    <Link href="/register">Sign Up</Link>
-                  </li>
-
-                  <li>
-                    <Link href="/login">Sign In</Link>
-                  </li>
+                  <AuthProfileMenu />
                 </ul>
               </div>
             </div>

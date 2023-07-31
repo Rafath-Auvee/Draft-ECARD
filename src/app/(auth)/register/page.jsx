@@ -9,16 +9,21 @@ import IconRight from "/public/icons/Icon-right.svg";
 import Logo from "/public/icons/logo_second.svg";
 import Link from "next/link";
 
+import Toast from "@/components/Toast/Toast";
+
 const Register = () => {
+  const [showToast, setShowToast] = useState(false);
+  const [type, setType] = useState("");
+  const [busy, setBusy] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const { password, email } = userInfo;
 
   const handleChange = ({ target }) => {
-    // const { email, password } = target;
     const { name, value } = target;
     setUserInfo({ ...userInfo, [name]: value });
   };
@@ -26,15 +31,24 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // console.log(userInfo);
-    // Check if both email and password are provided
-    if (!userInfo.email) {
-      console.error("Email is required");
-      return;
+    setBusy(true);
+
+    setError("");
+    let errorMessage = "";
+
+    if (!userInfo.email && !userInfo.password) {
+      errorMessage = "Email and password are required";
+    } else if (!userInfo.email) {
+      errorMessage = "Email is required";
+    } else if (!userInfo.password) {
+      errorMessage = "Password is required";
     }
 
-    if (!userInfo.password) {
-      console.error("Password is required");
+    if (errorMessage) {
+      setError(errorMessage);
+      setType("error");
+      setShowToast(true);
+      setBusy(false);
       return;
     }
 
@@ -44,17 +58,43 @@ const Register = () => {
         body: JSON.stringify(userInfo),
       });
 
-      if (!res.ok) {
-        // Handle non-successful response (e.g., status code 4xx or 5xx)
-        console.error("Failed to fetch: ", res);
-        return;
+      if (res.ok) {
+        // Registration successful
+        setError("Registration successful");
+        setType("success");
+        setShowToast(true);
+        setBusy(false);
+        setUserInfo({
+          email: "",
+          password: "",
+        });
+      } else {
+        // Handle non-successful responses if needed
+        const data = await res.json();
+        if (data.error && data.error === "email_exists") {
+          setError("Email already exists");
+          setType("error");
+          setBusy(false);
+        } else {
+          setError("Registration failed. Please try again later.");
+          setType("error");
+          setBusy(false);
+        }
+        setShowToast(true);
       }
-
-      const data = await res.json();
-      console.log(data);
     } catch (error) {
       console.error("Error while fetching: ", error);
+      setType("error");
+      setError("An unexpected error occurred. Please try again later.");
+      setShowToast(true);
+      setBusy(false);
     }
+
+    setBusy(false);
+  };
+
+  const handleToastClose = () => {
+    setShowToast(false);
   };
 
   return (
@@ -63,6 +103,9 @@ const Register = () => {
         {/* <div class="absolute w-1/2 top-[8px] left-[9px] lg:w-full md lg:bottom-0 lg:left-10 lg:top-[1rem]lg:right-0 ...">
           <Logo />
         </div> */}
+        {showToast && (
+          <Toast message={error} onClose={handleToastClose} type={type} />
+        )}
         <div className="flex flex-row justify-center">
           <div className="basis-1/2 hidden lg:block">
             <Image
@@ -80,7 +123,9 @@ const Register = () => {
                 <div className="join-item">
                   <div className="grid place-items-center mb-5 ">
                     <Link href="/">
-                      <><Logo /></>
+                      <>
+                        <Logo />
+                      </>
                     </Link>
                   </div>
                   <h1 className="text-primary text-2xl text-center mb-5 font-semibold">
@@ -143,7 +188,7 @@ const Register = () => {
                       </label> */}
                       </div>
                       <div className="form-control mb-3 mt-4 ">
-                        <div>
+                        {/* <div>
                           <label className="flex items-center cursor-pointer">
                             <input
                               type="checkbox"
@@ -152,8 +197,12 @@ const Register = () => {
                             />
                             <span className="text-base ml-5">Remember me</span>
                           </label>
-                        </div>
-                        <button className="btn btn-primary mt-4 mb-4 text-white text-base capitalize font-medium">
+                        </div> */}
+                        <button
+                          className="btn btn-primary mt-4 mb-4 text-white text-base capitalize font-medium"
+                          disabled={busy}
+                          style={{ opacity: busy ? 0.5 : 1 }}
+                        >
                           Sign Up
                         </button>
                         <div className="flex flex-row items-center justify-between">
@@ -161,11 +210,13 @@ const Register = () => {
                             {" "}
                             Already Have an Account?
                           </h3>
-                          <button className="border-2 border-[#DADDE7] text-[#23272A] px-5 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
-                            <span className="mr-1 lg:mr-3">Sign Up</span>
-                            <IconRight />
-                            {/* <Image src={IconRight} alt="Facebook Icon" /> */}
-                          </button>
+                          <Link href="/login">
+                            <button className="border-2 border-[#DADDE7] text-[#23272A] px-5 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
+                              <span className="mr-1 lg:mr-3">Sign In</span>
+                              <IconRight />
+                              {/* <Image src={IconRight} alt="Facebook Icon" /> */}
+                            </button>
+                          </Link>
                         </div>
 
                         <div className="mt-4 max-w-sm ">
