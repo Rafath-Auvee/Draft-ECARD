@@ -184,6 +184,14 @@ const ImageEditor = ({ params }) => {
     }
   }, [selectedTextIndex]);
 
+  const handleUpdateButtonClick = () => {
+    // First, close the modal
+    setShowModal(false);
+
+    // Then, center the selected text
+    handleCenterText();
+  };
+
   const gridColumns = devtools ? "grid-cols-7" : "grid-cols-4";
 
   return (
@@ -544,7 +552,7 @@ const ImageEditor = ({ params }) => {
                       <button
                         className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
-                        onClick={() => setShowModal(false)}
+                        onClick={handleUpdateButtonClick}
                       >
                         Update
                       </button>
