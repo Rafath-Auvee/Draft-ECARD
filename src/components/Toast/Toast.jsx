@@ -10,7 +10,7 @@ const Toast = ({ message, onClose, type }) => {
     const timer = setTimeout(() => {
       setVisible(false);
       onClose();
-    }, 3000); // Hide the toast after 3 seconds (adjust as needed)
+    }, 1500); // Hide the toast after 3 seconds (adjust as needed)
 
     return () => clearTimeout(timer);
   }, [onClose]);

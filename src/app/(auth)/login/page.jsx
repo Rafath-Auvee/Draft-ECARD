@@ -25,7 +25,6 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
-
   const { password, email } = userInfo;
 
   const handleChange = ({ target }) => {
@@ -53,7 +52,6 @@ const Login = () => {
     setType("success");
     setError("Login Success.");
     setShowToast(true);
-    setLoginSuccess(true);
     router.push("/");
   };
 
@@ -177,10 +175,12 @@ const Login = () => {
                         </button>
                         <div className="flex flex-row items-center justify-between">
                           <h3 className="text-base">Don’t have an account?</h3>
-                          <button className="border-2 border-[#DADDE7] text-[#23272A] px-7 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
-                            <span className="mr-3">Sign Up</span>
-                            <IconRight />
-                          </button>
+                          <Link href="/register">
+                            <div className="border-2 border-[#DADDE7] text-[#23272A] px-7 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl cursor-pointer">
+                              <span className="mr-3">Sign Up</span>
+                              <IconRight />
+                            </div>
+                          </Link>
                         </div>
                       </div>
                     </div>

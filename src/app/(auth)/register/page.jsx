@@ -8,10 +8,13 @@ import Google from "/public/icons/google.svg";
 import IconRight from "/public/icons/Icon-right.svg";
 import Logo from "/public/icons/logo_second.svg";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import Toast from "@/components/Toast/Toast";
 
 const Register = () => {
+  const router = useRouter();
+
   const [showToast, setShowToast] = useState(false);
   const [type, setType] = useState("");
   const [busy, setBusy] = useState(false);
@@ -90,7 +93,12 @@ const Register = () => {
       setBusy(false);
     }
 
+    // If login is successful
+    setType("success");
+    setError("Registration Success.");
+    setShowToast(true);
     setBusy(false);
+    router.push("/login/");
   };
 
   const handleToastClose = () => {
@@ -211,11 +219,11 @@ const Register = () => {
                             Already Have an Account?
                           </h3>
                           <Link href="/login">
-                            <button className="border-2 border-[#DADDE7] text-[#23272A] px-5 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
+                            <div className="cursor-pointer border-2 border-[#DADDE7] text-[#23272A] px-5 lg:px-12 py-2 rounded-2xl flex flex-row items-center justify-center text-sm lg:text-1xl">
                               <span className="mr-1 lg:mr-3">Sign In</span>
                               <IconRight />
                               {/* <Image src={IconRight} alt="Facebook Icon" /> */}
-                            </button>
+                            </div>
                           </Link>
                         </div>
 
