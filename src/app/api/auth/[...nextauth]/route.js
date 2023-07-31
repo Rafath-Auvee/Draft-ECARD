@@ -1,5 +1,5 @@
 import startDb from "@/lib/db";
-import UserModel from "@/models/UserModel";
+import UserModel from "../../../../models/userModel";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import clientPromise from "@/lib/db";
