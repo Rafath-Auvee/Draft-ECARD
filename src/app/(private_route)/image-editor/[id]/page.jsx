@@ -106,6 +106,8 @@ const ImageEditor = ({ params }) => {
     handleSaveAndPreviewClick,
     isLoaded,
     setIsLoaded,
+
+    handleTextStyleImage
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -586,27 +588,46 @@ const ImageEditor = ({ params }) => {
                       whiteSpace: "pre-wrap",
                       cursor: "pointer",
                       textAlign: textStyle.textAlign,
-                      lineHeight: textStyle.lineHeight || 1.5, // Set initial line height from JSON or default to 1.5
+                      lineHeight: textStyle.lineHeight || 1.5,
                       letterSpacing: textStyle.letterSpacing || 0,
                     }}
-                    onClick={() => handleTextClick(index)}
+                    
                   >
-                    {textStyle.text.split("\n").map((line, lineIndex) => (
-                      <div
-                        key={lineIndex}
+                    {textStyle.text &&
+                      textStyle.text.split("\n").map((line, lineIndex) => (
+                        <div
+                          key={lineIndex}
+                          style={{
+                            color: textStyle.backgroundColor,
+                            fontFamily: textStyle.fontFamily,
+                            fontSize: `${textStyle.fontSize}px`,
+                            textAlign: textStyle.textAlign,
+                          }}
+                          onClick={() => handleTextClick(index)}
+                        >
+                          {line}
+                        </div>
+                      ))}
+                    {textStyle.startingImage && ( // Check if the textStyle has an image property
+                      <Image
+                        src={textStyle.startingImage}
+                        alt="Image"
+                        width={200}
+                        height={100}
                         style={{
-                          color: textStyle.backgroundColor,
-                          fontFamily: textStyle.fontFamily,
-                          fontSize: `${textStyle.fontSize}px`,
-                          textAlign: textStyle.textAlign, // Center align the text
-                          // left: textStyle.left, // Set initial letter spacing from JSON or default to 0
-                          // top: textStyle.top, // Set initial letter spacing from JSON or default to 0
+                          position: "relative",
+                          left: 100,
+                          top: 100,
+                          // objectFit: textStyle.objectFit || "contain",
+                          backgroundColor: "transparent",
                         }}
-                      >
-                        {line}
-                      </div>
-                    ))}
-                    {textStyle.isSelected && ( // Only display the close icon if the text is selected
+                        onClick={() =>
+                          handleTextStyleImage(textStyle.startingImage)
+                        }
+                        // onLoad={() => console.log("Image loaded successfully!")}
+                      />
+                    )}
+                    {textStyle.isSelected && (
                       <button
                         className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
                         onClick={(e) => handleTextDelete(e, index)}
@@ -616,7 +637,7 @@ const ImageEditor = ({ params }) => {
                     )}
                   </div>
                 </Draggable>
-              ))}{" "}
+              ))}
             </>
           )}
           <canvas

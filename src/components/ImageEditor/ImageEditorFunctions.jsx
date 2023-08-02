@@ -31,8 +31,6 @@ import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDa
 const ImageEditorFunctions = ({ params, images }) => {
   const [devtools, setDevtools] = useState(false);
 
-  
-
   const [showModal, setShowModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
   const [undoHistory, setUndoHistory] = useState([]);
@@ -427,6 +425,16 @@ const ImageEditorFunctions = ({ params, images }) => {
     });
   };
 
+  // const handleImageClick = (imagePath) => {
+  //   setSelectedImage(imagePath);
+  //   const selectedImageData = imageData.images.find(
+  //     (image) => image.watermark === imagePath
+  //   );
+  //   if (selectedImageData) {
+  //     setSelectedImageTextStyles(selectedImageData.textStyles);
+  //   }
+  // };
+
   const handleTextClick = (index) => {
     const selectedTextStyle = textStyles[index];
     const lines = selectedTextStyle.text.split("\n");
@@ -624,9 +632,17 @@ const ImageEditorFunctions = ({ params, images }) => {
     // router.push("/preview");
 
     setTimeout(() => {
-      // setIsLoaded(false); 
+      // setIsLoaded(false);
       router.push("/preview");
     }, 1000);
+  };
+
+  const handleTextStyleImage = (image) => {
+    // You can define the logic to handle the click event for the image here.
+    // For example, you can log a message when the image is clicked.
+    console.log("Image clicked:", image);
+    // You can also set some state or perform any other action you need.
+    // For example, you can open a modal, update the selected image, etc.
   };
 
   return {
@@ -697,6 +713,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     setHoverY,
     handleCanvasMouseMove,
     handleSaveAndPreviewClick,
+    handleTextStyleImage
   };
 };
 
