@@ -107,7 +107,7 @@ const ImageEditor = ({ params }) => {
     isLoaded,
     setIsLoaded,
 
-    handleTextStyleImage
+    handleTextStyleImage,
   } = ImageEditorFunctions({ params, images });
 
   useEffect(() => {
@@ -201,13 +201,13 @@ const ImageEditor = ({ params }) => {
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        {/* <button
+        <button
           className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
           onClick={handleToggleDevtools}
         >
           Devtools:
           {devtools ? "True" : "False"}
-        </button> */}
+        </button>
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
           {imageData.title}
         </h1>
@@ -587,12 +587,46 @@ const ImageEditor = ({ params }) => {
                     style={{
                       whiteSpace: "pre-wrap",
                       cursor: "pointer",
-                      textAlign: textStyle.textAlign,
-                      lineHeight: textStyle.lineHeight || 1.5,
-                      letterSpacing: textStyle.letterSpacing || 0,
                     }}
-                    
                   >
+                    {textStyle.startingImage && ( // Check if the textStyle has an image property
+                      <Image
+                        src={textStyle.startingImage}
+                        alt="Image"
+                        width={200}
+                        height={100}
+                        style={{
+                          // position: "relative",
+                          left: textStyle.left,
+                          top: textStyle.top,
+                          objectFit: textStyle.objectFit || "contain",
+                          backgroundColor: "transparent",
+                        }}
+                        onClick={() => handleTextStyleImage(index)}
+                        // onLoad={() => console.log("Image loaded successfully!")}
+                      />
+                    )}
+                    {/* {textStyle.startingImage &&
+                      textStyle.startingImage.map((imageStyle, lineIndex) => (
+                        <div
+                          key={lineIndex}
+                          style={{
+                            // position: "relative",
+                            left: textStyle.left,
+                            top: textStyle.top,
+                            objectFit: textStyle.objectFit || "contain",
+                            backgroundColor: "transparent",
+                          }}
+                          onClick={() => handleTextStyleImage(index)}
+                        >
+                          <Image
+                            src={imageStyle}
+                            alt="Image"
+                            width={200}
+                            height={100}
+                          />
+                        </div>
+                      ))} */}
                     {textStyle.text &&
                       textStyle.text.split("\n").map((line, lineIndex) => (
                         <div
@@ -602,31 +636,16 @@ const ImageEditor = ({ params }) => {
                             fontFamily: textStyle.fontFamily,
                             fontSize: `${textStyle.fontSize}px`,
                             textAlign: textStyle.textAlign,
+                            textAlign: textStyle.textAlign,
+                            lineHeight: textStyle.lineHeight || 1.5,
+                            letterSpacing: textStyle.letterSpacing || 0,
                           }}
                           onClick={() => handleTextClick(index)}
                         >
                           {line}
                         </div>
                       ))}
-                    {textStyle.startingImage && ( // Check if the textStyle has an image property
-                      <Image
-                        src={textStyle.startingImage}
-                        alt="Image"
-                        width={200}
-                        height={100}
-                        style={{
-                          position: "relative",
-                          left: 100,
-                          top: 100,
-                          // objectFit: textStyle.objectFit || "contain",
-                          backgroundColor: "transparent",
-                        }}
-                        onClick={() =>
-                          handleTextStyleImage(textStyle.startingImage)
-                        }
-                        // onLoad={() => console.log("Image loaded successfully!")}
-                      />
-                    )}
+
                     {textStyle.isSelected && (
                       <button
                         className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"

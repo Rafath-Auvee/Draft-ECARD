@@ -138,8 +138,8 @@ export const draft = [
       {
         id: 11,
         startingImage: "/Bismillah/Bismillah.png",
-        left: 355,
-        top: 126,
+        left: 349.4000015258789,
+        top: 189,
         color: "white",
         fontSize: "20px",
         backgroundColor: "rgb(255, 255, 255)",

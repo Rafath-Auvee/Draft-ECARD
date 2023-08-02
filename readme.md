@@ -8,7 +8,6 @@
         backgroundColor: "rgb(255, 255, 255)",
       },
 
-
                           {textStyle.startingImage && ( // Check if the textStyle has an image property
                       <Image
                         src={textStyle.startingImage}

@@ -637,10 +637,20 @@ const ImageEditorFunctions = ({ params, images }) => {
     }, 1000);
   };
 
-  const handleTextStyleImage = (image) => {
+  const handleTextStyleImage = (index) => {
     // You can define the logic to handle the click event for the image here.
     // For example, you can log a message when the image is clicked.
-    console.log("Image clicked:", image);
+    console.log("Image clicked:", index);
+    const selectedTextStyle = textStyles[index];
+    const lines = selectedTextStyle.startingImage;
+    setTextStyles((prevTextStyles) => {
+      const updatedTextStyles = prevTextStyles.map((style, i) => ({
+        ...style,
+        isSelected: index === i,
+      }));
+      setSelectedTextIndex(index);
+      return updatedTextStyles;
+    });
     // You can also set some state or perform any other action you need.
     // For example, you can open a modal, update the selected image, etc.
   };
@@ -713,7 +723,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     setHoverY,
     handleCanvasMouseMove,
     handleSaveAndPreviewClick,
-    handleTextStyleImage
+    handleTextStyleImage,
   };
 };
 
