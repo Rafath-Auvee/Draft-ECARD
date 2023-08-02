@@ -116,7 +116,7 @@ const ImageEditor = ({ params }) => {
 
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
-        (image) => image.url === selectedImage
+        (image) => image.watermark === selectedImage
       );
 
       if (selectedImageData) {
@@ -146,7 +146,7 @@ const ImageEditor = ({ params }) => {
       }
     } else {
       const image = document.createElement("img");
-      image.src = imageData.url;
+      image.src = imageData.watermark;
 
       image.onload = () => {
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -636,14 +636,14 @@ const ImageEditor = ({ params }) => {
                   width={0}
                   height={0}
                   key={image.id}
-                  src={image.url}
+                  src={image.watermark}
                   alt={`Image ${image.id}`}
                   className={`w-16 h-16 mx-1 cursor-pointer ${
-                    selectedImage === image.url
+                    selectedImage === image.watermark
                       ? "border-2 border-blue-500"
                       : ""
                   }`}
-                  onClick={() => handleImageClick(image.url)}
+                  onClick={() => handleImageClick(image.watermark)}
                 />
                 <p>Page {index + 1}</p>
               </div>

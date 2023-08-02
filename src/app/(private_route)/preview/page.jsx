@@ -93,7 +93,7 @@ const Preview = () => {
 
       const renderImage = () => {
         const image = document.createElement("img");
-        image.src = previewData.url;
+        image.src = previewData.watermark;
 
         image.onload = () => {
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -194,7 +194,7 @@ const Preview = () => {
       if (previewData) {
         if (previewData.imageType === "multiple image") {
           const selectedImageData = previewData.images.find(
-            (image) => image.url === selectedImage
+            (image) => image.watermark === selectedImage
           );
 
           if (selectedImageData) {

@@ -11,12 +11,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <AuthProvider>
-      <html lang="en">
-        <body className={`${fraunces.variable}`}>
+    <html lang="en">
+      <body className={`${fraunces.variable}`}>
+        <AuthProvider>
           <PreviewDataContextProvider>{children}</PreviewDataContextProvider>
-        </body>
-      </html>
-    </AuthProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

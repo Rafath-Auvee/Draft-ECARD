@@ -113,7 +113,7 @@ const ImageEditorFunctions = ({ params, images }) => {
   const [editingTextIndex, setEditingTextIndex] = useState(null);
 
   const [selectedImage, setSelectedImage] = useState(
-    imageData?.images ? imageData.images[0].url : null
+    imageData?.images ? imageData.images[0].watermark : null
   );
 
   const [selectedImageTextStyles, setSelectedImageTextStyles] = useState(
@@ -125,7 +125,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     const selectedImageData = imageData.images.find(
-      (image) => image.url === url
+      (image) => image.watermark === url
     );
     const image = document.createElement("img");
     image.src = url;
@@ -170,7 +170,7 @@ const ImageEditorFunctions = ({ params, images }) => {
 
       if (imageData.imageType === "multiple image") {
         const selectedImageData = imageData.images.find(
-          (img) => img.url === selectedImage
+          (img) => img.watermark === selectedImage
         );
         selectedImageData.textStyles = updatedTextStyles;
         setSelectedImageTextStyles(updatedTextStyles);
@@ -260,7 +260,7 @@ const ImageEditorFunctions = ({ params, images }) => {
 
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
-        (img) => img.url === selectedImage
+        (img) => img.watermark === selectedImage
       );
       selectedImageData.textStyles = updatedTextStyles;
       setSelectedImageTextStyles(updatedTextStyles);
@@ -286,7 +286,7 @@ const ImageEditorFunctions = ({ params, images }) => {
 
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
-        (img) => img.url === selectedImage
+        (img) => img.watermark === selectedImage
       );
       selectedImageData.textStyles = updatedTextStyles;
     }
@@ -469,7 +469,9 @@ const ImageEditorFunctions = ({ params, images }) => {
         id: imageData.id,
         title: imageData.title,
         imageUrl: imageData.imageUrl,
-        url: imageData.url,
+        watermark: imageData.watermark,
+        referenceImage: imageData.referenceImage,
+        finalImage: imageData.finalImage,
         imageType: imageData.imageType,
         price: imageData.price,
         buttonText: imageData.buttonText,
@@ -497,7 +499,9 @@ const ImageEditorFunctions = ({ params, images }) => {
         id: imageData.id,
         title: imageData.title,
         imageUrl: imageData.imageUrl,
-        url: imageData.url,
+        watermark: imageData.watermark,
+        referenceImage: imageData.referenceImage,
+        finalImage: imageData.finalImage,
         imageType: imageData.imageType,
         price: imageData.price,
         buttonText: imageData.buttonText,
@@ -507,7 +511,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         cardCategory: imageData.cardCategory,
         images: imageData.images.map((image) => ({
           id: image.id,
-          url: image.url,
+          watermark: image.watermark,
           textStyles: image.textStyles.map((textStyle) => ({
             id: textStyle.id,
             text: textStyle.text,
@@ -553,7 +557,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         id: imageData.id,
         title: imageData.title,
         imageUrl: imageData.imageUrl,
-        url: imageData.url,
+        watermark: imageData.watermark,
         imageType: imageData.imageType,
         price: imageData.price,
         buttonText: imageData.buttonText,
@@ -581,7 +585,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         id: imageData.id,
         title: imageData.title,
         imageUrl: imageData.imageUrl,
-        url: imageData.url,
+        watermark: imageData.watermark,
         imageType: imageData.imageType,
         price: imageData.price,
         buttonText: imageData.buttonText,
@@ -591,7 +595,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         cardCategory: imageData.cardCategory,
         images: imageData.images.map((image) => ({
           id: image.id,
-          url: image.url,
+          watermark: image.watermark,
           textStyles: image.textStyles.map((textStyle) => ({
             id: textStyle.id,
             text: textStyle.text,

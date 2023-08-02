@@ -19,7 +19,7 @@ export const authOptions = {
         await startDb();
 
         const user = await UserModel.findOne({ email });
-        
+
         if (!user) throw new Error("email/password mismatch!");
 
         const passwordMatch = await user.comparePassword(password);
@@ -45,10 +45,8 @@ export const authOptions = {
     },
     session({ session, token }) {
       if (session.user) {
-        session.user = {
-          id: token.id,
-          role: token.role,
-        };
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     },
