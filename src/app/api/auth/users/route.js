@@ -28,3 +28,29 @@ export const POST = async (req) => {
     },
   });
 };
+
+export const GET = async () => {
+  await startDb();
+
+  try {
+    // Fetch all users from the database
+    const users = await UserModel.find();
+
+    // Extract only the relevant user information
+    const usersData = users.map((user) => ({
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    }));
+
+    return NextResponse.json({ users: usersData });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error fetching users" },
+      { status: 500 }
+    );
+  }
+};
+
+// export default { POST, GET };
