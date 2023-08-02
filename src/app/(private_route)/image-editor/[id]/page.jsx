@@ -513,6 +513,291 @@ const ImageEditor = ({ params }) => {
               </div>
             </div>
           )}
+
+          {selectedTextIndex === null && (
+            <div className="flex justify-center mt-4">
+              <div
+                key={selectedTextIndex}
+                className={`grid gap-4 ${gridColumns} px-5 py-2 bg-white text-[#23272A] rounded border-black border`}
+              >
+                <div
+                  className="flex flex-col justify-center align-center items-center cursor-pointer"
+                  // onClick={() => setShowModal(true)}
+                >
+                  <button className="text-3xl">
+                    <CiEdit />
+                  </button>
+                  <label
+                    className="font-bold cursor-pointer"
+                    htmlFor={`textInput-${selectedTextIndex}`}
+                  >
+                    Edit
+                  </label>
+                </div>
+
+                <div className="flex flex-col justify-center  items-center text-left">
+                  <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
+                    Font Size:
+                  </label>
+                  <div className="flex">
+                    <input
+                      id={`fontSizeInput-${selectedTextIndex}`}
+                      type="number"
+                      value={"Empty"}
+                      className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                      min="5"
+                    />
+                    {/* <div className="flex mt-2">
+                      <button
+                        onClick={() => incrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1 mr-1"
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() => decrementFontSize(selectedTextIndex)}
+                        className="bg-gray-200 rounded px-2 py-1"
+                      >
+                        -
+                      </button>
+                    </div> */}
+                  </div>
+                </div>
+
+                {devtools && (
+                  <>
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                      <label htmlFor={`leftInput-${selectedTextIndex}`}>
+                        X-Axis:
+                      </label>
+                      <div className="flex">
+                        <input
+                          id={`leftInput-${selectedTextIndex}`}
+                          type="number"
+                          value={"0"}
+                          // onChange={(e) =>
+                          //   handleLeftChange(selectedTextIndex, e)
+                          // }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
+                        />
+                        {/* <div className="flex mt-2">
+                          <button
+                            onClick={() => incrementLeft(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1 mr-1"
+                          >
+                            +
+                          </button>
+                          <button
+                            onClick={() => decrementLeft(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1"
+                          >
+                            -
+                          </button>
+                        </div> */}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                      <label htmlFor={`topInput-${selectedTextIndex}`}>
+                        Y-Axis
+                      </label>
+                      <div className="flex">
+                        <input
+                          id={`topInput-${selectedTextIndex}`}
+                          type="number"
+                          value={"0"}
+                          // onChange={(e) =>
+                          //   handleTopChange(selectedTextIndex, e)
+                          // }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-20"
+                        />
+                        {/* <div className="flex mt-2">
+                          <button
+                            onClick={() => incrementTop(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1 mr-1"
+                          >
+                            +
+                          </button>
+                          <button
+                            onClick={() => decrementTop(selectedTextIndex)}
+                            className="bg-gray-200 rounded px-2 py-1"
+                          >
+                            -
+                          </button>
+                        </div> */}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col text-center">
+                      <label className="mb-2">Text Align </label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          // onClick={() => handleTextAlignChange("left")}
+                        >
+                          <FiAlignLeft /> {/* Use the Align Left Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 mr-2"
+                          // onClick={() => handleTextAlignChange("center")}
+                        >
+                          <FiAlignCenter /> {/* Use the Align Center Icon */}
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          // onClick={() => handleTextAlignChange("right")}
+                        >
+                          <FiAlignRight /> {/* Use the Align Right Icon */}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (X-Axis)</label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          // onClick={() =>
+                          //   handleMoveToXAxisLeft(selectedTextIndex, "left")
+                          // }
+                        >
+                          <BiArrowToLeft />
+                        </button>
+
+                        <button
+                          // onClick={handleCenterText}
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                        >
+                          <BiHorizontalCenter />
+                        </button>
+
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2"
+                          // onClick={handleMoveToXAxisRight}
+                        >
+                          <BiArrowToRight />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Position (Y-Axis)</label>
+                      <div>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          // onClick={handleMoveToYAxisTop}
+                        >
+                          <BiArrowToTop />
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          // onClick={() =>
+                          //   handleMoveToYAxisCenter(selectedTextIndex)
+                          // }
+                        >
+                          <BsArrowsCollapse />
+                        </button>
+                        <button
+                          className="bg-primary text-white mb-2 px-3 py-3 text-1xl mx-2 my-1"
+                          // onClick={() =>
+                          //   handleMoveToYAxisBottom(selectedTextIndex, "top")
+                          // }
+                        >
+                          <BiArrowToBottom />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="font-dropdown text-center flex flex-col justify-center items-center">
+                      <label htmlFor="font-select">Select Font:</label>
+                      <div className="border border-black rounded-md px-2 py-2">
+                        <select id="font-select" value={"None"}>
+                          {/* // onChange={(e) =>
+                          //   handleFontChange(selectedTextIndex, e.target.value)
+                          // }
+                        //   {fonts.map((font) => (
+                        //     <option key={font.id} value={font.name}>
+                        //       {font.name}
+                        //     </option>
+                        //   ))} */}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Line Height</label>
+                      <div>
+                        <input
+                          type="number"
+                          value={0}
+                          // onChange={(e) =>
+                          //   handleLineHeightChange(parseFloat(e.target.value))
+                          // }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                          step="0.1"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-center flex flex-col justify-center items-center">
+                      <label className="mb-2">Letter Spacing</label>
+                      <div>
+                        <input
+                          type="number"
+                          value={0}
+                          // onChange={(e) =>
+                          //   handleLetterSpacingChange(
+                          //     parseFloat(e.target.value)
+                          //   )
+                          // }
+                          className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
+                          step="0.1"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                      <button
+                        className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                        onClick={handleSaveClick}
+                      >
+                        Save
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                      <button
+                        className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                        onClick={handleRedo}
+                      >
+                        Redo
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                  <button
+                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                    onClick={handleUndo}
+                  >
+                    Undo
+                  </button>
+                </div>
+
+                <div className="flex flex-col justify-center align-center items-center cursor-pointer">
+                  <button
+                    onClick={handleSaveAndPreviewClick}
+                    className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
+                  >
+                    Save & Preview
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {showModal ? (
             <>
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
@@ -593,40 +878,20 @@ const ImageEditor = ({ params }) => {
                       <Image
                         src={textStyle.startingImage}
                         alt="Image"
-                        width={200}
-                        height={100}
+                        width={textStyle.width}
+                        height={textStyle.height}
                         style={{
                           // position: "relative",
                           left: textStyle.left,
                           top: textStyle.top,
-                          objectFit: textStyle.objectFit || "contain",
-                          backgroundColor: "transparent",
+                          // objectFit: textStyle.objectFit || "contain",
+                          backgroundColor: "none",
                         }}
                         onClick={() => handleTextStyleImage(index)}
                         // onLoad={() => console.log("Image loaded successfully!")}
                       />
                     )}
-                    {/* {textStyle.startingImage &&
-                      textStyle.startingImage.map((imageStyle, lineIndex) => (
-                        <div
-                          key={lineIndex}
-                          style={{
-                            // position: "relative",
-                            left: textStyle.left,
-                            top: textStyle.top,
-                            objectFit: textStyle.objectFit || "contain",
-                            backgroundColor: "transparent",
-                          }}
-                          onClick={() => handleTextStyleImage(index)}
-                        >
-                          <Image
-                            src={imageStyle}
-                            alt="Image"
-                            width={200}
-                            height={100}
-                          />
-                        </div>
-                      ))} */}
+
                     {textStyle.text &&
                       textStyle.text.split("\n").map((line, lineIndex) => (
                         <div

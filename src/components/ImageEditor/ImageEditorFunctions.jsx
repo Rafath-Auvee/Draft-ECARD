@@ -61,17 +61,34 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const handleTextDelete = (e, index) => {
     e.stopPropagation();
-    setTextStyles((prevTextStyles) =>
-      prevTextStyles.map((style, i) => ({
-        ...style,
-        isSelected: false,
-      }))
-    );
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
 
-    setTextStyles((prevTextStyles) =>
-      prevTextStyles.filter((_, i) => i !== index)
-    );
+    // If the selected text has a starting image, clear the area occupied by the starting image
+    if (textStyles[index]?.startingImage) {
+      const image = document.createElement("img");
+      image.src = textStyles[index].startingImage;
+      image.onload = () => {
+        context.clearRect(
+          textStyles[index].left,
+          textStyles[index].top,
+          0, // Set width to 0 to clear the area
+          0 // Set height to 0 to clear the area
+        );
+      };
+    }
 
+    // Remove the selected text from the textStyles array
+    const updatedTextStyles = [...textStyles];
+    updatedTextStyles.splice(index, 1);
+    setTextStyles(updatedTextStyles);
+
+    // Deselect the deleted text if it was selected
+    if (selectedTextIndex === index) {
+      setSelectedTextIndex(null);
+    }
+
+    // Save the current text styles in the undo history
     setUndoHistory([...undoHistory, textStylesRef.current]);
   };
 
