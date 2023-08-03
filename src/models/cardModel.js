@@ -8,15 +8,9 @@ const textStyleSchema = new mongoose.Schema({
   },
   text: {
     type: String,
-    required: function () {
-      return !this.startingImage; // Text is required if startingImage is not present
-    },
   },
   startingImage: {
     type: String,
-    required: function () {
-      return !this.text; // Starting image is required if text is not present
-    },
   },
   left: Number,
   top: Number,
@@ -39,7 +33,10 @@ textStyleSchema.pre("save", function (next) {
 });
 
 const cardDataSchema = new mongoose.Schema({
-  id: Number,
+  id: {
+    type: Number,
+    unique: true,
+  },
   title: String,
   imageUrl: String,
   referenceImage: String,

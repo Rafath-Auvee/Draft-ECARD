@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const AddCard = () => {
   const generateUniqueID = () => {
-    // Logic to generate a unique ID (you can use UUID or any other method)
-    // For demonstration purposes, we will use a simple timestamp-based approach.
-    return Date.now().toString();
+    return uuidv4(); // Use uuid to generate a unique ID
   };
 
   const [formData, setFormData] = useState({
@@ -98,10 +97,43 @@ const AddCard = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      const response = await fetch("/api/cards", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        // Card created successfully
+        console.log("Card created!");
+      } else {
+        console.error("Error creating card:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating card:", error);
+    }
+  
+    // Reset the form data after submitting
+    setFormData({
+      id: "",
+      title: "",
+      imageUrl: "",
+      referenceImage: "",
+      finalImage: "",
+      watermark: "",
+      imageType: "",
+      price: "",
+      buttonText: "",
+      cardType: "",
+      popularity: "",
+      description: "",
+      cardCategory: "",
+      textStyles: [],
+    });
   };
+  
 
   return (
     <div className="container mx-auto mt-8">
