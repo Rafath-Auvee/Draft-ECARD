@@ -4,14 +4,10 @@ const mongoose = require("mongoose");
 const textStyleSchema = new mongoose.Schema({
   id: {
     type: Number,
-    unique: true,
+    // Remove unique constraint
   },
-  text: {
-    type: String,
-  },
-  startingImage: {
-    type: String,
-  },
+  text: String,
+  startingImage: String,
   left: Number,
   top: Number,
   color: String,
@@ -23,34 +19,31 @@ const textStyleSchema = new mongoose.Schema({
   // ... add any other properties you have in the textStyle object
 });
 
-// Middleware to generate a new id only if it doesn't exist
-textStyleSchema.pre("save", function (next) {
-  if (!this.id) {
-    // Generate a new id only if it doesn't exist
-    this.id = new Date().getTime();
-  }
-  next();
-});
-
-const cardDataSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
+const cardDataSchema = new mongoose.Schema(
+  {
+    id: {
+      type: Number,
+      unique: true,
+      // Remove unique constraint
+    },
+    title: String,
+    imageUrl: String,
+    referenceImage: String,
+    finalImage: String,
+    watermark: String,
+    imageType: String,
+    price: Number,
+    buttonText: String,
+    cardType: String,
+    popularity: Number,
+    description: String,
+    cardCategory: String,
+    textStyles: [textStyleSchema],
   },
-  title: String,
-  imageUrl: String,
-  referenceImage: String,
-  finalImage: String,
-  watermark: String,
-  imageType: String,
-  price: Number,
-  buttonText: String,
-  cardType: String,
-  popularity: Number,
-  description: String,
-  cardCategory: String,
-  textStyles: [textStyleSchema],
-});
+  {
+    strict: false, // Allow additional fields
+  }
+);
 
 const CardModel = models.card || mongoose.model("card", cardDataSchema);
 

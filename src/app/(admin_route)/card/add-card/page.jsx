@@ -99,12 +99,19 @@ const AddCard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Generate a new unique ID
+    const newId = uuidv4();
+
+    // Update the formData with the new ID
+    const updatedFormData = { ...formData, id: newId };
+    console.log(updatedFormData);
+
     try {
       const response = await fetch("/api/cards", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
-  
+
       if (response.ok) {
         // Card created successfully
         console.log("Card created!");
@@ -114,8 +121,7 @@ const AddCard = () => {
     } catch (error) {
       console.error("Error creating card:", error);
     }
-  
-    // Reset the form data after submitting
+
     setFormData({
       id: "",
       title: "",
@@ -132,8 +138,8 @@ const AddCard = () => {
       cardCategory: "",
       textStyles: [],
     });
+    // Reset the form data after submitting
   };
-  
 
   return (
     <div className="container mx-auto mt-8">

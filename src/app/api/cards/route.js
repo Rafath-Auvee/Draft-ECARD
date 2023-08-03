@@ -1,4 +1,4 @@
-import CardModel from "@/models/CardModel";
+import CardModel from "../../../models/cardModel";
 import startDb from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -20,6 +20,7 @@ export const GET = async () => {
 
 export const POST = async ({ body }) => {
   await startDb();
+  console.log(body)
 
   try {
     const newCard = await CardModel.create(body);

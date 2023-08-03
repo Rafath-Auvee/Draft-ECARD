@@ -1,6 +1,6 @@
 // pages/api/card/[id].js
 import { NextResponse } from "next/server";
-import CardModel from "@/models/CardModel";
+import CardModel from "../../../../models/cardModel";
 
 export async function GET(request) {
   console.log(request.url)
