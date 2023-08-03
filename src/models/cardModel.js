@@ -1,24 +1,44 @@
 const { model, models, Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
-const textStyleSchema = new mongoose.Schema(
-  {
-    id: Number,
-    type: { type: String, enum: ["text", "image"] },
-    left: Number,
-    top: Number,
-    color: String,
-    fontSize: String,
-    backgroundColor: String,
-    fontFamily: String,
-    textAlign: String,
-    lineHeight: Number,
-    // Add more fields here if needed in the future
+const textStyleSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
   },
-  { _id: false }
-); // Set _id to false to avoid generating subdocument IDs
+  text: {
+    type: String,
+    required: function () {
+      return !this.startingImage; // Text is required if startingImage is not present
+    },
+  },
+  startingImage: {
+    type: String,
+    required: function () {
+      return !this.text; // Starting image is required if text is not present
+    },
+  },
+  left: Number,
+  top: Number,
+  color: String,
+  fontSize: String,
+  backgroundColor: String,
+  fontFamily: String,
+  textAlign: String,
+  lineHeight: Number,
+  // ... add any other properties you have in the textStyle object
+});
 
-const cardSchema = new mongoose.Schema({
+// Middleware to generate a new id only if it doesn't exist
+textStyleSchema.pre("save", function (next) {
+  if (!this.id) {
+    // Generate a new id only if it doesn't exist
+    this.id = new Date().getTime();
+  }
+  next();
+});
+
+const cardDataSchema = new mongoose.Schema({
   id: Number,
   title: String,
   imageUrl: String,
@@ -32,11 +52,9 @@ const cardSchema = new mongoose.Schema({
   popularity: Number,
   description: String,
   cardCategory: String,
-  textStyles: [textStyleSchema], // Using the textStyleSchema as an array field
-  // Add more fields here if needed in the future
+  textStyles: [textStyleSchema],
 });
 
-// Step 3: Create the Mongoose model using the defined schemas
-const CardModel = models.card || mongoose.model("Card", cardSchema);
+const CardModel = models.card || mongoose.model("card", cardDataSchema);
 
 module.exports = CardModel;

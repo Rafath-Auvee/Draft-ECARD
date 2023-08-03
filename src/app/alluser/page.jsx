@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "@/components/Navbar/Navbar";
+import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay"
+
 const AllUser = () => {
   const [allUser, setAllUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +30,7 @@ const AllUser = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingOverlay/>;
   }
 
   const hasNameData = allUser.some((user) => user.name);

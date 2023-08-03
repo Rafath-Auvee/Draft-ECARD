@@ -2,7 +2,7 @@ export const draft = [
   {
     id: 100,
     title: "Beautiful Mountain Landscape",
-    imageUrl: "/cards/main/1/1.jpg",
+    // imageUrl: "/cards/main/1/1.jpg",
     referenceImage: "/cards/main/1/1.jpg",
     finalImage: "/cards/main/1/BG.jpg",
     watermark: "/cards/main/1/WaterMark.jpg",

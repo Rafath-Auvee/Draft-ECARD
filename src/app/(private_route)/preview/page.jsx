@@ -247,7 +247,7 @@ const Preview = () => {
         </h1>
         <div>
           {/* <h1>X: {hoverX}</h1>
-          <h1>Y: {hoverY}</h1> */}
+          <h1>Y: {hoverY}</h1> */}`  
         </div>
         <div className="relative">
           <canvas
