@@ -23,7 +23,6 @@ const AddCard = () => {
     description: "",
     cardCategory: "",
     textStyles: [],
-
   });
 
   const handleAddTextStyle = () => {
@@ -39,6 +38,35 @@ const AddCard = () => {
       };
     });
   };
+
+  const fieldOptions = [
+    "text",
+    "left",
+    "top",
+    "color",
+    "fontSize",
+    "backgroundColor",
+    "textAlign",
+    "fontFamily",
+    "lineHeight",
+    "startingImage",
+    "width",
+    "height",
+  ];
+
+  // const handleTextStyleFieldChange = (index, value) => {
+  //   setFormData((prevFormData) => {
+  //     const updatedTextStyles = [...prevFormData.textStyles];
+  //     const textStyle = updatedTextStyles[index];
+  //     const oldField = Object.keys(textStyle)[0];
+  //     const fieldValue = textStyle[oldField];
+
+  //     delete textStyle[oldField];
+  //     textStyle[value] = fieldValue;
+
+  //     return { ...prevFormData, textStyles: updatedTextStyles };
+  //   });
+  // };
 
   const handleTextStyleFieldChange = (index, value) => {
     setFormData((prevFormData) => {
@@ -77,7 +105,7 @@ const AddCard = () => {
 
   return (
     <div className="container mx-auto mt-8">
-      <div className="px-24">
+      <div className="px-12">
         <form onSubmit={handleSubmit}>
           <div>
             <label className="block font-bold mb-2" htmlFor="title">
@@ -255,18 +283,48 @@ const AddCard = () => {
           <div>
             <label className="block font-bold mt-6 mb-4">TextStyles:</label>
 
-            <div className="border-2 border-black px-10 py-5">
+            <div>
               {formData.textStyles.map((textStyle, index) => (
-                <div key={index}>
+                <div key={index} className="border-2 border-black px-4 py-5">
                   <div className="flex flex-row justify-between">
-                    <input
-                      type="text"
+                    <select
                       value={Object.keys(textStyle)[0]}
                       onChange={(e) =>
                         handleTextStyleFieldChange(index, e.target.value)
                       }
-                      className="border rounded px-2 py-1 w-1/2 mr-2"
-                    />
+                      className="border rounded px-2 py-1 w-32 mr-2"
+                    >
+                      <option value="">Select Field Name</option>
+                      <option value="text">text</option>
+                      <option value="left">left</option>
+                      <option value="top">top</option>
+                      <option value="color">color</option>
+                      <option value="fontSize">fontSize</option>
+                      <option value="backgroundColor">backgroundColor</option>
+                      <option value="textAlign">textAlign</option>
+                      <option value="fontFamily">fontFamily</option>
+                      <option value="lineHeight">lineHeight</option>
+                      <option value="startingImage">startingImage</option>
+                      <option value="width">width</option>
+                      <option value="height">height</option>
+                      <option value="custom">Custom</option>{" "}
+                      {/* Add custom option */}
+                    </select>
+                    {Object.keys(textStyle)[0] === "custom" ? ( // If custom option is selected, show an input field
+                      <input
+                        type="text"
+                        value={Object.values(textStyle)[0]}
+                        onChange={(e) =>
+                          handleTextStyleChange(
+                            index,
+                            Object.keys(textStyle)[0],
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter Custom Field Name"
+                        className="border rounded px-2 py-1 w-1/2"
+                      />
+                    ) : null}
                     <input
                       type="text"
                       value={Object.values(textStyle)[0]}
@@ -277,6 +335,7 @@ const AddCard = () => {
                           e.target.value
                         )
                       }
+                      placeholder="Enter Value Name"
                       className="border rounded px-2 py-1 w-1/2"
                     />
                   </div>
@@ -290,6 +349,7 @@ const AddCard = () => {
                 </div>
               ))}
             </div>
+
             <div className="mt-4">
               <button
                 type="button"
