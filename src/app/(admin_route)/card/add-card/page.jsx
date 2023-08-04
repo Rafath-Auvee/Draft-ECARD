@@ -106,6 +106,23 @@ const AddCard = () => {
     });
   };
 
+  const handleRemoveTextStyleKey = (index, key) => {
+    setFormData((prevFormData) => {
+      const updatedTextStyles = [...prevFormData.textStyles];
+      delete updatedTextStyles[index][key];
+
+      // If no key-value pairs left, remove the textStyle object
+      if (Object.keys(updatedTextStyles[index]).length === 1) {
+        updatedTextStyles.splice(index, 1);
+      }
+
+      return {
+        ...prevFormData,
+        textStyles: updatedTextStyles,
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedFormData = { ...formData };
@@ -331,17 +348,47 @@ const AddCard = () => {
             </label>
             <div>
               {formData.textStyles.map((textStyle, index) => (
-                <div key={index} className="border-2 border-black px-4 py-5 mb-10">
-                  <div className="flex flex-col">
-                    {Object.entries(textStyle).map(
+                <div
+                  key={index}
+                  className="border-2 rounded-md border-slate-500 px-4 py-5 mb-10"
+                >
+                  <div className="flex flex-col justify-between">
+                    {/* {Object.entries(textStyle).map(
                       ([key, value]) =>
                         key !== "id" && (
                           <p key={key} className="mb-1">
                             {`${key}: ${value}`}
                           </p>
                         )
-                    )}
+                    )} */}
 
+                    {Object.keys(textStyle).length > 1 ? ( // Check if any key-value pair exists
+                      <>
+                        {Object.entries(textStyle).map(
+                          ([key, value]) =>
+                            key !== "id" && (
+                              <div key={key} className="flex flex-row justify-between">
+                                <p className="mb-1">{`${key}: ${value}`}</p>
+                                <button
+                                  className="ml-2 bg-red-500 text-white px-4 py-1 rounded-sm"
+                                  onClick={() =>
+                                    handleRemoveTextStyleKey(index, key)
+                                  }
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )
+                        )}
+                      </>
+                    ) : (
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleRemoveTextStyle(index)}
+                      >
+                        Delete TextStyle
+                      </button>
+                    )}
                     {index === addingMoreIndex ? (
                       <div>
                         <label
@@ -397,7 +444,7 @@ const AddCard = () => {
                         </button>
                       </div>
                     ) : (
-                      <div>
+                      <div className="flex flex-row justify-evenly mt-3">
                         <button
                           type="button"
                           onClick={() => handleRemoveTextStyle(index)}
