@@ -8,7 +8,6 @@ const AddCard = () => {
   };
 
   const [formData, setFormData] = useState({
-    id: generateUniqueID(),
     title: "",
     imageUrl: "",
     referenceImage: "",
@@ -23,69 +22,27 @@ const AddCard = () => {
     cardCategory: "",
     textStyles: [],
   });
+  // const handleTextStyleChange = (index, key, value) => {
+  //   setFormData((prevFormData) => {
+  //     const updatedTextStyles = [...prevFormData.textStyles];
+  //     updatedTextStyles[index].key = key;
+  //     updatedTextStyles[index].value = value;
+  //     return { ...prevFormData, textStyles: updatedTextStyles };
+  //   });
+  // };
 
-  const handleAddTextStyle = () => {
+  const handleAddTextStyle = (key, value) => {
     setFormData((prevFormData) => {
       const uniqueId = generateUniqueID();
       const newTextStyle = {
-        [uniqueId]: "",
+        id: uniqueId,
+        [key]: value,
       };
 
       return {
         ...prevFormData,
         textStyles: [...prevFormData.textStyles, newTextStyle],
       };
-    });
-  };
-
-  const fieldOptions = [
-    "text",
-    "left",
-    "top",
-    "color",
-    "fontSize",
-    "backgroundColor",
-    "textAlign",
-    "fontFamily",
-    "lineHeight",
-    "startingImage",
-    "width",
-    "height",
-  ];
-
-  // const handleTextStyleFieldChange = (index, value) => {
-  //   setFormData((prevFormData) => {
-  //     const updatedTextStyles = [...prevFormData.textStyles];
-  //     const textStyle = updatedTextStyles[index];
-  //     const oldField = Object.keys(textStyle)[0];
-  //     const fieldValue = textStyle[oldField];
-
-  //     delete textStyle[oldField];
-  //     textStyle[value] = fieldValue;
-
-  //     return { ...prevFormData, textStyles: updatedTextStyles };
-  //   });
-  // };
-
-  const handleTextStyleFieldChange = (index, value) => {
-    setFormData((prevFormData) => {
-      const updatedTextStyles = [...prevFormData.textStyles];
-      const textStyle = updatedTextStyles[index];
-      const oldField = Object.keys(textStyle)[0];
-      const fieldValue = textStyle[oldField];
-
-      delete textStyle[oldField];
-      textStyle[value] = fieldValue;
-
-      return { ...prevFormData, textStyles: updatedTextStyles };
-    });
-  };
-
-  const handleTextStyleChange = (index, field, value) => {
-    setFormData((prevFormData) => {
-      const updatedTextStyles = [...prevFormData.textStyles];
-      updatedTextStyles[index][field] = value;
-      return { ...prevFormData, textStyles: updatedTextStyles };
     });
   };
 
@@ -99,45 +56,41 @@ const AddCard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Generate a new unique ID
-    const newId = uuidv4();
 
-    // Update the formData with the new ID
-    const updatedFormData = { ...formData, id: newId };
+    const updatedFormData = { ...formData };
     console.log(updatedFormData);
 
-    try {
-      const response = await fetch("/api/cards", {
-        method: "POST",
-        body: JSON.stringify(updatedFormData),
-      });
+    // try {
+    //   const response = await fetch("/api/cards", {
+    //     method: "POST",
+    //     body: JSON.stringify(updatedFormData),
+    //   });
 
-      if (response.ok) {
-        // Card created successfully
-        console.log("Card created!");
-      } else {
-        console.error("Error creating card:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error creating card:", error);
-    }
+    //   if (response.ok) {
+    //     // Card created successfully
+    //     console.log("Card created!");
+    //   } else {
+    //     console.error("Error creating card:", response.statusText);
+    //   }
+    // } catch (error) {
+    //   console.error("Error creating card:", error);
+    // }
 
-    setFormData({
-      id: "",
-      title: "",
-      imageUrl: "",
-      referenceImage: "",
-      finalImage: "",
-      watermark: "",
-      imageType: "",
-      price: "",
-      buttonText: "",
-      cardType: "",
-      popularity: "",
-      description: "",
-      cardCategory: "",
-      textStyles: [],
-    });
+    // setFormData({
+    //   title: "",
+    //   imageUrl: "",
+    //   referenceImage: "",
+    //   finalImage: "",
+    //   watermark: "",
+    //   imageType: "",
+    //   price: "",
+    //   buttonText: "",
+    //   cardType: "",
+    //   popularity: "",
+    //   description: "",
+    //   cardCategory: "",
+    //   textStyles: [],
+    // });
     // Reset the form data after submitting
   };
 
@@ -319,79 +272,33 @@ const AddCard = () => {
           </div>
 
           <div>
-            <label className="block font-bold mt-6 mb-4">TextStyles:</label>
-
-            <div>
-              {formData.textStyles.map((textStyle, index) => (
-                <div key={index} className="border-2 border-black px-4 py-5">
-                  <div className="flex flex-row justify-between">
-                    <select
-                      value={Object.keys(textStyle)[0]}
-                      onChange={(e) =>
-                        handleTextStyleFieldChange(index, e.target.value)
-                      }
-                      className="border rounded px-2 py-1 w-32 mr-2"
-                    >
-                      <option value="">Select Field Name</option>
-                      <option value="text">text</option>
-                      <option value="left">left</option>
-                      <option value="top">top</option>
-                      <option value="color">color</option>
-                      <option value="fontSize">fontSize</option>
-                      <option value="backgroundColor">backgroundColor</option>
-                      <option value="textAlign">textAlign</option>
-                      <option value="fontFamily">fontFamily</option>
-                      <option value="lineHeight">lineHeight</option>
-                      <option value="startingImage">startingImage</option>
-                      <option value="width">width</option>
-                      <option value="height">height</option>
-                      <option value="custom">Custom</option>{" "}
-                      {/* Add custom option */}
-                    </select>
-                    {Object.keys(textStyle)[0] === "custom" ? ( // If custom option is selected, show an input field
-                      <input
-                        type="text"
-                        value={Object.values(textStyle)[0]}
-                        onChange={(e) =>
-                          handleTextStyleChange(
-                            index,
-                            Object.keys(textStyle)[0],
-                            e.target.value
-                          )
-                        }
-                        placeholder="Enter Custom Field Name"
-                        className="border rounded px-2 py-1 w-1/2"
-                      />
-                    ) : null}
-                    <input
-                      type="text"
-                      value={Object.values(textStyle)[0]}
-                      onChange={(e) =>
-                        handleTextStyleChange(
-                          index,
-                          Object.keys(textStyle)[0],
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter Value Name"
-                      className="border rounded px-2 py-1 w-1/2"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTextStyle(index)}
-                    className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                  >
-                    Remove TextStyle
-                  </button>
+            {formData.textStyles.map((textStyle, index) => (
+              <div
+                key={textStyle.id}
+                className="border-2 border-black px-4 py-5"
+              >
+                <div className="flex flex-row justify-between">
+                  <p>{JSON.stringify(textStyle)}</p>
                 </div>
-              ))}
-            </div>
-
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTextStyle(index)}
+                  className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                >
+                  Remove TextStyle
+                </button>
+              </div>
+            ))}
             <div className="mt-4">
               <button
                 type="button"
-                onClick={handleAddTextStyle}
+                onClick={() => {
+                  const key = prompt("Enter Key:");
+                  const value = prompt("Enter Value:");
+                  if (key && value) {
+                    handleAddTextStyle(key, value);
+                  }
+                }}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
               >
                 Add TextStyle

@@ -1,14 +1,22 @@
+
 import { getServerSession } from "next-auth/next";
 import React from "react";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
-export default async function PrivateLayout({ children }) {
+import AuthProvider from "@/context/AuthProvider";
+import { useSession } from "next-auth/react";
+
+export default async function AdminLayout({ children }) {
   const session = await getServerSession(authOptions);
+  // const session = await useSession()
+  // console.log(session.user);
 
-  console.log(session);
-  
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirect("/");
 
-  return <>{children}</>;
+  return (
+    <>
+      <AuthProvider>{children}</AuthProvider>
+    </>
+  );
 }

@@ -2,10 +2,11 @@ const { model, models, Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
 const textStyleSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    // Remove unique constraint
-  },
+  // id: {
+  //   type: Number,
+  //   unique: true,
+  //   // Remove unique constraint
+  // },
   text: String,
   startingImage: String,
   left: Number,
@@ -21,11 +22,11 @@ const textStyleSchema = new mongoose.Schema({
 
 const cardDataSchema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
-      unique: true,
-      // Remove unique constraint
-    },
+    // id: {
+    //   type: Number,
+    //   unique: true,
+    //   // Remove unique constraint
+    // },
     title: String,
     imageUrl: String,
     referenceImage: String,
