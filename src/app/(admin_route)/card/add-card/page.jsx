@@ -22,18 +22,21 @@ const AddCard = () => {
     cardCategory: "",
     textStyles: [],
   });
-  // const handleTextStyleChange = (index, key, value) => {
-  //   setFormData((prevFormData) => {
-  //     const updatedTextStyles = [...prevFormData.textStyles];
-  //     updatedTextStyles[index].key = key;
-  //     updatedTextStyles[index].value = value;
-  //     return { ...prevFormData, textStyles: updatedTextStyles };
-  //   });
-  // };
 
   const [addingMoreIndex, setAddingMoreIndex] = useState(null);
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
+  const [newTextStyleKey, setNewTextStyleKey] = useState("");
+  const [newTextStyleValue, setNewTextStyleValue] = useState("");
+  const [showAddMore, setShowAddMore] = useState(false);
+  const [showAddKeyValue, setShowAddKeyValue] = useState(false);
+  const [customKey, setCustomKey] = useState("");
+  const [customTextStyleKey, setCustomTextStyleKey] = useState("");
+
+  const handleCustomKeyChange = (e) => {
+    setCustomKey(e.target.value);
+    setNewKey(e.target.value); // Update newKey as well
+  };
 
   const handleAddMoreKeyAndValue = (index) => {
     setShowAddMore(true);
@@ -46,7 +49,7 @@ const AddCard = () => {
   const handleAddKeyAndValue = (index) => {
     setShowAddMore(false);
     setShowAddKeyValue(true);
-    if (newKey && newValue) {
+    if ((newKey && newValue) || newKey === "custom") {
       setFormData((prevFormData) => {
         const updatedTextStyles = [...prevFormData.textStyles];
         updatedTextStyles[index][newKey] = newValue;
@@ -58,21 +61,25 @@ const AddCard = () => {
       setAddingMoreIndex(null);
       setNewKey("");
       setNewValue("");
+      setCustomKey(""); // Reset custom key input
     }
   };
 
-  const [newTextStyleKey, setNewTextStyleKey] = useState("");
-  const [newTextStyleValue, setNewTextStyleValue] = useState("");
-
   const handleAddNewTextStyle = () => {
-    if (newTextStyleKey && newTextStyleValue) {
-      handleAddTextStyle(newTextStyleKey, newTextStyleValue);
+    if (
+      (newTextStyleKey && newTextStyleValue) ||
+      newTextStyleKey === "custom"
+    ) {
+      if (newTextStyleKey === "custom") {
+        handleAddTextStyle(customTextStyleKey, newTextStyleValue);
+      } else {
+        handleAddTextStyle(newTextStyleKey, newTextStyleValue);
+      }
       setNewTextStyleKey("");
+      setCustomTextStyleKey("");
       setNewTextStyleValue("");
     }
   };
-
-  
 
   const handleAddTextStyle = (key, value) => {
     setFormData((prevFormData) => {
@@ -91,7 +98,6 @@ const AddCard = () => {
     });
   };
 
-
   const handleRemoveTextStyle = (index) => {
     setFormData((prevFormData) => {
       const updatedTextStyles = [...prevFormData.textStyles];
@@ -100,31 +106,14 @@ const AddCard = () => {
     });
   };
 
-  const [showAddMore, setShowAddMore] = useState(false);
-  const [showAddKeyValue, setShowAddKeyValue] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const updatedFormData = { ...formData };
     console.log(updatedFormData);
 
-    // try {
-    //   const response = await fetch("/api/cards", {
-    //     method: "POST",
-    //     body: JSON.stringify(updatedFormData),
-    //   });
+    // Uncomment and add your fetch logic here
 
-    //   if (response.ok) {
-    //     // Card created successfully
-    //     console.log("Card created!");
-    //   } else {
-    //     console.error("Error creating card:", response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error("Error creating card:", error);
-    // }
-
+    // Reset the form data after submitting
     // setFormData({
     //   title: "",
     //   imageUrl: "",
@@ -140,8 +129,23 @@ const AddCard = () => {
     //   cardCategory: "",
     //   textStyles: [],
     // });
-    // Reset the form data after submitting
   };
+
+  const fieldOptions = [
+    "text",
+    "left",
+    "top",
+    "color",
+    "fontSize",
+    "backgroundColor",
+    "textAlign",
+    "fontFamily",
+    "lineHeight",
+    "startingImage",
+    "width",
+    "height",
+    "custom",
+  ];
 
   return (
     <div className="container mx-auto mt-8">
@@ -327,7 +331,7 @@ const AddCard = () => {
             </label>
             <div>
               {formData.textStyles.map((textStyle, index) => (
-                <div key={index} className="border-2 border-black px-4 py-5">
+                <div key={index} className="border-2 border-black px-4 py-5 mb-10">
                   <div className="flex flex-col">
                     {Object.entries(textStyle).map(
                       ([key, value]) =>
@@ -346,13 +350,31 @@ const AddCard = () => {
                         >
                           New Key:
                         </label>
-                        <input
-                          type="text"
+                        <select
                           id={`newKey${index}`}
                           value={newKey}
                           onChange={(e) => setNewKey(e.target.value)}
                           className="border rounded px-2 py-1 w-full"
-                        />
+                        >
+                          <option value="">Select Key</option>
+                          {fieldOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                          <option value="custom">Custom</option>
+                        </select>
+                        {newKey === "custom" && (
+                          <div>
+                            <input
+                              type="text"
+                              value={customKey}
+                              onChange={(e) => setCustomKey(e.target.value)}
+                              placeholder="Enter custom key"
+                              className="border rounded px-2 py-1 mt-2 w-full"
+                            />
+                          </div>
+                        )}
                         <label
                           className="block font-bold mb-2"
                           htmlFor={`newValue${index}`}
@@ -400,14 +422,36 @@ const AddCard = () => {
               <label className="block font-bold mb-2" htmlFor="newTextStyleKey">
                 New Text Style Key:
               </label>
-              <input
-                type="text"
+              <select
                 id="newTextStyleKey"
                 value={newTextStyleKey}
-                onChange={(e) => setNewTextStyleKey(e.target.value)}
+                onChange={(e) => {
+                  const selectedKey = e.target.value;
+                  setNewTextStyleKey(selectedKey);
+                  if (selectedKey === "custom") {
+                    setCustomTextStyleKey("");
+                  }
+                }}
                 className="border rounded px-2 py-1 w-full"
-              />
+              >
+                <option value="">Select Key</option>
+                {fieldOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {newTextStyleKey === "custom" && (
+                <input
+                  type="text"
+                  value={customTextStyleKey}
+                  onChange={(e) => setCustomTextStyleKey(e.target.value)}
+                  placeholder="Enter custom key"
+                  className="border rounded px-2 py-1 mt-2 w-full"
+                />
+              )}
             </div>
+
             <div className="mt-2">
               <label
                 className="block font-bold mb-2"
