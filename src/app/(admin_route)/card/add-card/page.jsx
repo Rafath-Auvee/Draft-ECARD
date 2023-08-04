@@ -102,7 +102,11 @@ const AddCard = () => {
     setFormData((prevFormData) => {
       const updatedTextStyles = [...prevFormData.textStyles];
       updatedTextStyles.splice(index, 1);
-      return { ...prevFormData, textStyles: updatedTextStyles };
+
+      return {
+        ...prevFormData,
+        textStyles: updatedTextStyles,
+      };
     });
   };
 
@@ -353,21 +357,15 @@ const AddCard = () => {
                   className="border-2 rounded-md border-slate-500 px-4 py-5 mb-10"
                 >
                   <div className="flex flex-col justify-between">
-                    {/* {Object.entries(textStyle).map(
-                      ([key, value]) =>
-                        key !== "id" && (
-                          <p key={key} className="mb-1">
-                            {`${key}: ${value}`}
-                          </p>
-                        )
-                    )} */}
-
-                    {Object.keys(textStyle).length > 1 ? ( // Check if any key-value pair exists
+                    {Object.keys(textStyle).length > 1 ? (
                       <>
                         {Object.entries(textStyle).map(
                           ([key, value]) =>
                             key !== "id" && (
-                              <div key={key} className="flex flex-row justify-between">
+                              <div
+                                key={key}
+                                className="flex flex-row justify-between mb-5"
+                              >
                                 <p className="mb-1">{`${key}: ${value}`}</p>
                                 <button
                                   className="ml-2 bg-red-500 text-white px-4 py-1 rounded-sm"
