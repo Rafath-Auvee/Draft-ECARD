@@ -272,23 +272,25 @@ const AddCard = () => {
           </div>
 
           <div>
-            {formData.textStyles.map((textStyle, index) => (
-              <div
-                key={textStyle.id}
-                className="border-2 border-black px-4 py-5"
-              >
-                <div className="flex flex-row justify-between">
-                  <p>{JSON.stringify(textStyle)}</p>
+            <div>
+              {formData.textStyles.map((textStyle, index) => (
+                <div key={index} className="border-2 border-black px-4 py-5">
+                  <div className="flex flex-row justify-between">
+                    {Object.entries(textStyle).map(([key, value]) => (
+                      <p key={key}>{key !== "id" ? `${key}: ${value}` : ""}</p>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTextStyle(index)}
+                      className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                    >
+                      Remove TextStyle
+                    </button>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTextStyle(index)}
-                  className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                >
-                  Remove TextStyle
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
+
             <div className="mt-4">
               <button
                 type="button"
