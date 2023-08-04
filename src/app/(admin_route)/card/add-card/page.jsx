@@ -31,6 +31,49 @@ const AddCard = () => {
   //   });
   // };
 
+  const [addingMoreIndex, setAddingMoreIndex] = useState(null);
+  const [newKey, setNewKey] = useState("");
+  const [newValue, setNewValue] = useState("");
+
+  const handleAddMoreKeyAndValue = (index) => {
+    setShowAddMore(true);
+    setShowAddKeyValue(false);
+    setAddingMoreIndex(index);
+    setNewKey("");
+    setNewValue("");
+  };
+
+  const handleAddKeyAndValue = (index) => {
+    setShowAddMore(false);
+    setShowAddKeyValue(true);
+    if (newKey && newValue) {
+      setFormData((prevFormData) => {
+        const updatedTextStyles = [...prevFormData.textStyles];
+        updatedTextStyles[index][newKey] = newValue;
+        return {
+          ...prevFormData,
+          textStyles: updatedTextStyles,
+        };
+      });
+      setAddingMoreIndex(null);
+      setNewKey("");
+      setNewValue("");
+    }
+  };
+
+  const [newTextStyleKey, setNewTextStyleKey] = useState("");
+  const [newTextStyleValue, setNewTextStyleValue] = useState("");
+
+  const handleAddNewTextStyle = () => {
+    if (newTextStyleKey && newTextStyleValue) {
+      handleAddTextStyle(newTextStyleKey, newTextStyleValue);
+      setNewTextStyleKey("");
+      setNewTextStyleValue("");
+    }
+  };
+
+  
+
   const handleAddTextStyle = (key, value) => {
     setFormData((prevFormData) => {
       const uniqueId = generateUniqueID();
@@ -39,12 +82,15 @@ const AddCard = () => {
         [key]: value,
       };
 
+      const updatedTextStyles = [...prevFormData.textStyles, newTextStyle];
+
       return {
         ...prevFormData,
-        textStyles: [...prevFormData.textStyles, newTextStyle],
+        textStyles: updatedTextStyles,
       };
     });
   };
+
 
   const handleRemoveTextStyle = (index) => {
     setFormData((prevFormData) => {
@@ -53,6 +99,9 @@ const AddCard = () => {
       return { ...prevFormData, textStyles: updatedTextStyles };
     });
   };
+
+  const [showAddMore, setShowAddMore] = useState(false);
+  const [showAddKeyValue, setShowAddKeyValue] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -272,35 +321,112 @@ const AddCard = () => {
           </div>
 
           <div>
+            <div className="divider"></div>
+            <label className="block font-bold mb-2" htmlFor="cardCategory">
+              TextStyles
+            </label>
             <div>
               {formData.textStyles.map((textStyle, index) => (
                 <div key={index} className="border-2 border-black px-4 py-5">
-                  <div className="flex flex-row justify-between">
-                    {Object.entries(textStyle).map(([key, value]) => (
-                      <p key={key}>{key !== "id" ? `${key}: ${value}` : ""}</p>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTextStyle(index)}
-                      className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                    >
-                      Remove TextStyle
-                    </button>
+                  <div className="flex flex-col">
+                    {Object.entries(textStyle).map(
+                      ([key, value]) =>
+                        key !== "id" && (
+                          <p key={key} className="mb-1">
+                            {`${key}: ${value}`}
+                          </p>
+                        )
+                    )}
+
+                    {index === addingMoreIndex ? (
+                      <div>
+                        <label
+                          className="block font-bold mb-2"
+                          htmlFor={`newKey${index}`}
+                        >
+                          New Key:
+                        </label>
+                        <input
+                          type="text"
+                          id={`newKey${index}`}
+                          value={newKey}
+                          onChange={(e) => setNewKey(e.target.value)}
+                          className="border rounded px-2 py-1 w-full"
+                        />
+                        <label
+                          className="block font-bold mb-2"
+                          htmlFor={`newValue${index}`}
+                        >
+                          New Value:
+                        </label>
+                        <input
+                          type="text"
+                          id={`newValue${index}`}
+                          value={newValue}
+                          onChange={(e) => setNewValue(e.target.value)}
+                          className="border rounded px-2 py-1 w-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddKeyAndValue(index)}
+                          className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                        >
+                          Add Key-Value
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTextStyle(index)}
+                          className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                        >
+                          Remove TextStyle
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddMoreKeyAndValue(index)}
+                          className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                        >
+                          Add More
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-
+            <div className="mt-4">
+              <label className="block font-bold mb-2" htmlFor="newTextStyleKey">
+                New Text Style Key:
+              </label>
+              <input
+                type="text"
+                id="newTextStyleKey"
+                value={newTextStyleKey}
+                onChange={(e) => setNewTextStyleKey(e.target.value)}
+                className="border rounded px-2 py-1 w-full"
+              />
+            </div>
+            <div className="mt-2">
+              <label
+                className="block font-bold mb-2"
+                htmlFor="newTextStyleValue"
+              >
+                New Text Style Value:
+              </label>
+              <input
+                type="text"
+                id="newTextStyleValue"
+                value={newTextStyleValue}
+                onChange={(e) => setNewTextStyleValue(e.target.value)}
+                className="border rounded px-2 py-1 w-full"
+              />
+            </div>
             <div className="mt-4">
               <button
                 type="button"
-                onClick={() => {
-                  const key = prompt("Enter Key:");
-                  const value = prompt("Enter Value:");
-                  if (key && value) {
-                    handleAddTextStyle(key, value);
-                  }
-                }}
+                onClick={handleAddNewTextStyle}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
               >
                 Add TextStyle
