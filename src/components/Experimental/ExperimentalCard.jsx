@@ -1,8 +1,11 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import PortfolioPagination from "../Portfolio/PortfolioPagination";
 import Cards from "../Cards/Cards";
 import { draft } from "../../Data/Draft_Data";
 import Link from "next/link";
+import axios from "axios";
 
 const ExperimentalCard = ({
   minValue,
@@ -15,38 +18,63 @@ const ExperimentalCard = ({
   const [filteredCards, setFilteredCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [allCards, setCards] = useState([]);
+
   useEffect(() => {
-    setIsLoading(true);
+    const fetchAllCards = async () => {
+      try {
+        const response = await axios.get("/api/cards");
+        const fetchedCards = response.data.cards;
+        console.log(fetchedCards);
+        let cards = fetchedCards;
 
-    let cards = draft;
+        if (selectedFilter === "Default") {
+          cards = fetchedCards;
+        }
 
-    if (selectedFilter === "Default") {
-      cards = draft;
+        if (selectedCategory === "singlePageCard") {
+          cards = cards.filter(
+            (item) => item.cardCategory === "singlePageCard"
+          );
+        }
+
+        if (selectedCategory === "multiPageCard") {
+          cards = cards.filter((item) => item.cardCategory === "multiPageCard");
+        }
+
+        if (selectedFilter === "Highest Price") {
+          cards = cards.sort(
+            (a, b) => parseFloat(b.price) - parseFloat(a.price)
+          );
+        }
+
+        if (selectedFilter === "Lowest Price") {
+          cards = cards.sort(
+            (a, b) => parseFloat(a.price) - parseFloat(b.price)
+          );
+        }
+
+        cards = cards.filter(
+          (item) =>
+            parseFloat(item.price) >= minValue &&
+            parseFloat(item.price) <= maxValue
+        );
+
+        setFilteredCards(cards);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error loading data");
+        setIsLoading(false);
+      }
+    };
+
+    try {
+      setIsLoading(true);
+      fetchAllCards();
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      setIsLoading(false);
     }
-
-    if (selectedCategory === "singlePageCard") {
-      cards = cards.filter((item) => item.cardCategory === "singlePageCard");
-    }
-
-    if (selectedCategory === "multiPageCard") {
-      cards = cards.filter((item) => item.cardCategory === "multiPageCard");
-    }
-
-    if (selectedFilter === "Highest Price") {
-      cards = cards.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-    }
-
-    if (selectedFilter === "Lowest Price") {
-      cards = cards.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-    }
-
-    cards = cards.filter(
-      (item) =>
-        parseFloat(item.price) >= minValue && parseFloat(item.price) <= maxValue
-    );
-
-    setFilteredCards(cards);
-    setIsLoading(false);
   }, [minValue, maxValue, selectedCategory, selectedFilter]);
 
   const indexOfLastCard = currentPage * cardsPerPage;
