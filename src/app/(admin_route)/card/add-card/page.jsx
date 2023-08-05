@@ -129,27 +129,46 @@ const AddCard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedFormData = { ...formData };
+    // Generate a new unique ID
+    const newId = uuidv4();
+
+    // Update the formData with the new ID
+    const updatedFormData = { ...formData, id: newId };
     console.log(updatedFormData);
 
-    // Uncomment and add your fetch logic here
+    try {
+      const response = await fetch("/api/cards", {
+        method: "POST",
+        body: JSON.stringify(updatedFormData),
+      });
 
+      if (response.ok) {
+        // Card created successfully
+        console.log("Card created!");
+      } else {
+        console.error("Error creating card:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating card:", error);
+    }
+
+    setFormData({
+      id: "",
+      title: "",
+      imageUrl: "",
+      referenceImage: "",
+      finalImage: "",
+      watermark: "",
+      imageType: "",
+      price: "",
+      buttonText: "",
+      cardType: "",
+      popularity: "",
+      description: "",
+      cardCategory: "",
+      textStyles: [],
+    });
     // Reset the form data after submitting
-    // setFormData({
-    //   title: "",
-    //   imageUrl: "",
-    //   referenceImage: "",
-    //   finalImage: "",
-    //   watermark: "",
-    //   imageType: "",
-    //   price: "",
-    //   buttonText: "",
-    //   cardType: "",
-    //   popularity: "",
-    //   description: "",
-    //   cardCategory: "",
-    //   textStyles: [],
-    // });
   };
 
   const fieldOptions = [
@@ -182,6 +201,20 @@ const AddCard = () => {
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
+              }
+              className="border rounded px-2 py-1 w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold mb-2" htmlFor="description">
+              Description:
+            </label>
+            <textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
               }
               className="border rounded px-2 py-1 w-full"
             />
@@ -313,20 +346,6 @@ const AddCard = () => {
           </div>
 
           <div>
-            <label className="block font-bold mb-2" htmlFor="description">
-              Description:
-            </label>
-            <textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className="border rounded px-2 py-1 w-full"
-            />
-          </div>
-
-          <div>
             <label className="block font-bold mb-2" htmlFor="cardCategory">
               Card Category:
             </label>
@@ -445,17 +464,17 @@ const AddCard = () => {
                       <div className="flex flex-row justify-evenly mt-3">
                         <button
                           type="button"
-                          onClick={() => handleRemoveTextStyle(index)}
-                          className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                        >
-                          Remove TextStyle
-                        </button>
-                        <button
-                          type="button"
                           onClick={() => handleAddMoreKeyAndValue(index)}
                           className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
                         >
                           Add More
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTextStyle(index)}
+                          className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                        >
+                          Remove TextStyle
                         </button>
                       </div>
                     )}
