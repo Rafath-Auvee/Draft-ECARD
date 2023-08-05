@@ -39,7 +39,7 @@ const Toast = ({ message, onClose, type }) => {
       } ${toastClassName} ${toastColor}`}
     >
       {toastIcon}
-      <span>{message}</span>
+      <span>{message || "Done..."}</span>
     </div>
   );
 };

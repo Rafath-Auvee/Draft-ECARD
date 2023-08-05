@@ -37,7 +37,7 @@ const AllUser = () => {
 
   return (
     <div>
-      <Navbar />
+
       <div className="p-1.5 w-full inline-block align-middle px-16 mt-6">
         <div className="overflow-x-auto md:overflow-hidden border rounded-lg">
           <table className="min-w-full divide-y divide-gray-200 ">

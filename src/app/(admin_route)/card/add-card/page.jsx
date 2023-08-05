@@ -2,12 +2,16 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import Toast from "@/components/Toast/Toast";
+import JsonModal from "@/components/JsonModal/JsonModal";
+
 const AddCard = () => {
   const generateUniqueID = () => {
     return uuidv4(); // Use uuid to generate a unique ID
   };
 
   const [formData, setFormData] = useState({
+    id: generateUniqueID(),
     title: "",
     imageUrl: "",
     referenceImage: "",
@@ -32,6 +36,21 @@ const AddCard = () => {
   const [showAddKeyValue, setShowAddKeyValue] = useState(false);
   const [customKey, setCustomKey] = useState("");
   const [customTextStyleKey, setCustomTextStyleKey] = useState("");
+
+  const [showToast, setShowToast] = useState(false);
+  const [type, setType] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const [showJsonModal, setShowJsonModal] = useState(false);
+
+  const handleToastClose = () => {
+    setShowToast(false);
+  };
+
+  const toggleJsonModal = () => {
+    setShowJsonModal(!showJsonModal);
+  };
 
   const handleCustomKeyChange = (e) => {
     setCustomKey(e.target.value);
@@ -145,17 +164,28 @@ const AddCard = () => {
       if (response.ok) {
         // Card created successfully
         console.log("Card created!");
+        setType("success");
+        setMessage("Card created!");
+        setShowToast(true);
       } else {
+        setType("error");
+        setMessage("Not Created");
+        setShowToast(true);
         console.error("Error creating card:", response.statusText);
       }
     } catch (error) {
+      setType("error");
+      setMessage("Error Creating Card.");
+      setShowToast(true);
       console.error("Error creating card:", error);
     }
+    // Reset the form data after submitting
+  };
 
+  const handleClearForm = () => {
     setFormData({
       id: "",
       title: "",
-      imageUrl: "",
       referenceImage: "",
       finalImage: "",
       watermark: "",
@@ -168,7 +198,13 @@ const AddCard = () => {
       cardCategory: "",
       textStyles: [],
     });
-    // Reset the form data after submitting
+
+    setNewKey("");
+    setNewValue("");
+    setNewTextStyleKey("");
+    setNewTextStyleValue("");
+    setCustomKey("");
+    setCustomTextStyleKey("");
   };
 
   const fieldOptions = [
@@ -189,7 +225,17 @@ const AddCard = () => {
 
   return (
     <div className="container mx-auto mt-8">
+      <label
+        className="block font-bold my-8 text-center text-2xl"
+        htmlFor="single-card"
+      >
+        Single Card Add Form
+      </label>
+
       <div className="px-12">
+        {showToast && (
+          <Toast message={message} onClose={handleToastClose} type={type} />
+        )}
         <form onSubmit={handleSubmit}>
           <div>
             <label className="block font-bold mb-2" htmlFor="title">
@@ -217,11 +263,12 @@ const AddCard = () => {
                 setFormData({ ...formData, description: e.target.value })
               }
               className="border rounded px-2 py-1 w-full"
+              rows={4}
             />
           </div>
 
           <div>
-            <label className="block font-bold mb-2" htmlFor="imageUrl">
+            <label className="block font-bold mb-2" htmlFor="ReferenceImage">
               ReferenceImage
             </label>
             <input
@@ -235,7 +282,7 @@ const AddCard = () => {
             />
           </div>
           <div>
-            <label className="block font-bold mb-2" htmlFor="imageUrl">
+            <label className="block font-bold mb-2" htmlFor="FinalImage">
               FinalImage
             </label>
             <input
@@ -249,7 +296,7 @@ const AddCard = () => {
             />
           </div>
           <div>
-            <label className="block font-bold mb-2" htmlFor="imageUrl">
+            <label className="block font-bold mb-2" htmlFor="Watermark">
               Watermark
             </label>
             <input
@@ -280,7 +327,7 @@ const AddCard = () => {
             </select>
           </div>
           <div>
-            <label className="block font-bold mb-2" htmlFor="imageUrl">
+            <label className="block font-bold mb-2" htmlFor="Price">
               Price
             </label>
             <input
@@ -331,7 +378,7 @@ const AddCard = () => {
             </select>
           </div>
           <div>
-            <label className="block font-bold mb-2" htmlFor="imageUrl">
+            <label className="block font-bold mb-2" htmlFor="Popularity">
               Popularity
             </label>
             <input
@@ -383,17 +430,19 @@ const AddCard = () => {
                             key !== "id" && (
                               <div
                                 key={key}
-                                className="flex flex-row justify-between mb-5"
+                                className="flex flex-row justify-between mb-5 border-b-2  border-slate-500 pb-4"
                               >
                                 <p className="mb-1">{`${key}: ${value}`}</p>
-                                <button
-                                  className="ml-2 bg-red-500 text-white px-4 py-1 rounded-sm"
-                                  onClick={() =>
-                                    handleRemoveTextStyleKey(index, key)
-                                  }
-                                >
-                                  Delete
-                                </button>
+                                <div className="flex flex-col justify-center items-center">
+                                  <button
+                                    className="ml-2 bg-red-500 text-white px-4 py-1 rounded-sm"
+                                    onClick={() =>
+                                      handleRemoveTextStyleKey(index, key)
+                                    }
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
                               </div>
                             )
                         )}
@@ -545,11 +594,30 @@ const AddCard = () => {
           <div className="mt-4">
             <button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2"
             >
               Create Card
             </button>
+            <button
+              type="button"
+              onClick={toggleJsonModal}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2"
+            >
+              JSON
+            </button>
+            <button
+              type="button"
+              onClick={handleClearForm}
+              className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded mr-2"
+            >
+              Clear
+            </button>
           </div>
+          <JsonModal
+            visible={showJsonModal}
+            onClose={toggleJsonModal}
+            formData={formData}
+          />
         </form>
       </div>
     </div>
