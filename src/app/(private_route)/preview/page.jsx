@@ -118,7 +118,7 @@ const Preview = () => {
             letterSpacing,
           } = textStyle;
 
-          context.font = `${fontSize}px ${fontFamily}`;
+          context.font = `${fontSize}px ${fontFamily}, sans-serif`;
           context.fillStyle = color;
 
           context.lineHeight = lineHeight || 1.5;
