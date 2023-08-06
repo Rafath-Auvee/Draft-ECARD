@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
+import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 
 const Preview = () => {
   const canvasRef = useRef(null);
@@ -12,16 +11,13 @@ const Preview = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [hoverX, setHoverX] = useState(0);
   const [hoverY, setHoverY] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(true);
   const previewDataFromLocalStorage =
     typeof window !== "undefined" && localStorage.getItem("previewData");
 
   const [previewData, setPreviewData] = useState(
     previewDataFromLocalStorage ? JSON.parse(previewDataFromLocalStorage) : null
   );
-
-  // Use optional chaining and nullish coalescing to handle potential null or missing properties
-  const { title, url, imageType, textStyles } = previewData ?? {};
 
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
@@ -76,19 +72,21 @@ const Preview = () => {
   };
 
   useEffect(() => {
-    // Load previewData from localStorage after component mounts
     const storedPreviewData =
       typeof window !== "undefined" && localStorage.getItem("previewData");
     if (storedPreviewData) {
       setPreviewData(JSON.parse(storedPreviewData));
     }
 
-    // Rest of the code inside useEffect...
-  }, []); // Empty dependency array means this effect runs only once after component mounts
+    setIsLoading(false);
+  }, []);
+
 
   useEffect(() => {
     if (previewData) {
       const canvas = canvasRef.current;
+
+       if (canvas) {
       const context = canvas.getContext("2d");
 
       const renderImage = () => {
@@ -97,22 +95,27 @@ const Preview = () => {
 
         image.onload = () => {
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
-          renderTextStyles(); // Call the function here to render text styles after rendering the image.
+          renderTextStyles(previewData.textStyles);// Call the function here to render text styles after rendering the image.
         };
       };
 
-      const renderTextStyles = () => {
+      const renderTextStyles = (textStyles) => {
         textStyles.forEach((textStyle) => {
+          console.log(textStyle);
           const {
+            id,
+            text,
+            startingImage,
             left,
             top,
+            color,
             fontSize,
+            backgroundColor,
+            padding,
             fontFamily,
-            text,
+            textAlign,
             lineHeight,
             letterSpacing,
-            color,
-            textAlign,
           } = textStyle;
 
           context.font = `${fontSize}px ${fontFamily}`;
@@ -121,12 +124,13 @@ const Preview = () => {
           context.lineHeight = lineHeight || 1.5;
           context.letterSpacing = letterSpacing || 0;
 
-          const lines = text.split("\n");
+          const lines = text ? text.split("\n") : [""];
 
           // Render single line of text if there's only one line
-          if (lines.length === 1) {
+          if (lines && lines.length === 1) {
             const line = lines[0];
             const lineY = top + fontSize * context.lineHeight;
+
             // Calculate text width and height for single line
             const textWidth = context.measureText(line).width;
             const textHeight = fontSize;
@@ -226,16 +230,20 @@ const Preview = () => {
           renderImage(); // Call the function here to render the image.
         }
       }
+    }}
+    else{
+      setPreviewData(null) 
     }
+
+       setIsLoading(false);
   }, [previewData]);
+
+  if (isLoading) {
+    return <LoadingOverlay name="Preview is Opening" />;
+  }
 
   if (!previewData) {
     return <div className="text-center flex justify-center">No Data Found</div>;
-  }
-
-  if (Object.keys(previewData).length === 0) {
-    // Data is available but empty
-    return <div className="text-center flex justify-center">Empty data</div>;
   }
 
   return (
@@ -243,12 +251,9 @@ const Preview = () => {
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
         <h1 className="text-center text-3xl font-bold leading-5 my-5">
-          {title}
-        </h1>
-        <div>
-          {/* <h1>X: {hoverX}</h1>
-          <h1>Y: {hoverY}</h1> */}`  
-        </div>
+  {previewData?.title || ""}
+</h1>
+
         <div className="relative">
           <canvas
             ref={canvasRef}

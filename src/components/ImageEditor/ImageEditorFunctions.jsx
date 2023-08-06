@@ -46,22 +46,15 @@ const ImageEditorFunctions = ({ params, images }) => {
     setDevtools((prevDevtools) => !prevDevtools);
   };
 
-  const [imageData, setImageData] = useState();
 
-    const [textStyles, setTextStyles] = useState(
-    imageData?.textStyles?.map((textStyle) => ({
-      ...textStyle,
-      fontSize: parseInt(textStyle.fontSize),
-    })) || []
-  );
 
 
   useEffect(() => {
     const fetchImageData = async () => {
       try {
         const response = await axios.get(`/api/cards/${params.id}`);
-        setTextStyles(response.data.textStyles);
-        setImageData(response.data);
+        setTextStyles(response?.data?.textStyles);
+        setImageData(response?.data);
         // console.log(response.data);
       } catch (error) {
         console.log("Error", error);
@@ -73,6 +66,15 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const router = useRouter();
   const canvasRef = useRef(null);
+
+  const [imageData, setImageData] = useState();
+
+    const [textStyles, setTextStyles] = useState(
+    imageData?.textStyles.map((textStyle) => ({
+      ...textStyle,
+      fontSize: parseInt(textStyle?.fontSize),
+    })) || []
+  );
 
   const handleTextAlignChange = (alignment) => {
     if (selectedTextIndex !== null) {
@@ -526,6 +528,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         cardCategory: imageData.cardCategory,
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
+          startingImage: textStyle.startingImage,
           text: textStyle.text,
           left: textStyle.left,
           top: textStyle.top,
@@ -560,6 +563,7 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyles: image.textStyles.map((textStyle) => ({
             id: textStyle.id,
             text: textStyle.text,
+            startingImage: textStyle.startingImage,
             left: textStyle.left,
             top: textStyle.top,
             color: textStyle.color,
