@@ -48,12 +48,21 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const [imageData, setImageData] = useState();
 
+    const [textStyles, setTextStyles] = useState(
+    imageData?.textStyles?.map((textStyle) => ({
+      ...textStyle,
+      fontSize: parseInt(textStyle.fontSize),
+    })) || []
+  );
+
+
   useEffect(() => {
     const fetchImageData = async () => {
       try {
         const response = await axios.get(`/api/cards/${params.id}`);
+        setTextStyles(response.data.textStyles);
         setImageData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.log("Error", error);
       }
@@ -131,12 +140,7 @@ const ImageEditorFunctions = ({ params, images }) => {
         )
       : [];
 
-  const [textStyles, setTextStyles] = useState(
-    imageData?.textStyles?.map((textStyle) => ({
-      ...textStyle,
-      fontSize: parseInt(textStyle.fontSize),
-    })) || []
-  );
+
 
   const textStylesRef = useRef(textStyles);
 

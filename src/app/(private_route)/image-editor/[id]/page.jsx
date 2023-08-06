@@ -857,7 +857,9 @@ const ImageEditor = ({ params }) => {
         <div className="relative">
           {isLoaded && (
             <>
-              {textStyles.map((textStyle, index) => (
+              {textStyles.map((textStyle, index) => 
+              {
+                return (
                 <Draggable
                   key={index}
                   position={{ x: textStyle.left, y: textStyle.top }}
@@ -923,7 +925,11 @@ const ImageEditor = ({ params }) => {
                     )}
                   </div>
                 </Draggable>
-              ))}
+              )
+
+              }
+
+                )}
             </>
           )}
           <canvas
