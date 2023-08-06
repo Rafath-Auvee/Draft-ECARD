@@ -116,8 +116,8 @@ const ImageEditor = ({ params }) => {
 
     textStylesRef.current = textStyles;
 
-    if (imageData.imageType === "multiple image") {
-      const selectedImageData = imageData.images.find(
+    if (imageData?.imageType === "multiple image") {
+      const selectedImageData = imageData?.images.find(
         (image) => image.watermark === selectedImage
       );
 
@@ -128,7 +128,7 @@ const ImageEditor = ({ params }) => {
         image.onload = () => {
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
-          selectedImageData.textStyles.forEach((textStyle) => {
+          selectedImageData?.textStyles.forEach((textStyle) => {
             context.fillStyle = textStyle.backgroundColor;
             context.fillRect(
               textStyle.left,
@@ -138,17 +138,17 @@ const ImageEditor = ({ params }) => {
             );
           });
           setTextStyles(
-            selectedImageData.textStyles.map((textStyle) => ({
+            selectedImageData?.textStyles.map((textStyle) => ({
               ...textStyle,
               fontSize: parseInt(textStyle.fontSize),
             }))
           );
-          setSelectedImageTextStyles(selectedImageData.textStyles);
+          setSelectedImageTextStyles(selectedImageData?.textStyles);
         };
       }
     } else {
       const image = document.createElement("img");
-      image.src = imageData.watermark;
+      image.src = imageData?.watermark;
 
       image.onload = () => {
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -209,7 +209,7 @@ const ImageEditor = ({ params }) => {
           {devtools ? "True" : "False"}
         </button>
         <h1 className="text-center text-3xl font-bold leading-5 mt-5">
-          {imageData.title}
+          {imageData?.title}
         </h1>
 
         {/* <h1>{hoverX}</h1>
@@ -246,9 +246,9 @@ const ImageEditor = ({ params }) => {
                       id={`fontSizeInput-${selectedTextIndex}`}
                       type="number"
                       value={
-                        imageData.imageType === "multiple image"
-                          ? selectedImageTextStyles[selectedTextIndex].fontSize
-                          : textStyles[selectedTextIndex].fontSize
+                        imageData?.imageType === "multiple image"
+                          ? selectedImageTextStyles[selectedTextIndex]?.fontSize
+                          : textStyles[selectedTextIndex]?.fontSize
                       }
                       onChange={(e) =>
                         handleFontSizeChange(selectedTextIndex, e)
@@ -286,7 +286,7 @@ const ImageEditor = ({ params }) => {
                         <input
                           id={`leftInput-${selectedTextIndex}`}
                           type="number"
-                          value={textStyles[selectedTextIndex].left}
+                          value={textStyles[selectedTextIndex]?.left}
                           onChange={(e) =>
                             handleLeftChange(selectedTextIndex, e)
                           }
@@ -317,7 +317,7 @@ const ImageEditor = ({ params }) => {
                         <input
                           id={`topInput-${selectedTextIndex}`}
                           type="number"
-                          value={textStyles[selectedTextIndex].top}
+                          value={textStyles[selectedTextIndex]?.top}
                           onChange={(e) =>
                             handleTopChange(selectedTextIndex, e)
                           }
@@ -425,7 +425,7 @@ const ImageEditor = ({ params }) => {
                       <div className="border border-black rounded-md px-2 py-2">
                         <select
                           id="font-select"
-                          value={textStyles[selectedTextIndex].fontFamily}
+                          value={textStyles[selectedTextIndex]?.fontFamily}
                           onChange={(e) =>
                             handleFontChange(selectedTextIndex, e.target.value)
                           }
@@ -543,7 +543,9 @@ const ImageEditor = ({ params }) => {
                     <input
                       id={`fontSizeInput-${selectedTextIndex}`}
                       type="number"
-                      value={"Empty"}
+                      value=''
+                      onChange={(e) => handleFontSizeChange(selectedTextIndex, e)} // Add this line
+                      onInput={(e) => handleFontSizeChange(selectedTextIndex, e)}
                       className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-16"
                       min="5"
                     />
@@ -820,7 +822,7 @@ const ImageEditor = ({ params }) => {
                     <div className="relative p-6 flex-auto">
                       <textarea
                         id={`textInput-${selectedTextIndex}`}
-                        value={textStyles[selectedTextIndex].text}
+                        value={textStyles[selectedTextIndex]?.text}
                         onChange={(e) => handleTextChange(selectedTextIndex, e)}
                         className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full resize-none"
                         style={{ whiteSpace: "pre-wrap" }}
@@ -933,7 +935,7 @@ const ImageEditor = ({ params }) => {
           ></canvas>
         </div>
 
-        {imageData && imageData.imageType === "multiple image" && (
+        {imageData && imageData?.imageType === "multiple image" && (
           <div className="flex justify-center mt-4">
             {imageData.images.map((image, index) => (
               <div className="flex flex-col text-center mx-3" key={index}>

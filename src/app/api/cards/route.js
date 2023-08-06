@@ -24,7 +24,7 @@ export const POST = async (req) => {
   await startDb();
 
   try {
-    const client = new MongoClient(process.env.MONGODB_URI, {
+    const client = new MongoClient(process.env.URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

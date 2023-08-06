@@ -27,6 +27,7 @@ import {
 } from "react-icons/bi";
 
 import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDataContext";
+import axios from "axios";
 
 const ImageEditorFunctions = ({ params, images }) => {
   const [devtools, setDevtools] = useState(false);
@@ -45,9 +46,24 @@ const ImageEditorFunctions = ({ params, images }) => {
     setDevtools((prevDevtools) => !prevDevtools);
   };
 
+  const [imageData, setImageData] = useState();
+
+  useEffect(() => {
+    const fetchImageData = async () => {
+      try {
+        const response = await axios.get(`/api/cards/${params.id}`);
+        setImageData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+
+    fetchImageData();
+  }, [params.id]);
+
   const router = useRouter();
   const canvasRef = useRef(null);
-  const imageData = images.find((image) => image.id === parseInt(params.id));
 
   const handleTextAlignChange = (alignment) => {
     if (selectedTextIndex !== null) {
@@ -109,7 +125,7 @@ const ImageEditorFunctions = ({ params, images }) => {
   };
 
   const multipleImageFontSizes =
-    imageData.imageType === "multiple image"
+    imageData?.imageType === "multiple image"
       ? imageData.images.map((image) =>
           image.textStyles.map((textStyle) => textStyle.fontSize)
         )

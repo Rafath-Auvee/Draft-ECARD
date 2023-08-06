@@ -10,39 +10,20 @@ import Navbar from "@/components/Navbar/Navbar";
 import CardDynamic from "/public/card-preview/card.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 
 const cardLimit = 4;
 let cardCount = 0;
 
-const LoadingOverlay = () => (
-  <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-white rounded p-4">
-      <p className="text-lg font-semibold">Card Loading...</p>
-      <div className="mt-2">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
-      </div>
-    </div>
-  </div>
-);
 
 const CardDetails = ({ card, cardLimit }) => {
-  const [imageDimensions, setImageDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
-
-  const handleImageLoad = (event) => {
-    setImageDimensions({
-      width: event.target.naturalWidth,
-      height: event.target.naturalHeight,
-    });
-  };
 
   const navigate = useRouter();
 
-  const filteredCards = data.filter(
-    (items) => card.cardType === items.cardType
-  );
+  // const filteredCards = card.filter(
+  //   (items) => card.cardType === items.cardType
+  // );
 
   return (
     <>
@@ -59,7 +40,7 @@ const CardDetails = ({ card, cardLimit }) => {
                   layout="fill"
                   objectFit="contain" // Use "contain" to keep the image within the container without cropping
                   className="rounded-md max-h-[500px] max-w-[300px] md:max-w-[400px] lg:max-w-[500px]"
-                  onLoad={handleImageLoad}
+                  // onLoad={handleImageLoad}
                 />
               </div>
 
@@ -103,7 +84,7 @@ const CardDetails = ({ card, cardLimit }) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-between mt-10">
+            {/* <div className="flex flex-col justify-between mt-10">
               <div className="flex flex-col items-center justify-center h-full mt-[6rem]">
                 <h1 className="font-bold text-[56px] text-primary capitalize text-center mb-10 mt-10 md:mt-0">
                   Our Popular Cards
@@ -114,7 +95,7 @@ const CardDetails = ({ card, cardLimit }) => {
                   <Cards key={index} items={items} />
                 ))}
               </div>
-            </div>
+            </div> */}
 
             <Footer />
           </div>
@@ -128,19 +109,30 @@ const CardDetails = ({ card, cardLimit }) => {
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [card, setCard] = useState(null); // Add this state variable
   const params = useParams();
-  const card = draft.find((item) => item.id === parseInt(params.id));
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [card]);
+    const fetchCard = async () => {
+      try {
+        const response = await axios.get(`/api/cards/${params.id}`); // Correct the API endpoint URL
+        setCard(response.data); // Store the fetched card data in the state
+        console.log(response.data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+      setIsLoading(false);
+    };
+
+    fetchCard();
+  }, [params.id]);
 
   return (
     <div>
       {isLoading ? (
         <LoadingOverlay />
       ) : (
-        <CardDetails card={card} cardLimit={cardLimit} />
+        <CardDetails card={card} cardLimit={cardLimit} /> 
       )}
     </div>
   );

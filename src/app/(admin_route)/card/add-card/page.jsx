@@ -186,6 +186,7 @@ const AddCard = () => {
     setFormData({
       id: "",
       title: "",
+      imageUrl: "",
       referenceImage: "",
       finalImage: "",
       watermark: "",
@@ -212,6 +213,7 @@ const AddCard = () => {
     "left",
     "top",
     "color",
+    
     "fontSize",
     "backgroundColor",
     "textAlign",
@@ -267,6 +269,20 @@ const AddCard = () => {
             />
           </div>
 
+          <div>
+            <label className="block font-bold mb-2" htmlFor="imageUrl">
+              Demo Image
+            </label>
+            <input
+              type="text"
+              id="imageUrl"
+              value={formData.imageUrl}
+              onChange={(e) =>
+                setFormData({ ...formData, imageUrl: e.target.value })
+              }
+              className="border rounded px-2 py-1 w-full"
+            />
+          </div>
           <div>
             <label className="block font-bold mb-2" htmlFor="ReferenceImage">
               ReferenceImage

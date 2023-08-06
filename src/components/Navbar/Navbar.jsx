@@ -40,9 +40,9 @@ const Navbar = () => {
               <Link href="/">Physical Wedding Cards</Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link href="/experimental">Experiment</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="navbar-end ">

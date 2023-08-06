@@ -1,18 +1,17 @@
-"use client";
-
+import Experimental from "@/components/Experimental/Experimental";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
-import PortfolioMain from "@/components/Portfolio/PortfolioMain";
 
 
 const page = () => {
   return (
     <div>
       <Navbar />
-      <PortfolioMain />
+      <Experimental />
       <Footer />
     </div>
   );
 };
 
 export default page;
+

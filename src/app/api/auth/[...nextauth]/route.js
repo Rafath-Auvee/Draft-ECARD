@@ -46,7 +46,6 @@ export const authOptions = {
       //   session.user.role = token.role;
       // }
 
-      // console.log(token);
       // console.log(session);
       if (token) {
         session.user.id = token.id;
@@ -56,6 +55,10 @@ export const authOptions = {
         session.user.role = token.role;
       }
       // console.log(session)
+
+      console.log("token", token);
+      console.log("session", session);
+
       return session;
     },
     async jwt({ token, user }) {
@@ -78,6 +81,8 @@ export const authOptions = {
         email: dbUser.email,
         role: dbUser.role,
       };
+
+      console.log("dbUser", dbUser);
     },
   },
 };

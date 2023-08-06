@@ -103,7 +103,7 @@ const ExperimentalCard = ({
               <p>No cards match the selected filters.</p>
             ) : (
               currentCards.map((item, index) => (
-                <Link key={index} href={`/experimental/${item.id}`}>
+                <Link key={index} href={`/portfolio/${item.id}`}>
                   <Cards items={item} />
                 </Link>
               ))
