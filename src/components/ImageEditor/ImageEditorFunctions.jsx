@@ -528,7 +528,10 @@ const ImageEditorFunctions = ({ params, images }) => {
         cardCategory: imageData.cardCategory,
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
-          startingImage: textStyle.startingImage,
+startingImage: textStyle.startingImage,
+            width: textStyle.width,
+            height: textStyle.height,
+            
           text: textStyle.text,
           left: textStyle.left,
           top: textStyle.top,
@@ -563,7 +566,10 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyles: image.textStyles.map((textStyle) => ({
             id: textStyle.id,
             text: textStyle.text,
-            startingImage: textStyle.startingImage,
+startingImage: textStyle.startingImage,
+            width: textStyle.width,
+            height: textStyle.height,
+            
             left: textStyle.left,
             top: textStyle.top,
             color: textStyle.color,
@@ -617,6 +623,9 @@ const ImageEditorFunctions = ({ params, images }) => {
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
           text: textStyle.text,
+          startingImage: textStyle.startingImage,
+          width: textStyle.width,
+          height: textStyle.height,
           left: textStyle.left,
           top: textStyle.top,
           color: textStyle.color,
@@ -650,6 +659,10 @@ const ImageEditorFunctions = ({ params, images }) => {
             text: textStyle.text,
             left: textStyle.left,
             top: textStyle.top,
+            startingImage: textStyle.startingImage,
+            width: textStyle.width,
+            height: textStyle.height,
+            
             color: textStyle.color,
             fontSize: textStyle.fontSize,
             backgroundColor: textStyle.backgroundColor,
