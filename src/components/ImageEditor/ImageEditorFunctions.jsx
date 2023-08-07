@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react"
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 
@@ -30,6 +31,11 @@ import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDa
 import axios from "axios";
 
 const ImageEditorFunctions = ({ params, images }) => {
+
+  const { data: session } = useSession()
+
+  console.log(session)
+
   const [devtools, setDevtools] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
@@ -611,6 +617,8 @@ const ImageEditorFunctions = ({ params, images }) => {
 
     if (imageData.imageType === "single image" || imageData.imageType === "multiple image") {
       dataForPreview = {
+
+        userEmail: session?.user?.email,
         id: imageData.id,
         title: imageData.title,
         imageUrl: imageData.imageUrl,
@@ -681,7 +689,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Order created:", responseData);
-        setIsPreviewModalOpen(true);
+        // setIsPreviewModalOpen(true);
         setPreviewData(responseData.previewData);
       } else {
         console.error("Failed to create order");

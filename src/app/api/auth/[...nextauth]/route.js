@@ -56,8 +56,8 @@ export const authOptions = {
       }
       // console.log(session)
 
-      console.log("token", token);
-      console.log("session", session);
+      // console.log("token", token);
+      // console.log("session", session);
 
       return session;
     },
@@ -82,7 +82,7 @@ export const authOptions = {
         role: dbUser.role,
       };
 
-      console.log("dbUser", dbUser);
+      // console.log("dbUser", dbUser);
     },
   },
 };
