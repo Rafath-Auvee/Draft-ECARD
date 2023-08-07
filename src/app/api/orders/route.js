@@ -1,7 +1,7 @@
 import startDb from "@/lib/db";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
-import OrderModel from "models/orderModel"
+import OrderModel from "@/models/orderModel"
 
 export const POST = async (req) => {
     const body = await req.json();
