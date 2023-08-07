@@ -1,7 +1,7 @@
 import startDb from "@/lib/db";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
-
+import OrderModel from "@/models/OrderModel"
 
 export const POST = async (req) => {
     const body = await req.json();
@@ -25,3 +25,19 @@ export const POST = async (req) => {
     }
   };
   
+
+  export const GET = async () => {
+  await startDb();
+
+  try {
+    // Fetch all users from the database
+    const ordersData = await OrderModel.find();
+
+    return NextResponse.json({ orders: ordersData });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error fetching users" },
+      { status: 500 }
+    );
+  }
+};

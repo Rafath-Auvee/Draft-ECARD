@@ -237,7 +237,7 @@ const ImageEditor = ({ params }) => {
                   </label>
                 </div>
 
-      <div className="flex flex-col justify-center  items-center text-left">
+                <div className="flex flex-col justify-center  items-center text-left">
                   <label htmlFor={`fontSizeInput-${selectedTextIndex}`}>
                     Font Size:
                   </label>
@@ -571,79 +571,75 @@ const ImageEditor = ({ params }) => {
         <div className="relative">
           {isLoaded && (
             <>
-              {textStyles.map((textStyle, index) => 
-              {
+              {textStyles.map((textStyle, index) => {
                 return (
-                <Draggable
-                  key={index}
-                  position={{ x: textStyle?.left, y: textStyle?.top }}
-                  onStop={(e, data) => handleTextDragStop(index, data)}
-                  bounds={{ left: 0, right: 900, top: 0, bottom: 1200 }}
-                >
-                  <div
-                    id={`textElement_${index}`} // Set a unique ID for each text element
-                    className={`absolute ${
-                      textStyle?.isSelected
-                        ? "border-gray-500  border-2 border-dashed"
-                        : ""
-                    }`}
-                    style={{
-                      whiteSpace: "pre-wrap",
-                      cursor: "pointer",
-                    }}
+                  <Draggable
+                    key={index}
+                    position={{ x: textStyle?.left, y: textStyle?.top }}
+                    onStop={(e, data) => handleTextDragStop(index, data)}
+                    bounds={{ left: 0, right: 900, top: 0, bottom: 1200 }}
                   >
-                    {textStyle?.startingImage && ( // Check if the textStyle has an image property
-                      <Image
-                        src={textStyle?.startingImage}
-                        alt="Image"
-                        width={textStyle?.width}
-                        height={textStyle?.height}
-                        style={{
-                          // position: "relative",
-                          left: textStyle?.left,
-                          top: textStyle?.top,
-                          // objectFit: textStyle?.objectFit || "contain",
-                          backgroundColor: "none",
-                        }}
-                        onClick={() => handleTextStyleImage(index)}
-                        // onLoad={() => console.log("Image loaded successfully!")}
-                      />
-                    )}
-
-                    {textStyle?.text &&
-                      textStyle?.text.split("\n").map((line, lineIndex) => (
-                        <div
-                          key={lineIndex}
+                    <div
+                      id={`textElement_${index}`} // Set a unique ID for each text element
+                      className={`absolute ${
+                        textStyle?.isSelected
+                          ? "border-gray-500  border-2 border-dashed"
+                          : ""
+                      }`}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {textStyle?.startingImage && ( // Check if the textStyle has an image property
+                        <Image
+                          src={textStyle?.startingImage}
+                          alt="Image"
+                          width={textStyle?.width}
+                          height={textStyle?.height}
                           style={{
-                            color: textStyle?.backgroundColor,
-                            fontFamily: textStyle?.fontFamily,
-                            fontSize: `${textStyle?.fontSize}px`,
-                            textAlign: textStyle?.textAlign,
-                            textAlign: textStyle?.textAlign,
-                            lineHeight: textStyle?.lineHeight || 1.5,
-                            letterSpacing: textStyle?.letterSpacing || 0,
+                            // position: "relative",
+                            left: textStyle?.left,
+                            top: textStyle?.top,
+                            // objectFit: textStyle?.objectFit || "contain",
+                            backgroundColor: "none",
                           }}
-                          onClick={() => handleTextClick(index)}
+                          onClick={() => handleTextStyleImage(index)}
+                          // onLoad={() => console.log("Image loaded successfully!")}
+                        />
+                      )}
+
+                      {textStyle?.text &&
+                        textStyle?.text.split("\n").map((line, lineIndex) => (
+                          <div
+                            key={lineIndex}
+                            style={{
+                              color: textStyle?.backgroundColor,
+                              fontFamily: textStyle?.fontFamily,
+                              fontSize: `${textStyle?.fontSize}px`,
+                              textAlign: textStyle?.textAlign,
+                              textAlign: textStyle?.textAlign,
+                              lineHeight: textStyle?.lineHeight || 1.5,
+                              letterSpacing: textStyle?.letterSpacing || 0,
+                            }}
+                            onClick={() => handleTextClick(index)}
+                          >
+                            {line}
+                          </div>
+                        ))}
+
+                      {textStyle?.isSelected && (
+                        <button
+                          className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
+                          onClick={(e) => handleTextDelete(e, index)}
                         >
-                          {line}
-                        </div>
-                      ))}
-
-                    {textStyle?.isSelected && (
-                      <button
-                        className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
-                        onClick={(e) => handleTextDelete(e, index)}
-                      >
-                        <IoCloseSharp size={20} />
-                      </button>
-                    )}
-                  </div>
-                </Draggable>
-              )
-
-              }
-
-                )}
+                          <IoCloseSharp size={20} />
+                        </button>
+                      )}
+                    </div>
+                  </Draggable>
+                );
+              })}
             </>
           )}
           <canvas

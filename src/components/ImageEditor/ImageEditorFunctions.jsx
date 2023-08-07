@@ -69,12 +69,12 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const [imageData, setImageData] = useState();
 
-    const [textStyles, setTextStyles] = useState(
+  const [textStyles, setTextStyles] = useState(
     imageData?.textStyles.map((textStyle) => ({
       ...textStyle,
       fontSize: parseInt(textStyle?.fontSize),
     })) || []
-  );
+    );
 
   const handleTextAlignChange = (alignment) => {
     if (selectedTextIndex !== null) {
@@ -101,7 +101,7 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyles[index].top,
           0, // Set width to 0 to clear the area
           0 // Set height to 0 to clear the area
-        );
+          );
       };
     }
 
@@ -136,11 +136,11 @@ const ImageEditorFunctions = ({ params, images }) => {
   };
 
   const multipleImageFontSizes =
-    imageData?.imageType === "multiple image"
-      ? imageData.images.map((image) =>
-          image.textStyles.map((textStyle) => textStyle.fontSize)
-        )
-      : [];
+  imageData?.imageType === "multiple image"
+  ? imageData.images.map((image) =>
+    image.textStyles.map((textStyle) => textStyle.fontSize)
+    )
+  : [];
 
 
 
@@ -151,11 +151,11 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const [selectedImage, setSelectedImage] = useState(
     imageData?.images ? imageData.images[0].watermark : null
-  );
+    );
 
   const [selectedImageTextStyles, setSelectedImageTextStyles] = useState(
     imageData?.images ? imageData.images[0].textStyles : []
-  );
+    );
 
   const handleImageClick = (url) => {
     setSelectedImage(url);
@@ -163,7 +163,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     const context = canvas.getContext("2d");
     const selectedImageData = imageData.images.find(
       (image) => image.watermark === url
-    );
+      );
     const image = document.createElement("img");
     image.src = url;
     image.onload = () => {
@@ -176,14 +176,14 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyle.top,
           textStyle.width,
           textStyle.height
-        );
+          );
       });
       setTextStyles(
         selectedImageData.textStyles.map((textStyle) => ({
           ...textStyle,
           fontSize: parseInt(textStyle.fontSize),
         }))
-      );
+        );
       setSelectedImageTextStyles(selectedImageData.textStyles);
     };
   };
@@ -208,7 +208,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       if (imageData.imageType === "multiple image") {
         const selectedImageData = imageData.images.find(
           (img) => img.watermark === selectedImage
-        );
+          );
         selectedImageData.textStyles = updatedTextStyles;
         setSelectedImageTextStyles(updatedTextStyles);
       }
@@ -298,7 +298,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
         (img) => img.watermark === selectedImage
-      );
+        );
       selectedImageData.textStyles = updatedTextStyles;
       setSelectedImageTextStyles(updatedTextStyles);
     }
@@ -324,7 +324,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
         (img) => img.watermark === selectedImage
-      );
+        );
       selectedImageData.textStyles = updatedTextStyles;
     }
   };
@@ -346,13 +346,13 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-      );
+        );
       const textWidth = textElement.getBoundingClientRect().width;
 
       updatedTextStyles[selectedTextIndex].left = Math.max(
         (canvasWidth - textWidth) / 2,
         0
-      );
+        );
       setTextStyles(updatedTextStyles);
     }
   };
@@ -365,13 +365,13 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-      );
+        );
       const textWidth = textElement.getBoundingClientRect().width;
 
       updatedTextStyles[selectedTextIndex].left = Math.max(
         canvasWidth - textWidth,
         0
-      );
+        );
       setTextStyles(updatedTextStyles);
     }
   };
@@ -384,7 +384,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-      );
+        );
       const textHeight = textElement.getBoundingClientRect().height;
 
       console.log(textHeight, "textHeight");
@@ -408,7 +408,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-      );
+        );
       const textHeight = textElement.getBoundingClientRect().height;
 
       console.log(textHeight, "textHeight");
@@ -417,7 +417,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       console.log(
         (canvasHeight + textHeight) / 2 + textHeight,
         "(canvasHeight + textHeight)/2"
-      );
+        );
       // updatedTextStyles[selectedTextIndex].top =
       //   (canvasHeight + textHeight) / 2 + textHeight;
 
@@ -439,7 +439,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = updatedTextStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-      );
+        );
       const textHeight = textElement.getBoundingClientRect().height;
 
       // Calculate the new y position to move to the bottom without crossing the border
@@ -528,10 +528,10 @@ const ImageEditorFunctions = ({ params, images }) => {
         cardCategory: imageData.cardCategory,
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
-startingImage: textStyle.startingImage,
-            width: textStyle.width,
-            height: textStyle.height,
-            
+          startingImage: textStyle.startingImage,
+          width: textStyle.width,
+          height: textStyle.height,
+
           text: textStyle.text,
           left: textStyle.left,
           top: textStyle.top,
@@ -566,7 +566,7 @@ startingImage: textStyle.startingImage,
           textStyles: image.textStyles.map((textStyle) => ({
             id: textStyle.id,
             text: textStyle.text,
-startingImage: textStyle.startingImage,
+            startingImage: textStyle.startingImage,
             width: textStyle.width,
             height: textStyle.height,
             
@@ -605,9 +605,11 @@ startingImage: textStyle.startingImage,
     setHoverX(x);
     setHoverY(y);
   };
-  const handleSaveAndPreviewClick = () => {
+
+  const handleSaveAndPreviewClick = async () => {
     let dataForPreview = null;
-    if (imageData.imageType === "single image") {
+
+    if (imageData.imageType === "single image" || imageData.imageType === "multiple image") {
       dataForPreview = {
         id: imageData.id,
         title: imageData.title,
@@ -620,6 +622,29 @@ startingImage: textStyle.startingImage,
         popularity: imageData.popularity,
         description: imageData.description,
         cardCategory: imageData.cardCategory,
+        images: imageData.imageType === "multiple image"
+        ? imageData.images.map((image) => ({
+          id: image.id,
+          watermark: image.watermark,
+          textStyles: image.textStyles.map((textStyle) => ({
+            id: textStyle.id,
+            text: textStyle.text,
+            left: textStyle.left,
+            top: textStyle.top,
+            startingImage: textStyle.startingImage,
+            width: textStyle.width,
+            height: textStyle.height,
+            color: textStyle.color,
+            fontSize: textStyle.fontSize,
+            backgroundColor: textStyle.backgroundColor,
+            padding: textStyle.padding,
+            fontFamily: textStyle.fontFamily,
+            textAlign: textStyle.textAlign,
+            lineHeight: textStyle.lineHeight,
+            letterSpacing: textStyle.letterSpacing,
+          })),
+        }))
+        : [],
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
           text: textStyle.text,
@@ -638,55 +663,34 @@ startingImage: textStyle.startingImage,
           letterSpacing: textStyle.letterSpacing,
         })),
       };
-    } else if (imageData.imageType === "multiple image") {
-      dataForPreview = {
-        id: imageData.id,
-        title: imageData.title,
-        imageUrl: imageData.imageUrl,
-        watermark: imageData.watermark,
-        imageType: imageData.imageType,
-        price: imageData.price,
-        buttonText: imageData.buttonText,
-        cardType: imageData.cardType,
-        popularity: imageData.popularity,
-        description: imageData.description,
-        cardCategory: imageData.cardCategory,
-        images: imageData.images.map((image) => ({
-          id: image.id,
-          watermark: image.watermark,
-          textStyles: image.textStyles.map((textStyle) => ({
-            id: textStyle.id,
-            text: textStyle.text,
-            left: textStyle.left,
-            top: textStyle.top,
-            startingImage: textStyle.startingImage,
-            width: textStyle.width,
-            height: textStyle.height,
-            
-            color: textStyle.color,
-            fontSize: textStyle.fontSize,
-            backgroundColor: textStyle.backgroundColor,
-            padding: textStyle.padding,
-            fontFamily: textStyle.fontFamily,
-            textAlign: textStyle.textAlign,
-            lineHeight: textStyle.lineHeight,
-            letterSpacing: textStyle.letterSpacing,
-          })),
-        })),
-      };
     }
 
-    // setIsLoaded(true);
     const dataToPass = JSON.stringify(dataForPreview);
     localStorage.removeItem("previewData");
     localStorage.setItem("previewData", dataToPass);
-    // setEditorPreviewData(dataToPass);
 
-    // setIsLoaded(false);
-    // router.push("/preview");
+    try {
+      const response = await fetch("/api/orders/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataForPreview),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Order created:", responseData);
+        setIsPreviewModalOpen(true);
+        setPreviewData(responseData.previewData);
+      } else {
+        console.error("Failed to create order");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
 
     setTimeout(() => {
-      // setIsLoaded(false);
       router.push("/preview");
     }, 1000);
   };

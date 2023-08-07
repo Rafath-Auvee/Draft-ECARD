@@ -27,6 +27,18 @@ export default function AuthProfileMenu() {
               <Link href="/my-favourites">My Favourites</Link>
             </li>
             <li>
+              <Link href="/alluser">All Users</Link>
+            </li>
+            <li>
+              <Link href="/allorders">All Orders</Link>
+            </li>
+            <li>
+              <Link href="/card/add-card">All Cards</Link>
+            </li>
+            <li>
+              <Link href="/card/add-card">Add Card</Link>
+            </li>
+            <li>
               <Link href="/orders">My Orders</Link>
             </li>
             <li>
