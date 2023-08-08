@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 
@@ -31,10 +31,9 @@ import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDa
 import axios from "axios";
 
 const ImageEditorFunctions = ({ params, images }) => {
+  const { data: session } = useSession();
 
-  const { data: session } = useSession()
-
-  console.log(session)
+  console.log(session);
 
   const [devtools, setDevtools] = useState(false);
 
@@ -51,9 +50,6 @@ const ImageEditorFunctions = ({ params, images }) => {
   const handleToggleDevtools = () => {
     setDevtools((prevDevtools) => !prevDevtools);
   };
-
-
-
 
   useEffect(() => {
     const fetchImageData = async () => {
@@ -80,7 +76,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       ...textStyle,
       fontSize: parseInt(textStyle?.fontSize),
     })) || []
-    );
+  );
 
   const handleTextAlignChange = (alignment) => {
     if (selectedTextIndex !== null) {
@@ -107,7 +103,7 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyles[index].top,
           0, // Set width to 0 to clear the area
           0 // Set height to 0 to clear the area
-          );
+        );
       };
     }
 
@@ -142,13 +138,11 @@ const ImageEditorFunctions = ({ params, images }) => {
   };
 
   const multipleImageFontSizes =
-  imageData?.imageType === "multiple image"
-  ? imageData.images.map((image) =>
-    image.textStyles.map((textStyle) => textStyle.fontSize)
-    )
-  : [];
-
-
+    imageData?.imageType === "multiple image"
+      ? imageData.images.map((image) =>
+          image.textStyles.map((textStyle) => textStyle.fontSize)
+        )
+      : [];
 
   const textStylesRef = useRef(textStyles);
 
@@ -157,11 +151,11 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   const [selectedImage, setSelectedImage] = useState(
     imageData?.images ? imageData.images[0].watermark : null
-    );
+  );
 
   const [selectedImageTextStyles, setSelectedImageTextStyles] = useState(
     imageData?.images ? imageData.images[0].textStyles : []
-    );
+  );
 
   const handleImageClick = (url) => {
     setSelectedImage(url);
@@ -169,7 +163,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     const context = canvas.getContext("2d");
     const selectedImageData = imageData.images.find(
       (image) => image.watermark === url
-      );
+    );
     const image = document.createElement("img");
     image.src = url;
     image.onload = () => {
@@ -182,14 +176,14 @@ const ImageEditorFunctions = ({ params, images }) => {
           textStyle.top,
           textStyle.width,
           textStyle.height
-          );
+        );
       });
       setTextStyles(
         selectedImageData.textStyles.map((textStyle) => ({
           ...textStyle,
           fontSize: parseInt(textStyle.fontSize),
         }))
-        );
+      );
       setSelectedImageTextStyles(selectedImageData.textStyles);
     };
   };
@@ -214,7 +208,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       if (imageData.imageType === "multiple image") {
         const selectedImageData = imageData.images.find(
           (img) => img.watermark === selectedImage
-          );
+        );
         selectedImageData.textStyles = updatedTextStyles;
         setSelectedImageTextStyles(updatedTextStyles);
       }
@@ -304,7 +298,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
         (img) => img.watermark === selectedImage
-        );
+      );
       selectedImageData.textStyles = updatedTextStyles;
       setSelectedImageTextStyles(updatedTextStyles);
     }
@@ -330,7 +324,7 @@ const ImageEditorFunctions = ({ params, images }) => {
     if (imageData.imageType === "multiple image") {
       const selectedImageData = imageData.images.find(
         (img) => img.watermark === selectedImage
-        );
+      );
       selectedImageData.textStyles = updatedTextStyles;
     }
   };
@@ -352,13 +346,13 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-        );
+      );
       const textWidth = textElement.getBoundingClientRect().width;
 
       updatedTextStyles[selectedTextIndex].left = Math.max(
         (canvasWidth - textWidth) / 2,
         0
-        );
+      );
       setTextStyles(updatedTextStyles);
     }
   };
@@ -371,13 +365,13 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-        );
+      );
       const textWidth = textElement.getBoundingClientRect().width;
 
       updatedTextStyles[selectedTextIndex].left = Math.max(
         canvasWidth - textWidth,
         0
-        );
+      );
       setTextStyles(updatedTextStyles);
     }
   };
@@ -390,7 +384,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-        );
+      );
       const textHeight = textElement.getBoundingClientRect().height;
 
       console.log(textHeight, "textHeight");
@@ -414,7 +408,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = textStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-        );
+      );
       const textHeight = textElement.getBoundingClientRect().height;
 
       console.log(textHeight, "textHeight");
@@ -423,7 +417,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       console.log(
         (canvasHeight + textHeight) / 2 + textHeight,
         "(canvasHeight + textHeight)/2"
-        );
+      );
       // updatedTextStyles[selectedTextIndex].top =
       //   (canvasHeight + textHeight) / 2 + textHeight;
 
@@ -445,7 +439,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const selectedTextStyle = updatedTextStyles[selectedTextIndex];
       const textElement = document.getElementById(
         `textElement_${selectedTextIndex}`
-        );
+      );
       const textHeight = textElement.getBoundingClientRect().height;
 
       // Calculate the new y position to move to the bottom without crossing the border
@@ -537,7 +531,6 @@ const ImageEditorFunctions = ({ params, images }) => {
           startingImage: textStyle.startingImage,
           width: textStyle.width,
           height: textStyle.height,
-
           text: textStyle.text,
           left: textStyle.left,
           top: textStyle.top,
@@ -575,7 +568,7 @@ const ImageEditorFunctions = ({ params, images }) => {
             startingImage: textStyle.startingImage,
             width: textStyle.width,
             height: textStyle.height,
-            
+
             left: textStyle.left,
             top: textStyle.top,
             color: textStyle.color,
@@ -615,9 +608,11 @@ const ImageEditorFunctions = ({ params, images }) => {
   const handleSaveAndPreviewClick = async () => {
     let dataForPreview = null;
 
-    if (imageData.imageType === "single image" || imageData.imageType === "multiple image") {
+    if (
+      imageData.imageType === "single image" ||
+      imageData.imageType === "multiple image"
+    ) {
       dataForPreview = {
-
         userEmail: session?.user?.email,
         id: imageData.id,
         title: imageData.title,
@@ -630,29 +625,30 @@ const ImageEditorFunctions = ({ params, images }) => {
         popularity: imageData.popularity,
         description: imageData.description,
         cardCategory: imageData.cardCategory,
-        images: imageData.imageType === "multiple image"
-        ? imageData.images.map((image) => ({
-          id: image.id,
-          watermark: image.watermark,
-          textStyles: image.textStyles.map((textStyle) => ({
-            id: textStyle.id,
-            text: textStyle.text,
-            left: textStyle.left,
-            top: textStyle.top,
-            startingImage: textStyle.startingImage,
-            width: textStyle.width,
-            height: textStyle.height,
-            color: textStyle.color,
-            fontSize: textStyle.fontSize,
-            backgroundColor: textStyle.backgroundColor,
-            padding: textStyle.padding,
-            fontFamily: textStyle.fontFamily,
-            textAlign: textStyle.textAlign,
-            lineHeight: textStyle.lineHeight,
-            letterSpacing: textStyle.letterSpacing,
-          })),
-        }))
-        : [],
+        images:
+          imageData.imageType === "multiple image"
+            ? imageData.images.map((image) => ({
+                id: image.id,
+                watermark: image.watermark,
+                textStyles: image.textStyles.map((textStyle) => ({
+                  id: textStyle.id,
+                  text: textStyle.text,
+                  left: textStyle.left,
+                  top: textStyle.top,
+                  startingImage: textStyle.startingImage,
+                  width: textStyle.width,
+                  height: textStyle.height,
+                  color: textStyle.color,
+                  fontSize: textStyle.fontSize,
+                  backgroundColor: textStyle.backgroundColor,
+                  padding: textStyle.padding,
+                  fontFamily: textStyle.fontFamily,
+                  textAlign: textStyle.textAlign,
+                  lineHeight: textStyle.lineHeight,
+                  letterSpacing: textStyle.letterSpacing,
+                })),
+              }))
+            : [],
         textStyles: textStyles.map((textStyle) => ({
           id: textStyle.id,
           text: textStyle.text,

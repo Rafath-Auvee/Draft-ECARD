@@ -15,7 +15,7 @@ export default function AuthProfileMenu() {
   if (isAuth) {
     return (
       <li>
-        <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
+        <div className="dropdown z-[20] dropdown-hover dropdown-bottom dropdown-end">
           <label tabIndex={0} className="">
             My Account
           </label>

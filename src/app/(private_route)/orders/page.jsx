@@ -1,10 +1,43 @@
 "use client";
 
 import Navbar from "@/components/Navbar/Navbar";
-import React, { useState } from "react";
-import { orders } from "../../Data/Order_Data";
-
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { orders } from "@/Data/Order_Data";
+import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
+import axios from "axios";
+import { redirect } from "next/navigation";
 const Page = () => {
+  const [AllOrders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!session?.user) {
+        setIsLoading(false);
+        setError("Not Logged In");
+        return;
+      }
+
+      try {
+        const response = await axios.get(`/api/orders/${session.user.email}`);
+        setOrders(response.data.myOrders); // Update the orders directly
+        setIsLoading(false);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setIsLoading(false);
+        setError("Can't Fetch Data");
+      }
+    };
+
+    if (session?.user?.email) {
+      fetchData();
+    }
+  }, [session]);
+
   const [sortOrder, setSortOrder] = useState(null);
   const handleSort = (field) => {
     if (sortOrder === field) {
@@ -15,16 +48,16 @@ const Page = () => {
   };
 
   const getSortedOrders = () => {
-    let filteredOrders = orders;
+    let filteredOrders = AllOrders.slice(); // Create a copy of AllOrders to avoid mutating the original array
 
     // Filter by status
     if (sortOrder === "paid") {
       filteredOrders = filteredOrders.filter(
-        (order) => order.status === "paid"
+        (order) => order.paid === "paid" || order.paid === true
       );
     } else if (sortOrder === "pending") {
       filteredOrders = filteredOrders.filter(
-        (order) => order.status === "pending"
+        (order) => order.paid === "pending" || order.paid === false
       );
     }
 
@@ -38,11 +71,11 @@ const Page = () => {
     // Sort by card name
     if (sortOrder === "cardsDesc") {
       filteredOrders = filteredOrders.sort((a, b) =>
-        b.card.localeCompare(a.card)
+        a.card && b.card ? b.card.localeCompare(a.card) : 0
       );
     } else if (sortOrder === "cardsAsc") {
       filteredOrders = filteredOrders.sort((a, b) =>
-        a.card.localeCompare(b.card)
+        a.card && b.card ? a.card.localeCompare(b.card) : 0
       );
     }
 
@@ -55,56 +88,71 @@ const Page = () => {
     return (
       <ul
         tabIndex={0}
-        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+        className="mt-3 z-10 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
       >
-        <li>
+        {/* <li>
           {sortOrder !== "cardsAsc" && (
             <p
-              className="justify-between w-full"
+              className={`justify-between w-full ${
+                sortOrder === "cardsDesc" ? "text-accent-500" : ""
+              }`}
               onClick={() => handleSort("cardsAsc")}
             >
-              Cards: A-Z
+              Cards: A-Z {sortOrder === "cardsAsc" ? "✓" : ""}
             </p>
           )}
           {sortOrder !== "cardsDesc" && (
             <p
-              className="justify-between w-full"
+              className={`justify-between w-full ${
+                sortOrder === "cardsAsc" ? "text-accent-500" : ""
+              }`}
               onClick={() => handleSort("cardsDesc")}
             >
-              Cards: Z-A
+              Cards: Z-A {sortOrder === "cardsDesc" ? "✓" : ""}
             </p>
           )}
-        </li>
+        </li> */}
         <li>
+          {/* Sort by Price */}
           <p
-            className="justify-between w-full"
+            className={`justify-between w-full ${
+              sortOrder === "priceDesc" ? "text-accent-500" : ""
+            }`}
             onClick={() => handleSort("priceDesc")}
           >
-            Price: High to Low
+            Price: High to Low {sortOrder === "priceDesc" ? "✓" : ""}
           </p>
         </li>
         <li>
           <p
-            className="justify-between w-full"
+            className={`justify-between w-full ${
+              sortOrder === "priceAsc" ? "text-accent-500" : ""
+            }`}
             onClick={() => handleSort("priceAsc")}
           >
-            Price: Low to High
+            Price: Low to High {sortOrder === "priceAsc" ? "✓" : ""}
           </p>
         </li>
         <li>
+          {/* Show Paid Orders */}
           <p
-            className="justify-between w-full"
+            className={`justify-between w-full ${
+              sortOrder === "paid" ? "text-accent-500" : ""
+            }`}
             onClick={() => handleSort("paid")}
           >
-            Show Paid
+            Show Paid {sortOrder === "paid" ? "✓" : ""}
           </p>
         </li>
         <li>
+          {/* Show Pending Orders */}
           <p
-            className="justify-between w-full"
+            className={`justify-between w-full ${
+              sortOrder === "pending" ? "text-accent-500" : ""
+            }`}
             onClick={() => handleSort("pending")}
           >
-            Show Pending
+            Show Pending {sortOrder === "pending" ? "✓" : ""}
           </p>
         </li>
       </ul>
@@ -112,7 +160,7 @@ const Page = () => {
   };
 
   const getStatusComponent = (status) => {
-    if (status === "paid") {
+    if (status === "paid" || status === true) {
       return (
         <div className="flex text-center justify-end">
           <div className="bg-green-200 text-green-600 uppercase px-3 py-1 rounded text-[12px] font-normal leading-none tracking-wide">
@@ -120,7 +168,7 @@ const Page = () => {
           </div>
         </div>
       );
-    } else if (status === "pending") {
+    } else if (status === "pending" || status === false) {
       return (
         <div className="flex text-center justify-end">
           <div className="bg-amber-200 text-amber-600 text-[12px] font-normal leading-none tracking-wide uppercase px-3 py-1 rounded">
@@ -131,6 +179,17 @@ const Page = () => {
     }
     return null;
   };
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
+
+  if (!AllOrders) {
+    return <div className="min-h-[100vh]">Empty Data</div>;
+  }
+  if (error) {
+    return <div className="min-h-[100vh]">{error}</div>;
+  }
 
   return (
     <div>
@@ -165,7 +224,7 @@ const Page = () => {
 
             <div className="flex items-center space-x-2">
               <div className="relative">
-                <button className="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1">
+                <button className="relative z-[0] inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1">
                   <span className="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2">
                     {/*  */}
                     <div className="dropdown dropdown-end">
@@ -204,7 +263,7 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="p-1.5 w-full inline-block align-middle">
+          <div className="p-1.5 w-full inline-block align-middle ">
             <div className="overflow-x-auto md:overflow-hidden border rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 ">
                 <thead className="bg-gray-50">
@@ -213,103 +272,67 @@ const Page = () => {
                       scope="col"
                       className="flex items-center px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
-                      Orders
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={1}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 13l-5 5m0 0l-5-5m5 5V6"
-                        />
-                      </svg>
+                      ID
                     </th>
 
                     <th
                       scope="col"
                       className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
-                      <span className="inline-flex items-center">
-                        Card
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17 13l-5 5m0 0l-5-5m5 5V6"
-                          />
-                        </svg>
-                      </span>
+                      <span className="inline-flex items-center">Email</span>
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
                     >
-                      <span className="inline-flex items-center">
-                        Price
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M7 11l5-5m0 0l5 5m-5-5v12"
-                          />
-                        </svg>
-                      </span>
+                      <span className="inline-flex items-center">Card</span>
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase"
+                      className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase"
+                    >
+                      <span className="inline-flex items-center">Price</span>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase"
                     >
                       Status
                     </th>
-                    {/* <th
+                    <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase"
+                      className="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase"
                     >
-                      Delete
-                    </th> */}
+                      View
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {sortedOrders.map((order) => (
-                    <tr key={order.id}>
-                      <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
-                        #{order.id}
-                      </td>
-                      <td className="px-6 py-4 text-primary text-xs font-normal leading-none tracking-wide">
-                        {order.card}
-                      </td>
-                      <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
-                        ৳ {order.price}
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                        <div>{getStatusComponent(order.status)}</div>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                        <button className="text-primary bg-stone-200 px-4 py-1 rounded">
-                          Download
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {AllOrders &&
+                    getSortedOrders().map((order) => (
+                      <tr key={order._id}>
+                        <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
+                          #{order._id}
+                        </td>
+                        <td className="px-6 py-4 text-primary text-xs font-normal leading-none tracking-wide">
+                          {order.userEmail}
+                        </td>
+                        <td className="px-6 py-4 text-primary text-xs font-normal leading-none tracking-wide">
+                          {order.title}
+                        </td>
+                        <td className="px-6 py-4 text-primary text-xs font-normal tracking-wide">
+                          ৳ {order.price}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          <div>{getStatusComponent(order.paid)}</div>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          <button className="text-primary bg-stone-200 px-4 py-1 rounded">
+                            Download
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
