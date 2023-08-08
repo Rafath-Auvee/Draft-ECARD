@@ -62,27 +62,26 @@ export const authOptions = {
       return session;
     },
     async jwt({ token, user }) {
-      // async jwt(params) {
-      // if (params.user?.role) {
-      //   params.token.role = params.user.role;
-      //   params.token.id = params.user.id;
-      // }
+      try {
+        const dbUser = await UserModel.findOne({ email: token.email }).timeout(
+          20000
+        );
 
-      const dbUser = await UserModel.findOne({ email: token.email });
+        if (!dbUser) {
+          token.id = user ? user.id : token.id;
+          return token;
+        }
 
-      if (!dbUser) {
-        token.id = user ? user.id : token.id; // Use a ternary operator for optional chaining
+        return {
+          id: dbUser.id,
+          name: dbUser.name,
+          email: dbUser.email,
+          role: dbUser.role,
+        };
+      } catch (error) {
+        console.error("Database operation timed out:", error);
         return token;
       }
-      // console.log(dbUser)
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        role: dbUser.role,
-      };
-
-      // console.log("dbUser", dbUser);
     },
   },
 };

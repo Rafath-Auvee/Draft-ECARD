@@ -20,6 +20,9 @@ const Preview = () => {
   );
 
   const [isTextLoaded, setIsTextLoaded] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("sslCommerze");
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
@@ -263,6 +266,19 @@ const Preview = () => {
     setIsLoading(false);
   }, [previewData]);
 
+  const calculateVatAmount = () => {
+    const vatRate = 20; // VAT rate in percentage
+    const vatAmount = (previewData.price * vatRate) / 100;
+    return vatAmount.toFixed(2); // Display VAT amount with 2 decimal places
+  };
+
+  const calculateTotal = () => {
+    const vatRate = 20; // VAT rate in percentage
+    const vatAmount = (previewData.price * vatRate) / 100;
+    const total = previewData.price + vatAmount;
+    return total.toFixed(2); // Display total with 2 decimal places
+  };
+
   if (isLoading) {
     return <LoadingOverlay name="Preview is Opening" />;
   }
@@ -295,18 +311,32 @@ const Preview = () => {
           </div>
         )}
 
-        <div className="relative inline-block text-left mt-10">
+        <div className="ButtonMasterLarge w-[900px] h-12 px-6 py-2.5 bg-[#D5B048] rounded-md shadow flex-col justify-center items-center gap-2.5 inline-flex mt-10">
+          <div className="Container justify-center items-center gap-[7px] inline-flex">
+            <button
+              className="Label text-center text-zinc-800 text-lg font-medium leading-7"
+              onClick={() => setShowModal(true)}
+            >
+              Download without Watermark
+            </button>
+            <div className="IconRight w-5 h-5 relative">
+              <div className="Crown w-5 h-5 left-0 top-0 absolute"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative  mt-5">
           <div>
             <button
               type="button"
-              className="inline-flex justify-center w-full rounded-lg shadow-sm px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className=" w-[900px] h-12 px-4 py-2 text-lg font-medium text-zinc-800 bg-white rounded-md shadow border border-gray-300 flex-col justify-center items-center gap-2.5 flex"
               id="dropdown-button"
               aria-haspopup="true"
               aria-expanded={isOpen ? "true" : "false"}
               onClick={toggleDropdown}
             >
-              Download
-              <svg
+              Download With Watermark
+              {/* <svg
                 className="-mr-1 ml-2 h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
@@ -318,7 +348,7 @@ const Preview = () => {
                   d="M10 3.586L4.707 8.879a1 1 0 0 0 0 1.414l5.293 5.293a1 1 0 0 0 1.414-1.414L7.414 10l4.293-4.293a1 1 0 1 0-1.414-1.414z"
                   clipRule="evenodd"
                 />
-              </svg>
+              </svg> */}
             </button>
           </div>
 
@@ -360,7 +390,140 @@ const Preview = () => {
           </div>
         )}
       </div>
+      {showModal ? (
+        <>
+          <div className=" justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
+            <div className="relative w-full my-6 mx-auto max-w-3xl">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h1 className="text-lg font-bold font-sans">
+                    Billing Address
+                  </h1>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <h5 className="text-1xl font-semibold">Full Name *</h5>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded px-2 py-3  placeholder:text-black w-full resize-none"
+                    style={{ whiteSpace: "pre-wrap" }}
+                    // rows={4} // Set the number of rows you want to display initially
+                  />
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <h5 className="text-1xl font-semibold">Email *</h5>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded px-2 py-3  placeholder:text-black w-full resize-none"
+                    style={{ whiteSpace: "pre-wrap" }}
+                    // rows={4} // Set the number of rows you want to display initially
+                  />
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <h5 className="text-1xl font-semibold">Phone *</h5>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded px-2 py-3  placeholder:text-black w-full resize-none"
+                    style={{ whiteSpace: "pre-wrap" }}
+                    // rows={4} // Set the number of rows you want to display initially
+                  />
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <h5 className="text-1xl font-semibold">Address *</h5>
+                  <textarea
+                    type="text"
+                    className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full resize-none"
+                    style={{ whiteSpace: "pre-wrap" }}
+                    rows={4} // Set the number of rows you want to display initially
+                  />
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <div className="divider"></div>
+                </div>
 
+                <div className="flex items-start justify-between px-6 mb-4  border-solid border-slate-200 rounded-t">
+                  <h1 className="text-lg font-bold font-sans">Make Payment</h1>
+                </div>
+                <div className="px-6 mb-6">
+                  <p className="text-neutral-600 text-sm font-normal leading-snug tracking-tight">
+                    Complete your purchase by providing your payment details.
+                  </p>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="sslCommerze"
+                      checked={paymentMethod === "sslCommerze"}
+                      onChange={() => setPaymentMethod("sslCommerze")}
+                      className="cursor-pointer"
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+                      SSL Commerze
+                    </span>
+                  </label>
+                </div>
+
+                <div className=" rounded-sm border border-gray-300 flex-col justify-start items-start gap-1 mx-6 pt-3 flex-auto">
+                  <div className="flex flex-row justify-between py-3 px-4 text-1xl">
+                    <p className="font-thin">Subtotal</p>
+                    <p className="font-thin">৳{previewData.price}</p>
+                  </div>
+                  <div className="flex flex-row justify-between py-3 px-4 text-1xl">
+                    <p className="font-thin">VAT (20%)</p>
+                    <p className="font-thin">
+                      ৳{previewData.vatAmount || calculateVatAmount()}
+                    </p>
+                  </div>
+                  <div className="font-bold bg-[#EEEFF1] flex flex-row justify-between py-3 px-4 text-1xl">
+                    <p>Total</p>
+                    <p>৳{previewData.totalAmount || calculateTotal()}</p>
+                  </div>
+                </div>
+                <div className="relative px-6 py-3 flex-auto">
+                  <div className="divider"></div>
+                </div>
+                <div className="px-6 flex items-center justify-center">
+                  <button
+                    className="w-full bg-[#23272A] text-white active:bg-[#23272A] text-lg font-sans px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    <p className="text-center text-white text-lg font-medium leading-7">
+                      Pay ৳{calculateTotal()}
+                    </p>
+                  </button>
+                </div>
+                <div className="my-10 justify-center items-center gap-1 inline-flex text-zinc-400 text-1xl font-medium uppercase leading-tight ">
+                  Payments are secure and encrypted
+                </div>
+                {/* <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b"> */}
+                {/* <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button> */}
+                {/* <button
+                    className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    Update
+                  </button> */}
+                {/* </div> */}
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
       <Footer />
     </>
   );

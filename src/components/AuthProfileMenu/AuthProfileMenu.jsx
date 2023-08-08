@@ -7,7 +7,8 @@ import { useSession, signOut } from "next-auth/react";
 export default function AuthProfileMenu() {
   const { data, status } = useSession();
 
-  // console.log(data)
+  // console.log("data",data)
+  
   const isAuth = status === "authenticated"; // Assuming this value is correctly set based on authentication state.
 
   //   const isAuth = false; // Assuming this value is correctly set based on authentication state.

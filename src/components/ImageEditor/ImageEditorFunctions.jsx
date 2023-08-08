@@ -605,6 +605,26 @@ const ImageEditorFunctions = ({ params, images }) => {
     setHoverY(y);
   };
 
+  const calculateVatAmount = () => {
+    const vatRate = 20; // VAT rate in percentage
+    const vatAmount = (imageData.price * vatRate) / 100;
+    return vatAmount.toFixed(2); // Display VAT amount with 2 decimal places
+  };
+
+  const calculateTotal = () => {
+    const vatRate = 20; // VAT rate in percentage
+    const vatAmount = (imageData.price * vatRate) / 100;
+    const total = imageData.price + vatAmount;
+    return total.toFixed(2); // Display total with 2 decimal places
+  };
+
+  const generateUniqueOrderID = () => {
+    const timestamp = new Date().getTime(); // Get current timestamp in milliseconds
+    const randomNum = Math.floor(Math.random() * 10000); // Generate a random number between 0 and 9999
+    const orderID = `${timestamp}-${randomNum}`;
+    return orderID;
+  };
+
   const handleSaveAndPreviewClick = async () => {
     let dataForPreview = null;
 
@@ -613,6 +633,11 @@ const ImageEditorFunctions = ({ params, images }) => {
       imageData.imageType === "multiple image"
     ) {
       dataForPreview = {
+        orderID: generateUniqueOrderID(),
+        watermark: true,
+        paid: "pending",
+        vatAmount: calculateVatAmount(),
+        totalAmount: calculateTotal(),
         userEmail: session?.user?.email,
         id: imageData.id,
         title: imageData.title,
